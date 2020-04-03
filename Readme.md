@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Egor P](https://up.htmlacademy.ru/ecmascript/11/user/782001).
-* Наставник: `Неизвестно`.
+* Наставник: [Григорий Бушманов](https://htmlacademy.ru/profile/id1106363).
 
 ---
 
