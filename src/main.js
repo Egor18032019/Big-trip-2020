@@ -21,7 +21,7 @@ import {createSitePathTemplate} from './components/path.js';
 import {createSiteMenuTemplate} from './components/menu.js';
 import {createSiteFiltrTemplate} from './components/filter.js';
 
-import {createContentTemplate} from './components/content.js';
+import {createMainContent} from './components/content.js';
 import {createContentDayTemplate} from './components/content.js';
 import {createDayTemplate} from './components/content.js';
 import {createPointTemplate} from './components/content.js';
@@ -29,6 +29,7 @@ import {createPointTemplate} from './components/content.js';
 import {createSiteAddNewEventTemplate} from './components/form.js';
 
 import {createSiteSortTemplate} from './components/sort.js';
+import {creatSorting} from './mock/sort.js';
 
 /**
  * функция рендеринга изображений
@@ -65,27 +66,16 @@ if (tripControlsElement) {
  */
 const sortMainElement = document.querySelector(`.trip-events`);
 if (sortMainElement) {
-  render(sortMainElement, createSiteSortTemplate(), `beforeend`);
+  render(sortMainElement, createSiteSortTemplate(creatSorting), `beforeend`);
 }
 if (sortMainElement) {
   render(sortMainElement, createSiteAddNewEventTemplate(), `beforeend`);
 }
 if (sortMainElement) {
-  render(sortMainElement, createContentTemplate(), `beforeend`);
+  render(sortMainElement, createMainContent(), `beforeend`);
 }
-// после отрисовки контейнера контента отрисовываем контейнер для даты
-const tripDays = document.querySelector(`.trip-days`);
 
-if (tripDays) {
-  render(tripDays, createContentDayTemplate(), `beforeend`);
-}
-// и дату
-const dayInfo = document.querySelector(`.day__info`);
-if (dayInfo) {
-  render(dayInfo, createDayTemplate(), `beforeend`);
-}
-// и точку маршрута
-const tripEventsList = document.querySelector(`.trip-events__list`);
+const tripEventsList = document.querySelector(`.trip-days`);
 
 for (let i = 0; i < POINT_PATH; i++) {
   if (tripEventsList) {
