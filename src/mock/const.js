@@ -1,5 +1,8 @@
-const POINT_PATH = 3;
-const FIRST_DATE = 18;
+import {
+  getRandomIntegerNumber,
+} from '../mock/utils.js';
+const POINT_PATH = getRandomIntegerNumber(0, 8);
+const FIRST_DATE = getRandomIntegerNumber(1, 28);
 const FINAL_DATE = +FIRST_DATE + POINT_PATH - 1;
 const MONTH_DATE = `Mar`;
 const PATH_DAYS = ` ${MONTH_DATE} ${FIRST_DATE} - ${FINAL_DATE}`;
