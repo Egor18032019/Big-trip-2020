@@ -19,22 +19,23 @@ const createMainContent = () => {
   );
 };
 
-const createOffersTemplate = (offers) => {
-  // console.log(offers);
-  const {
-    eventOfferTitle,
-    eventOfferPrice
-  } = offers;
+const createOffersTemplate = (add) => {
 
-  return (
-    `
-  <li class="event__offer">
-  <span class="event__offer-title">${eventOfferTitle}</span>
-  +
-  €&nbsp;
-  <span class="event__offer-price">${eventOfferPrice}</span>
- </li>
- `);
+  for (const title of add) {
+    // console.log(title);
+    // -???? почему тут берет только первое значение и  что делать то ?
+    return (
+      `
+      <li class="event__offer">
+      <span class="event__offer-title">${title.eventOfferTitle}</span>
+      +
+      €&nbsp;
+      <span class="event__offer-price">${title.evenOfferPrice}</span>
+     </li>
+     `);
+
+  }
+  return `--???Что сюда написать или как исправить ?`;
 };
 
 const createPointTemplate = (points) => {
@@ -48,7 +49,10 @@ const createPointTemplate = (points) => {
     eventPrice,
     eventDuration,
   } = points;
-  const eventOffer = createOffersTemplate(eventOffers);
+  // console.log(eventOffers);
+
+  const eventSelectedOffers = eventOffers.map((it) => createOffersTemplate(it)).join(`\n`);
+
   return (
     `
   <li class="trip-events__item">
@@ -74,7 +78,7 @@ const createPointTemplate = (points) => {
 
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-${eventOffer}
+${eventSelectedOffers}
     </ul>
 
     <button class="event__rollup-btn" type="button">
