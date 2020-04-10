@@ -2,11 +2,8 @@ import {
   generatePoints,
 } from '../mock/content-mock.js';
 import {
-  POINT_PATH,
   FIRST_DATE,
   MONTH_DATE,
-  FINAL_DATE,
-  PATH_DAYS
 } from '../mock/const.js';
 /**
  * Главный контейнер для контента
