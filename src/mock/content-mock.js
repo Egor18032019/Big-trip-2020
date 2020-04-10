@@ -2,86 +2,86 @@ import {
   pointType, pointFinal
 } from './const.js';
 
-const Taxi = [{
-  eventOfferTitle: `Rent a car`,
-  evenOfferPrice: `€ 200`
-}, {
-  eventOfferTitle: `Order Uber`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `Поймать попопутку`,
-  evenOfferPrice: `Поболтать`
-}];
-const Bus = [{
-  eventOfferTitle: `Rent a car`,
-  evenOfferPrice: `€ 200`
-}, {
-  eventOfferTitle: `Order Uber`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `Поймать попопутку`,
-  evenOfferPrice: `Поболтать`
-}];
-const Ship = [{
-  eventOfferTitle: `Rent a car`,
-  evenOfferPrice: `€ 200`
-}, {
-  eventOfferTitle: `Order Uber`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `Поймать попопутку`,
-  evenOfferPrice: `Поболтать`
-}];
-const Transport = [{
-  eventOfferTitle: `Rent a car`,
-  evenOfferPrice: `€ 200`
-}, {
-  eventOfferTitle: `Order Uber`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `Поймать попопутку`,
-  evenOfferPrice: `Поболтать`
-}];
-const Drive = [{
-  eventOfferTitle: `Rent a car`,
-  evenOfferPrice: `€ 200`
-}, {
-  eventOfferTitle: `Order Uber`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `Поймать попопутку`,
-  evenOfferPrice: `Поболтать`
-}];
-const Flight = [{
-  eventOfferTitle: `add luggage`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `add meal`,
-  evenOfferPrice: ` € 21`
-}, {
-  eventOfferTitle: `Choose seats`,
-  evenOfferPrice: `5 $ `
-}];
-const Sightseeng = [{
-  eventOfferTitle: `add luggage`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `add meal`,
-  evenOfferPrice: ` € 21`
-}, {
-  eventOfferTitle: `Choose seats`,
-  evenOfferPrice: `5 $ `
-}];
-const Restaurant = [{
-  eventOfferTitle: `add luggage`,
-  evenOfferPrice: `€ 20`
-}, {
-  eventOfferTitle: `add meal`,
-  evenOfferPrice: ` € 21`
-}, {
-  eventOfferTitle: `Choose seats`,
-  evenOfferPrice: `5 $ `
-}];
+// const Taxi = [{
+//   eventOfferTitle: `Rent a car`,
+//   evenOfferPrice: `€ 200`
+// }, {
+//   eventOfferTitle: `Order Uber`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `Поймать попопутку`,
+//   evenOfferPrice: `Поболтать`
+// }];
+// const Bus = [{
+//   eventOfferTitle: `Rent a car`,
+//   evenOfferPrice: `€ 200`
+// }, {
+//   eventOfferTitle: `Order Uber`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `Поймать попопутку`,
+//   evenOfferPrice: `Поболтать`
+// }];
+// const Ship = [{
+//   eventOfferTitle: `Rent a car`,
+//   evenOfferPrice: `€ 200`
+// }, {
+//   eventOfferTitle: `Order Uber`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `Поймать попопутку`,
+//   evenOfferPrice: `Поболтать`
+// }];
+// const Transport = [{
+//   eventOfferTitle: `Rent a car`,
+//   evenOfferPrice: `€ 200`
+// }, {
+//   eventOfferTitle: `Order Uber`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `Поймать попопутку`,
+//   evenOfferPrice: `Поболтать`
+// }];
+// const Drive = [{
+//   eventOfferTitle: `Rent a car`,
+//   evenOfferPrice: `€ 200`
+// }, {
+//   eventOfferTitle: `Order Uber`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `Поймать попопутку`,
+//   evenOfferPrice: `Поболтать`
+// }];
+// const Flight = [{
+//   eventOfferTitle: `add luggage`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `add meal`,
+//   evenOfferPrice: ` € 21`
+// }, {
+//   eventOfferTitle: `Choose seats`,
+//   evenOfferPrice: `5 $ `
+// }];
+// const Sightseeng = [{
+//   eventOfferTitle: `add luggage`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `add meal`,
+//   evenOfferPrice: ` € 21`
+// }, {
+//   eventOfferTitle: `Choose seats`,
+//   evenOfferPrice: `5 $ `
+// }];
+// const Restaurant = [{
+//   eventOfferTitle: `add luggage`,
+//   evenOfferPrice: `€ 20`
+// }, {
+//   eventOfferTitle: `add meal`,
+//   evenOfferPrice: ` € 21`
+// }, {
+//   eventOfferTitle: `Choose seats`,
+//   evenOfferPrice: `5 $ `
+// }];
 
 
 const getRandomIntegerNumber = (min, max) => {
