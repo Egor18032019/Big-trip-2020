@@ -1,3 +1,6 @@
+import {
+  PATH_DAYS
+} from '../mock/const.js';
 /**
  *  контайнер для  маршурта и стоимости
  * @return{html} возращает разметку
@@ -33,7 +36,7 @@ export const createSitePathTemplate = () => {
     `
       <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
 
-     <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
+     <p class="trip-info__dates">${PATH_DAYS}</p>
        </div>
     `
   );

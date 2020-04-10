@@ -1,7 +1,8 @@
 //  генерация разметки
 
-
-const POINT_PATH = 3;
+import {
+  POINT_PATH
+} from './mock/const.js';
 /**
  * .trip-main
  */
@@ -14,22 +15,40 @@ const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
 // в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
 const [firstH2] = tripControlH2;
 
-import {createHeaderContainerTemplate} from './components/path.js';
-import {createSitePriceTemplate} from './components/path.js';
-import {createSitePathTemplate} from './components/path.js';
+import {
+  createHeaderContainerTemplate
+} from './components/path.js';
+import {
+  createSitePriceTemplate
+} from './components/path.js';
+import {
+  createSitePathTemplate
+} from './components/path.js';
 
-import {createSiteMenuTemplate} from './components/menu.js';
-import {createSiteFiltrTemplate} from './components/filter.js';
+import {
+  createSiteMenuTemplate
+} from './components/menu.js';
+import {
+  createSiteFiltrTemplate
+} from './components/filter.js';
 
-import {createMainContent} from './components/content.js';
-import {createContentDayTemplate} from './components/content.js';
-import {createDayTemplate} from './components/content.js';
-import {createPointTemplate} from './components/content.js';
+import {
+  createMainContent
+} from './components/content.js';
+import {
+  createPointContainer
+} from './components/content.js';
 
-import {createSiteAddNewEventTemplate} from './components/form.js';
+import {
+  createSiteAddNewEventTemplate
+} from './components/form.js';
 
-import {createSiteSortTemplate} from './components/sort.js';
-import {creatSorting} from './mock/sort.js';
+import {
+  createSiteSortTemplate
+} from './components/sort.js';
+import {
+  creatSorting
+} from './mock/sort.js';
 
 /**
  * функция рендеринга изображений
@@ -76,9 +95,12 @@ if (sortMainElement) {
 }
 
 const tripEventsList = document.querySelector(`.trip-days`);
+/**
+ * генерируем кол-во точек
+ */
 
 for (let i = 0; i < POINT_PATH; i++) {
   if (tripEventsList) {
-    render(tripEventsList, createPointTemplate(), `beforeend`);
+    render(tripEventsList, createPointContainer(POINT_PATH), `beforeend`);
   }
 }
