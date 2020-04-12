@@ -21,10 +21,14 @@ const createMainContent = () => {
     `
   );
 };
+/**
+ * контейнер для Offers
+ * @param {*} arrayOffers
+ * @return{html} возращает разметку
+ */
+const createOffersTemplate = (arrayOffers) => {
 
-const createOffersTemplate = (add) => {
-
-  for (const title of add) {
+  for (const title of arrayOffers) {
     // console.log(title);
     // -???? почему тут берет только первое значение и  что делать то ?
     return (
