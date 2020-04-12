@@ -1,6 +1,6 @@
 import {
   pointType,
-  pointFinal
+  POINT_TOWN
 } from './const.js';
 
 import {
@@ -19,7 +19,7 @@ const generateEventContent = function () {
 
   return {
     eventPoint,
-    eventTitle: `${eventPoint}  ${getRandomArrayItem(pointFinal)}`,
+    eventTitle: `${eventPoint}  ${getRandomArrayItem(POINT_TOWN)}`,
     eventOffers: [pointType.Taxi],
     // - ?? та же самая хрень . не могу из обьекта по ключу вытащить значение
     eventTimeStart: `07:05`, // считать?

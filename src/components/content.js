@@ -5,6 +5,9 @@ import {
   FIRST_DATE,
   MONTH_DATE,
 } from '../mock/const.js';
+import {
+  getRandomIntegerNumber
+} from '../mock/utils.js';
 /**
  * Главный контейнер для контента
  * @return{html} возращает разметку
@@ -90,14 +93,13 @@ ${eventSelectedOffers}
   );
 };
 
-const createDateDayTemplate = () => {
-  let dayAcc = 1;
+const createDateDayTemplate = (dayEvent = 1) => {
 
   return (
     `
     <div class="day__info">
-    <span class="day__counter">${dayAcc}</span>
-    <time class="day__date" datetime="2019-03-18">${FIRST_DATE} ${MONTH_DATE}</time>
+    <span class="day__counter">${dayEvent}</span>
+    <time class="day__date" datetime="2019-03-18">${FIRST_DATE + dayEvent} ${MONTH_DATE}</time>
   </div>
     `
   );
@@ -105,18 +107,17 @@ const createDateDayTemplate = () => {
 
 /**
  * Контейнер для точек маршрута
- * @param {*} task
+ * @param {*} dayEvent дни
  * @return{html} возращает разметку
  */
-const createPointContainer = () => {
+const createPointContainer = (dayEvent) => {
 
-  const events = generatePoints(3);
-  const dateMarkup = createDateDayTemplate();
+  const events = generatePoints(getRandomIntegerNumber(1, 4));
+  const dateMarkup = createDateDayTemplate(dayEvent);
   const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
   return (
     `
   <li class="trip-days__item  day">
-
 ${dateMarkup}
     <ul class="trip-events__list">
 ${pointsMarkup}

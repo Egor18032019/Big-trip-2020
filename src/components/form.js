@@ -1,6 +1,6 @@
 import {
   pointType,
-  pointFinal,
+  POINT_TOWN,
 } from '../mock/const.js';
 
 import {
@@ -39,7 +39,7 @@ export const createSiteAddNewEventTemplate = () => {
   const keysPointType = Object.keys(pointType);
   const eventType = getRandomArrayItem(keysPointType);
 
-  const pointEventList = pointFinal.map((it) => pointTownEventList(it)).join(`\n`);
+  const pointEventList = POINT_TOWN.map((it) => pointTownEventList(it)).join(`\n`);
 
   let ass = pointType[eventType];
   const eventAvailableOffers = ass.map((it) => eventAvailableOffer(it)).join(`\n`);

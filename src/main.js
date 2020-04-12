@@ -99,8 +99,8 @@ const tripEventsList = document.querySelector(`.trip-days`);
  * генерируем кол-во точек
  */
 
-for (let i = 0; i < POINT_PATH; i++) {
+for (let eventDay = 1; eventDay < POINT_PATH; eventDay++) {
   if (tripEventsList) {
-    render(tripEventsList, createPointContainer(POINT_PATH), `beforeend`);
+    render(tripEventsList, createPointContainer(eventDay), `beforeend`);
   }
 }

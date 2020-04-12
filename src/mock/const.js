@@ -1,12 +1,12 @@
 import {
   getRandomIntegerNumber,
 } from '../mock/utils.js';
-const POINT_PATH = getRandomIntegerNumber(0, 8);
+const POINT_PATH = getRandomIntegerNumber(2, 8);
 const FIRST_DATE = getRandomIntegerNumber(1, 28);
-const FINAL_DATE = +FIRST_DATE + POINT_PATH - 1;
+const FINAL_DATE = Math.round(FIRST_DATE + POINT_PATH - 1);
 const MONTH_DATE = `Mar`;
 const PATH_DAYS = ` ${MONTH_DATE} ${FIRST_DATE} - ${FINAL_DATE}`;
-const pointFinal = [`Amsterdam`, `Geneva`, `Ekaterinburg`];
+const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`];
 
 const pointType = {
   "Taxi": [{
@@ -118,5 +118,5 @@ export {
   FINAL_DATE,
   PATH_DAYS,
   pointType,
-  pointFinal,
+  POINT_TOWN,
 };
