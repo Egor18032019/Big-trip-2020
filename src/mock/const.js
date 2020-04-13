@@ -2,6 +2,8 @@ import {
   getRandomIntegerNumber,
   getRandomNewArray,
   getRandomPointPathRoad,
+  getRandomDateArray,
+  getRandomArrayItem,
 } from '../mock/utils.js';
 
 const POINT_PATH = getRandomIntegerNumber(2, 8);
@@ -117,13 +119,8 @@ const POINT_TYPE = {
   }],
 };
 
-const getRandomDateArray = (finalDate, firstDate) => {
-  const dateArrayList = [];
-  for (let i = firstDate; i <= finalDate; i++) {
-    dateArrayList.push(i);
-  }
-  return dateArrayList;
-};
+const EVENT_POINT = getRandomArrayItem(Object.keys(POINT_TYPE));
+
 const DATE_ARRAY = getRandomDateArray(FINAL_DATE, FIRST_DATE);
 
 
@@ -140,5 +137,6 @@ export {
   POINT_TOWN,
   EVENTS,
   POINT_PATH_ROAD,
-  DATE_ARRAY
+  DATE_ARRAY,
+  EVENT_POINT
 };

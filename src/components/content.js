@@ -29,7 +29,7 @@ const createOffersTemplate = (arrayOffers) => {
   for (let title of arrayOffers) {
     // console.log(title);
     // -???? почему тут берет только первое значение и  что делать то ?
-    let offers = title.evenOfferPrice;
+    let offers = title.eventOfferTitle;
     return (
       `
       <li class="event__offer">

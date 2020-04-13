@@ -48,11 +48,19 @@ const getRandomPointPathRoad = (arrayPoint, pointPath, dateArray) => {
   return poitArray;
 };
 
+const getRandomDateArray = (finalDate, firstDate) => {
+  const dateArrayList = [];
+  for (let i = firstDate; i <= finalDate; i++) {
+    dateArrayList.push(i);
+  }
+  return dateArrayList;
+};
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
   getRandomArray,
   getRandomDate,
   getRandomNewArray,
-  getRandomPointPathRoad
+  getRandomPointPathRoad,
+  getRandomDateArray
 };

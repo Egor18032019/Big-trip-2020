@@ -155,7 +155,6 @@ export const createSiteAddNewEventTemplate = () => {
 
                 <div class="event__available-offers">
                 ${eventAvailableOffers}
-
                 </div>
               </section>
             </section>
