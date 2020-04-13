@@ -1,14 +1,20 @@
 import {
   getRandomIntegerNumber,
+  getRandomNewArray,
+  getRandomPointPathRoad,
 } from '../mock/utils.js';
+
 const POINT_PATH = getRandomIntegerNumber(2, 8);
 const FIRST_DATE = getRandomIntegerNumber(1, 28);
 const FINAL_DATE = Math.round(FIRST_DATE + POINT_PATH - 1);
 const MONTH_DATE = `Mar`;
 const PATH_DAYS = ` ${MONTH_DATE} ${FIRST_DATE} - ${FINAL_DATE}`;
-const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`];
-
-const pointType = {
+const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
+/**
+ * массив  где написано кол-во значений в дне
+ */
+const EVENTS = getRandomNewArray(POINT_PATH);
+const POINT_TYPE = {
   "Taxi": [{
     eventOfferTitle: `Rent a car`,
     evenOfferPrice: ` 200`
@@ -111,12 +117,28 @@ const pointType = {
   }],
 };
 
+const getRandomDateArray = (finalDate, firstDate) => {
+  const dateArrayList = [];
+  for (let i = firstDate; i <= finalDate; i++) {
+    dateArrayList.push(i);
+  }
+  return dateArrayList;
+};
+const DATE_ARRAY = getRandomDateArray(FINAL_DATE, FIRST_DATE);
+
+
+const POINT_PATH_ROAD = getRandomPointPathRoad(POINT_TOWN, POINT_PATH, DATE_ARRAY);
+// console.log(POINT_PATH_ROAD);
+// -? как теперь это воткнуть в моки ,,??
 export {
   POINT_PATH,
   FIRST_DATE,
   MONTH_DATE,
   FINAL_DATE,
   PATH_DAYS,
-  pointType,
+  POINT_TYPE,
   POINT_TOWN,
+  EVENTS,
+  POINT_PATH_ROAD,
+  DATE_ARRAY
 };

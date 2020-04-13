@@ -5,9 +5,7 @@ import {
   FIRST_DATE,
   MONTH_DATE,
 } from '../mock/const.js';
-import {
-  getRandomIntegerNumber
-} from '../mock/utils.js';
+
 /**
  * Главный контейнер для контента
  * @return{html} возращает разметку
@@ -28,13 +26,14 @@ const createMainContent = () => {
  */
 const createOffersTemplate = (arrayOffers) => {
 
-  for (const title of arrayOffers) {
+  for (let title of arrayOffers) {
     // console.log(title);
     // -???? почему тут берет только первое значение и  что делать то ?
+    let offers = title.evenOfferPrice;
     return (
       `
       <li class="event__offer">
-      <span class="event__offer-title">${title.eventOfferTitle}</span>
+      <span class="event__offer-title">${offers}</span>
       +
       €&nbsp;
       <span class="event__offer-price">${title.evenOfferPrice}</span>
@@ -112,11 +111,13 @@ const createDateDayTemplate = (dayEvent = 1) => {
 /**
  * Контейнер для точек маршрута
  * @param {*} dayEvent дни
+ * @param {*} event количество ивентом в день
  * @return{html} возращает разметку
  */
-const createPointContainer = (dayEvent) => {
+const createPointContainer = (dayEvent, event) => {
 
-  const events = generatePoints(getRandomIntegerNumber(1, 4));
+  const events = generatePoints(event);
+  // console.log(events);
   const dateMarkup = createDateDayTemplate(dayEvent);
   const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
   return (

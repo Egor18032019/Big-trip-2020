@@ -1,6 +1,7 @@
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
+
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -21,9 +22,37 @@ const getRandomDate = (date) => {
   return resultData;
 };
 
+const getRandomNewArray = (end = 1) => {
+  const newArray = [];
+  for (let i = 0; i < end; i++) {
+    newArray.push(getRandomIntegerNumber(1, 5));
+  }
+  return newArray;
+};
+
+/**
+ * создает массив с 2 ключами  town: город  и day: дата когда происходит событие
+ * @param {*} arrayPoint
+ * @param {*} pointPath
+ * @param {*} dateArray массив с датами ивентов
+ * @return{html} возращает массив с обьектами по два ключа town и day
+ */
+const getRandomPointPathRoad = (arrayPoint, pointPath, dateArray) => {
+  const poitArray = [];
+  for (let i = 0; i < pointPath; i++) {
+    poitArray.push({
+      town: getRandomArrayItem(arrayPoint),
+      day: getRandomArrayItem(dateArray)
+    });
+  }
+  return poitArray;
+};
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
   getRandomArray,
-  getRandomDate
+  getRandomDate,
+  getRandomNewArray,
+  getRandomPointPathRoad
 };

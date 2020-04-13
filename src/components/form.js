@@ -1,5 +1,5 @@
 import {
-  pointType,
+  POINT_TYPE,
   POINT_TOWN,
 } from '../mock/const.js';
 
@@ -36,12 +36,12 @@ const eventAvailableOffer = (array) => {
  * @return{html} возращает разметку
  */
 export const createSiteAddNewEventTemplate = () => {
-  const keysPointType = Object.keys(pointType);
+  const keysPointType = Object.keys(POINT_TYPE);
   const eventType = getRandomArrayItem(keysPointType);
 
   const pointEventList = POINT_TOWN.map((it) => pointTownEventList(it)).join(`\n`);
 
-  let ass = pointType[eventType];
+  let ass = POINT_TYPE[eventType];
   const eventAvailableOffers = ass.map((it) => eventAvailableOffer(it)).join(`\n`);
   return (
     `
