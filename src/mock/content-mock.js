@@ -6,16 +6,14 @@ import {
 
 import {
   getRandomArrayItem,
-  getRandomDate
+  getRandomDate,
 } from './utils';
 
 // import {
 //   flatpickr
 // } from '../../node_modules/flatpickr';
 // // console.log(flatpickr);
-// import {
-//   moment,
-// } from '../../node_modules/moment';
+import moment from 'moment';
 // как работать то с этим ?
 
 const generateEventContent = function () {
@@ -27,14 +25,22 @@ const generateEventContent = function () {
     eventTitle: `${EVENT_POINT} to  ${eventTown.town}`,
     eventOffers: [POINT_TYPE[EVENT_POINT]],
     // - ?? та же самая хрень . не могу из обьекта по ключу вытащить значение
-    eventTimeStart: `07:05`, // считать?
-    eventTimeEnd: `16:05`, // flatpickr.js как её подключить ?
+    eventTimeStart: moment(getRandomDate()).format(`HH:MM`),
+    eventTimeEnd: moment(getRandomDate()).format(`HH:MM`), // flatpickr.js как её подключить ?
     // сделать разницу между старт и енд
     eventPrice: 50, // как это считаеться ? и считаеться ли то ?
     eventDuration: `30 M `, // как это считаеться ? и считаеться ли то ?
     eventDate: eventTown.day,
   };
 };
+
+const clonesEvent = [];
+for (let i = 0; i < 5; i++) {
+  const newCloneEvent = Object.assign({}, generateEventContent());
+  clonesEvent.push(newCloneEvent);
+}
+console.log(clonesEvent);
+
 /**
  * разбирает generateEventContent в массив с обьектами
  * @param {*} count список данных(ключ:значение)
@@ -49,6 +55,5 @@ const generatePoints = (count) => {
 export {
   generateEventContent,
   generatePoints,
-  getRandomDate,
   getRandomArrayItem
 };

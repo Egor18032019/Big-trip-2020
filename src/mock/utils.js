@@ -16,10 +16,8 @@ const getRandomArray = (array, start, end = array.length) => {
 };
 
 
-const getRandomDate = (date) => {
-  const resultData = new Date(date);
-  resultData.setMilliseconds(getRandomIntegerNumber(1500000, 860000000));
-  return resultData;
+const getRandomDate = (start = new Date(2020, 4, 1), end = new Date()) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
 const getRandomNewArray = (end = 1) => {
@@ -55,6 +53,7 @@ const getRandomDateArray = (finalDate, firstDate) => {
   }
   return dateArrayList;
 };
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -62,5 +61,5 @@ export {
   getRandomDate,
   getRandomNewArray,
   getRandomPointPathRoad,
-  getRandomDateArray
+  getRandomDateArray,
 };
