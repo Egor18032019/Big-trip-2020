@@ -6,6 +6,7 @@ import {
   getRandomArrayItem,
 } from '../mock/utils.js';
 
+
 const POINT_PATH = getRandomIntegerNumber(2, 8);
 const FIRST_DATE = getRandomIntegerNumber(1, 28);
 const FINAL_DATE = Math.round(FIRST_DATE + POINT_PATH - 1);
@@ -16,6 +17,7 @@ const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
  * массив  где написано кол-во значений в дне
  */
 const EVENTS = getRandomNewArray(POINT_PATH);
+// console.log(EVENTS);
 const POINT_TYPE = {
   "Taxi": [{
     eventOfferTitle: `Rent a car`,

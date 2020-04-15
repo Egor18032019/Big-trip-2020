@@ -116,6 +116,7 @@ const createDateDayTemplate = (dayEvent = 1) => {
  */
 const createPointContainer = (dayEvent, event) => {
 
+
   const events = generatePoints(event);
   // console.log(events);
   const dateMarkup = createDateDayTemplate(dayEvent);
