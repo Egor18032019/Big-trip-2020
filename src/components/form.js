@@ -32,7 +32,7 @@ const eventAvailableOffer = (array) => {
 };
 
 /**
- *   Новая форма
+ * Новая форма
  * @return{html} возращает разметку
  */
 export const createSiteAddNewEventTemplate = () => {

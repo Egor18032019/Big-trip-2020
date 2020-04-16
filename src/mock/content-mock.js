@@ -18,18 +18,24 @@ import moment from 'moment';
 const generateEventContent = function () {
 
   const eventTown = getRandomArrayItem(POINT_TOWN);
+  const dayEventDate = moment(getRandomDate()).format(`MMM do DD`).substring(0, 5);
+  // не могу найти как вывести просто месяц и день
+  const startEvent = moment(getRandomDate()).format(`HH:MM`);
+  // -??  как сделать чтобы  getRandomDate принимала startEvent ?
+  const endEvent = moment(getRandomDate()).format(`HH:MM`);
+  const durationEventHour = endEvent.slice(0, 2) - startEvent.slice(0, 2);
+  const durationEventMinutes = endEvent.slice(3, 2) - startEvent.slice(3, 2);
+  const durationEvent = `${durationEventHour}H ${durationEventMinutes}M`;
 
   return {
+    eventDate: dayEventDate,
     eventPoint: EVENT_POINT,
     eventTitle: `${EVENT_POINT} to  ${eventTown}`,
-    eventOffers: [POINT_TYPE[EVENT_POINT]],
-    // - ?? та же самая хрень . не могу из обьекта по ключу вытащить значение
-    eventTimeStart: moment(getRandomDate()).format(`HH:MM`),
-    eventTimeEnd: moment(getRandomDate()).format(`HH:MM`), // flatpickr.js как её подключить ?
-    // сделать разницу между старт и енд
+    eventOffers: POINT_TYPE[EVENT_POINT],
+    eventTimeStart: startEvent,
+    eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
     eventPrice: 50, // как это считаеться ? и считаеться ли то ?
-    eventDuration: `30 M `, // как это считаеться ? и считаеться ли то ?
-    eventDate: moment(getRandomDate()).format(`MM`),
+    eventDuration: durationEvent, // как это считаеться ? и считаеться ли то ?
   };
 };
 
@@ -44,7 +50,6 @@ const getAllEvent = () => {
   }
   return clonesEvent;
 };
-// console.log(getAllEvent());
 
 /**
  * разбирает generateEventContent в массив с обьектами

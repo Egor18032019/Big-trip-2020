@@ -1,10 +1,6 @@
 import {
   generatePoints,
 } from '../mock/content-mock.js';
-import {
-  FIRST_DATE,
-  MONTH_DATE,
-} from '../mock/const.js';
 
 /**
  * Главный контейнер для контента
@@ -19,29 +15,24 @@ const createMainContent = () => {
     `
   );
 };
+
+
 /**
  * контейнер для Offers
  * @param {*} arrayOffers
  * @return{html} возращает разметку
  */
-const createOffersTemplate = (arrayOffers) => {
+const createOffersTemplates = (arrayOffers) => {
 
-  for (let title of arrayOffers) {
-    // console.log(title);
-    // -???? почему тут берет только первое значение и  что делать то ?
-    let offers = title.eventOfferTitle;
-    return (
-      `
+  return (
+    `
       <li class="event__offer">
-      <span class="event__offer-title">${offers}</span>
+      <span class="event__offer-title">${arrayOffers.eventOfferTitle}</span>
       +
       €&nbsp;
-      <span class="event__offer-price">${title.evenOfferPrice}</span>
+      <span class="event__offer-price">${arrayOffers.evenOfferPrice}</span>
      </li>
      `);
-
-  }
-  return `--???Что сюда написать или как исправить ?`;
 };
 
 const createPointTemplate = (points) => {
@@ -55,9 +46,8 @@ const createPointTemplate = (points) => {
     eventPrice,
     eventDuration,
   } = points;
-  // console.log(eventOffers);
 
-  const eventSelectedOffers = eventOffers.map((it) => createOffersTemplate(it)).join(`\n`);
+  const eventSelectedOffers = eventOffers.map((it) => createOffersTemplates(it)).join(`\n`);
 
   return (
     `
@@ -96,30 +86,30 @@ ${eventSelectedOffers}
   );
 };
 
-const createDateDayTemplate = (dayEvent = 1) => {
+const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась`) => {
 
   return (
     `
     <div class="day__info">
-    <span class="day__counter">${dayEvent}</span>
-    <time class="day__date" datetime="2019-03-18">${FIRST_DATE + dayEvent} ${MONTH_DATE}</time>
+    <span class="day__counter">${eventDay + 1}</span>
+    <time class="day__date" datetime="2019-03-18">${dayEventDate}</time>
   </div>
     `
   );
 };
 
 /**
- * Контейнер для точек маршрута
- * @param {*} dayEvent дни
- * @param {*} event количество ивентом в день
+ * Контейнеры для точек маршрута
+ * @param {*} eventDay номер эвента по порядку
+ * @param {*} dayEventDate  дата ивента
  * @return{html} возращает разметку
  */
-const createPointContainer = (dayEvent, event) => {
+const createPointContainer = (eventDay, dayEventDate) => {
 
 
-  const events = generatePoints(event);
+  const events = generatePoints(dayEventDate);
   // console.log(events);
-  const dateMarkup = createDateDayTemplate(dayEvent);
+  const dateMarkup = createDateDayTemplate(eventDay, dayEventDate);
   const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
   return (
     `
