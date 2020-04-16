@@ -1,6 +1,7 @@
 import {
-  PATH_DAYS
+  allEvent
 } from '../mock/const.js';
+
 /**
  *  контайнер для  маршурта и стоимости
  * @return{html} возращает разметку
@@ -27,17 +28,29 @@ export const createSitePriceTemplate = () => {
       </p>`
   );
 };
+
+
+const createPathPointTown = (itemArray) => {
+  return itemArray.eventPointTown;
+};
+const createPathPointDate = (itemArray) => {
+  return itemArray.eventDate;
+};
 /**
  *  Маршрут и  дата
  * @return{html} возращает разметку
  */
 export const createSitePathTemplate = () => {
+  const pathPoints = allEvent.map((it) => createPathPointTown(it)).join(` &mdash; `);
+  const pathDate = allEvent.map((it) => createPathPointDate(it)).join(` &mdash; `);
+
   return (
     `
-      <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
+      <h1 class="trip-info__title">${pathPoints}</h1>
 
-     <p class="trip-info__dates">${PATH_DAYS}</p>
+     <p class="trip-info__dates">${pathDate}</p>
        </div>
     `
   );
 };
+

@@ -1,8 +1,8 @@
 //  генерация разметки
 
 import {
-  getAllEvent
-} from './mock/content-mock.js';
+  allEvent
+} from './mock/const.js';
 
 /**
  * .trip-main
@@ -91,14 +91,13 @@ if (sortMainElement) {
 if (sortMainElement) {
   render(sortMainElement, createSiteAddNewEventTemplate(), `beforeend`);
 }
+
 if (sortMainElement) {
   render(sortMainElement, createMainContent(), `beforeend`);
 }
 
 const tripEventsList = document.querySelector(`.trip-days`);
 
-
-const allEvent = getAllEvent();
 
 // // В зависимости от POINT_PATH отрисовываем кол-во точек
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {

@@ -36,6 +36,8 @@ const generateEventContent = function () {
     eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
     eventPrice: 50, // как это считаеться ? и считаеться ли то ?
     eventDuration: durationEvent, // как это считаеться ? и считаеться ли то ?
+    eventPointTown: eventTown,
+    eventPointDestination: `dddddSSSS`,
   };
 };
 
@@ -50,6 +52,7 @@ const getAllEvent = () => {
   }
   return clonesEvent;
 };
+
 
 /**
  * разбирает generateEventContent в массив с обьектами

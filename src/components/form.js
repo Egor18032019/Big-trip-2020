@@ -1,6 +1,8 @@
 import {
   POINT_TYPE,
-  POINT_TOWN,
+  POINT_TOWN, // убрать
+  description,
+  descriptionImg
 } from '../mock/const.js';
 
 import {
@@ -32,6 +34,29 @@ const eventAvailableOffer = (array) => {
 };
 
 /**
+ * отрисовывает описание(description)
+ * @param {*} array
+ * @param {*} arrayImg
+ * @return{html} возращает разметку
+ */
+const creatPointDestination = (array, arrayImg) => {
+  const pathDestination = getRandomArrayItem(array);
+  const destinationImg = getRandomArrayItem(arrayImg);
+
+  return (
+    `
+   <p class="event__destination-description">${pathDestination}</p>
+
+  <div class="event__photos-container">
+    <div class="event__photos-tape">
+    ${destinationImg}
+    </div>
+  </div>
+`
+  );
+};
+
+/**
  * Новая форма
  * @return{html} возращает разметку
  */
@@ -43,6 +68,7 @@ export const createSiteAddNewEventTemplate = () => {
 
   let ass = POINT_TYPE[eventType];
   const eventAvailableOffers = ass.map((it) => eventAvailableOffer(it)).join(`\n`);
+  const pointDestination = creatPointDestination(description, descriptionImg);
   return (
     `
 <form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -157,6 +183,11 @@ export const createSiteAddNewEventTemplate = () => {
                 ${eventAvailableOffers}
                 </div>
               </section>
+
+              <section class="event__section  event__section--destination">
+              <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            ${pointDestination}
+            </section>
             </section>
           </form>
     `
