@@ -31,7 +31,6 @@ const createOffersTemplates = (arrayOffers) => {
 };
 
 const createPointTemplate = (points) => {
-  // console.log(points);
   const {
     eventPoint,
     eventTitle,
@@ -49,7 +48,7 @@ const createPointTemplate = (points) => {
   <li class="trip-events__item">
   <div class="event">
     <div class="event__type">
-    <img class="event__type-icon" src=img/icons/${eventPoint}.png
+    <img class="event__type-icon" src=img/icons/${eventPoint.toLowerCase()}.png
     alt="Event type icon" width="42" height="42">
     </div>
     <h3 class="event__title">${eventTitle}</h3>
@@ -96,21 +95,20 @@ const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась
 /**
  * Контейнеры для точек маршрута
  * @param {*} eventDay номер эвента по порядку
- * @param {*} eventOneDay  дата ивента
+ * @param {*} allEventOneDay  список ивентов в день
  * @return{html} возращает разметку
  */
-const createPointContainer = (eventDay, eventOneDay) => {
+const createPointContainer = (eventDay, allEventOneDay) => {
 
   const {
     eventDate: dayEventDate,
-  } = eventOneDay;
-  // -? обудмать как здесь сделать лучше
-  // const events = [eventOneDay];
-  // console.log(events);
-  const dateMarkup = createDateDayTemplate(eventDay, dayEventDate);
-  const pointsMarkup = createPointTemplate(eventOneDay);
+    points: eventOneDay,
+  } = allEventOneDay;
 
-  // const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
+  const dateMarkup = createDateDayTemplate(eventDay, dayEventDate);
+
+  const pointsMarkup = eventOneDay.map((it) => createPointTemplate(it)).join(`\n`);
+
   return (
     `
   <li class="trip-days__item  day">

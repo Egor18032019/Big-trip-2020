@@ -33,30 +33,19 @@ const getRandomNewArray = (end = 1) => {
   return newArray;
 };
 
-/**
- * создает массив с 2 ключами  town: город  и day: дата когда происходит событие
- * @param {*} arrayPoint
- * @param {*} pointPath
- * @param {*} dateArray массив с датами ивентов
- * @return{html} возращает массив с обьектами по два ключа town и day
- */
-const getRandomPointPathRoad = (arrayPoint, pointPath, dateArray) => {
-  const poitArray = [];
-  for (let i = 0; i < pointPath; i++) {
-    poitArray.push({
-      town: getRandomArrayItem(arrayPoint),
-      day: getRandomArrayItem(dateArray)
-    });
-  }
-  return poitArray;
-};
 
-const getRandomDateArray = (finalDate, firstDate) => {
-  const dateArrayList = [];
-  for (let i = firstDate; i <= finalDate; i++) {
-    dateArrayList.push(i);
+/**
+ * @param {*} allday кол-во дней или ивентов в дне
+ * @param {*} events функция которая записывает значение в элемент массива
+ *  @return{html} массив с обьектами от generateEventContent()
+ */
+const getAllEvent = (allday, events) => {
+  const clonesEvent = [];
+  for (let i = 0; i < allday; i++) {
+    const newCloneEvent = Object.assign({}, events);
+    clonesEvent.push(newCloneEvent);
   }
-  return dateArrayList;
+  return clonesEvent;
 };
 
 export {
@@ -65,6 +54,5 @@ export {
   getRandomArray,
   getRandomDate,
   getRandomNewArray,
-  getRandomPointPathRoad,
-  getRandomDateArray,
+  getAllEvent,
 };

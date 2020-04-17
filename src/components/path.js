@@ -1,6 +1,3 @@
-import {
-  allEvent
-} from '../mock/const.js';
 
 /**
  *  контайнер для  маршурта и стоимости
@@ -31,18 +28,20 @@ export const createSitePriceTemplate = () => {
 
 
 const createPathPointTown = (itemArray) => {
-  return itemArray.eventPointTown;
+
+  return itemArray.points[1].eventPointTown;
 };
 const createPathPointDate = (itemArray) => {
   return itemArray.eventDate;
 };
 /**
  *  Маршрут и  дата
+ * @param {*} listEvent список ивентов
  * @return{html} возращает разметку
  */
-export const createSitePathTemplate = () => {
-  const pathPoints = allEvent.map((it) => createPathPointTown(it)).join(` &mdash; `);
-  const pathDate = allEvent.map((it) => createPathPointDate(it)).join(` &mdash; `);
+export const createSitePathTemplate = (listEvent) => {
+  const pathPoints = listEvent.map((it) => createPathPointTown(it)).join(` &mdash; `);
+  const pathDate = listEvent.map((it) => createPathPointDate(it)).join(` &mdash; `);
 
   return (
     `
@@ -53,4 +52,3 @@ export const createSitePathTemplate = () => {
     `
   );
 };
-

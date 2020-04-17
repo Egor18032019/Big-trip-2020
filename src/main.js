@@ -69,7 +69,7 @@ if (runMainElement) {
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
-  render(pathElement, createSitePathTemplate());
+  render(pathElement, createSitePathTemplate(allEvent));
 }
 const priceElement = document.querySelector(`.trip-info`);
 if (priceElement) {
@@ -91,7 +91,7 @@ if (sortMainElement) {
 }
 // пока времено. Обудамать или Обсудить  как сюда передавать
 // и для POINT_TOWN
-const vremenno = allEvent[1];
+const vremenno = allEvent[1].points[1];
 
 if (sortMainElement) {
   render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN), `beforeend`);

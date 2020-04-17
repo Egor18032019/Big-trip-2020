@@ -1,10 +1,13 @@
 import {
   getRandomArrayItem,
+  getAllEvent
 } from '../mock/utils.js';
 
 import {
-  getAllEvent,
+  generateEventContent
 } from './content-mock.js';
+
+const ALLDAY = 5;
 
 const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
 
@@ -140,8 +143,11 @@ const descriptionImg = [
   `  <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">`
 ];
 
-const allEvent = getAllEvent();
+const allEvent = getAllEvent(ALLDAY, generateEventContent());
+// console.log(allEvent);
+
 export {
+  ALLDAY,
   POINT_TOWN,
   POINT_TYPE,
   EVENT_POINT,

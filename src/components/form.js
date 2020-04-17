@@ -73,8 +73,8 @@ export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown) =>
 
   const pointEventList = vremennoTown.map((it) => pointTownEventList(it)).join(`\n`);
 
-  let ass = POINT_TYPE[eventType];
-  const eventAvailableOffers = ass.map((it) => eventAvailableOffer(it)).join(`\n`);
+  let offersForType = POINT_TYPE[eventType];
+  const eventAvailableOffers = offersForType.map((it) => eventAvailableOffer(it)).join(`\n`);
   const pointDestination = creatPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
   return (
     `
