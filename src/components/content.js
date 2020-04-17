@@ -1,7 +1,3 @@
-import {
-  generatePoints,
-} from '../mock/content-mock.js';
-
 /**
  * Главный контейнер для контента
  * @return{html} возращает разметку
@@ -15,7 +11,6 @@ const createMainContent = () => {
     `
   );
 };
-
 
 /**
  * контейнер для Offers
@@ -104,13 +99,18 @@ const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась
  * @param {*} dayEventDate  дата ивента
  * @return{html} возращает разметку
  */
-const createPointContainer = (eventDay, dayEventDate) => {
+const createPointContainer = (eventDay, eventOneDay) => {
 
-
-  const events = generatePoints(dayEventDate);
+  const {
+    eventDate: dayEventDate,
+  } = eventOneDay;
+  // -? обудмать как здесь сделать лучше
+  // const events = [eventOneDay];
   // console.log(events);
   const dateMarkup = createDateDayTemplate(eventDay, dayEventDate);
-  const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
+  const pointsMarkup = createPointTemplate(eventOneDay);
+
+  // const pointsMarkup = events.map((it) => createPointTemplate(it)).join(`\n`);
   return (
     `
   <li class="trip-days__item  day">

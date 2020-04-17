@@ -1,6 +1,7 @@
 //  генерация разметки
 
 import {
+  POINT_TOWN,
   allEvent
 } from './mock/const.js';
 
@@ -88,8 +89,12 @@ const sortMainElement = document.querySelector(`.trip-events`);
 if (sortMainElement) {
   render(sortMainElement, createSiteSortTemplate(creatSorting), `beforeend`);
 }
+// пока времено. Обудамать или Обсудить  как сюда передавать
+// и для POINT_TOWN
+const vremenno = allEvent[1];
+
 if (sortMainElement) {
-  render(sortMainElement, createSiteAddNewEventTemplate(), `beforeend`);
+  render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN), `beforeend`);
 }
 
 if (sortMainElement) {
@@ -99,9 +104,9 @@ if (sortMainElement) {
 const tripEventsList = document.querySelector(`.trip-days`);
 
 
-// // В зависимости от POINT_PATH отрисовываем кол-во точек
+// // В зависимости от allEvent.length отрисовываем кол-во точек
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
-    render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay].eventDate), `beforeend`);
+    render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay]), `beforeend`);
   }
 }

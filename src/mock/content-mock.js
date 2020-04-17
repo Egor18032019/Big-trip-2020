@@ -1,12 +1,15 @@
 import {
   POINT_TYPE,
   POINT_TOWN,
-  EVENT_POINT
+  EVENT_POINT,
+  description,
+  descriptionImg
 } from './const.js';
 
 import {
   getRandomArrayItem,
   getRandomDate,
+  getRandomArray,
 } from './utils';
 
 // import {
@@ -37,7 +40,10 @@ const generateEventContent = function () {
     eventPrice: 50, // как это считаеться ? и считаеться ли то ?
     eventDuration: durationEvent, // как это считаеться ? и считаеться ли то ?
     eventPointTown: eventTown,
-    eventPointDestination: `dddddSSSS`,
+    eventPointDestination: {
+      pathDestination: getRandomArray(description, 1, 5),
+      destinationImg: getRandomArray(descriptionImg, 1, 5)
+    },
   };
 };
 

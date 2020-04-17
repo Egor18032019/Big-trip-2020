@@ -1,14 +1,16 @@
 import {
   POINT_TYPE,
-  POINT_TOWN, // убрать
-  description,
-  descriptionImg
 } from '../mock/const.js';
 
 import {
-  getRandomArrayItem
+  getRandomArrayItem,
 } from '../mock/utils.js';
 
+/**
+ * Делает datalist выборки городов
+ * @param {*} town
+ * @return{html} разметку
+ */
 const pointTownEventList = (town) => {
   return (
     `
@@ -35,19 +37,17 @@ const eventAvailableOffer = (array) => {
 
 /**
  * отрисовывает описание(description)
- * @param {*} array
- * @param {*} arrayImg
+ * @param {*} description
+ * @param {*} descriptionImg
  * @return{html} возращает разметку
  */
-const creatPointDestination = (array, arrayImg) => {
-  const pathDestination = getRandomArrayItem(array);
-  const destinationImg = getRandomArrayItem(arrayImg);
-
+const creatPointDestination = (description, descriptionImg) => {
+  const pathDestination = description;
+  const destinationImg = descriptionImg;
   return (
     `
    <p class="event__destination-description">${pathDestination}</p>
-
-  <div class="event__photos-container">
+   <div class="event__photos-container">
     <div class="event__photos-tape">
     ${destinationImg}
     </div>
@@ -56,19 +56,26 @@ const creatPointDestination = (array, arrayImg) => {
   );
 };
 
+
 /**
  * Новая форма
+ * @param {*} vremennoOpisanie
+ * @param {*} vremennoTown
  * @return{html} возращает разметку
  */
-export const createSiteAddNewEventTemplate = () => {
+export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown) => {
+  const {
+    eventPointDestination
+  } = vremennoOpisanie;
+
   const keysPointType = Object.keys(POINT_TYPE);
   const eventType = getRandomArrayItem(keysPointType);
 
-  const pointEventList = POINT_TOWN.map((it) => pointTownEventList(it)).join(`\n`);
+  const pointEventList = vremennoTown.map((it) => pointTownEventList(it)).join(`\n`);
 
   let ass = POINT_TYPE[eventType];
   const eventAvailableOffers = ass.map((it) => eventAvailableOffer(it)).join(`\n`);
-  const pointDestination = creatPointDestination(description, descriptionImg);
+  const pointDestination = creatPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
   return (
     `
 <form class="trip-events__item  event  event--edit" action="#" method="post">

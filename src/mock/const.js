@@ -1,5 +1,4 @@
 import {
-  getRandomIntegerNumber,
   getRandomArrayItem,
 } from '../mock/utils.js';
 
@@ -7,11 +6,6 @@ import {
   getAllEvent,
 } from './content-mock.js';
 
-const POINT_PATH = getRandomIntegerNumber(2, 8);
-const FIRST_DATE = getRandomIntegerNumber(1, 28);
-const FINAL_DATE = Math.round(FIRST_DATE + POINT_PATH - 1);
-const MONTH_DATE = `Mar`;
-const PATH_DAYS = ` ${MONTH_DATE} ${FIRST_DATE} - ${FINAL_DATE}`;
 const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
 
 const POINT_TYPE = {
@@ -117,11 +111,13 @@ const POINT_TYPE = {
   }],
 };
 
+/**
+ * случайный ключ от списка("Taxi","Bus" и т..п)
+ */
 const EVENT_POINT = getRandomArrayItem(Object.keys(POINT_TYPE));
 /**
  * список эвентов
  */
-const allEvent = getAllEvent();
 
 const description = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
@@ -144,12 +140,10 @@ const descriptionImg = [
   `  <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">`
 ];
 
+const allEvent = getAllEvent();
 export {
-  POINT_PATH,
-  MONTH_DATE,
-  PATH_DAYS,
-  POINT_TYPE,
   POINT_TOWN,
+  POINT_TYPE,
   EVENT_POINT,
   allEvent,
   description,

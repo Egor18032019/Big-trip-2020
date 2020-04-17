@@ -2,6 +2,11 @@ const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
+/**
+ * Выбор случайного элемента из переданого массива
+ * @param {*} array массив
+ * @return{элемент} один элемент массива
+ */
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
