@@ -96,7 +96,7 @@ const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась
 /**
  * Контейнеры для точек маршрута
  * @param {*} eventDay номер эвента по порядку
- * @param {*} dayEventDate  дата ивента
+ * @param {*} eventOneDay  дата ивента
  * @return{html} возращает разметку
  */
 const createPointContainer = (eventDay, eventOneDay) => {
