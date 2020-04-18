@@ -1,6 +1,3 @@
-import {
-  POINT_TYPE,
-} from '../mock/const.js';
 
 import {
   getRandomArrayItem,
@@ -61,19 +58,20 @@ const creatPointDestination = (description, descriptionImg) => {
  * Новая форма
  * @param {*} vremennoOpisanie
  * @param {*} vremennoTown
+ * @param {*} pointType
  * @return{html} возращает разметку
  */
-export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown) => {
+export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, pointType) => {
   const {
     eventPointDestination
   } = vremennoOpisanie;
 
-  const keysPointType = Object.keys(POINT_TYPE);
+  const keysPointType = Object.keys(pointType);
   const eventType = getRandomArrayItem(keysPointType);
 
   const pointEventList = vremennoTown.map((it) => pointTownEventList(it)).join(`\n`);
 
-  let offersForType = POINT_TYPE[eventType];
+  let offersForType = pointType[eventType];
   const eventAvailableOffers = offersForType.map((it) => eventAvailableOffer(it)).join(`\n`);
   const pointDestination = creatPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
   return (

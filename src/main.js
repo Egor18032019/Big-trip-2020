@@ -2,6 +2,7 @@
 
 import {
   POINT_TOWN,
+  POINT_TYPE,
   allEvent
 } from './mock/const.js';
 
@@ -18,13 +19,9 @@ const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
 const [firstH2] = tripControlH2;
 
 import {
-  createHeaderContainerTemplate
-} from './components/path.js';
-import {
-  createSitePriceTemplate
-} from './components/path.js';
-import {
-  createSitePathTemplate
+  createSitePriceTemplate,
+  createHeaderContainerTemplate,
+  createSitePathTemplate,
 } from './components/path.js';
 
 import {
@@ -35,9 +32,7 @@ import {
 } from './components/filter.js';
 
 import {
-  createMainContent
-} from './components/content.js';
-import {
+  createMainContent,
   createPointContainer
 } from './components/content.js';
 
@@ -94,7 +89,7 @@ if (sortMainElement) {
 const vremenno = allEvent[1].points[1];
 
 if (sortMainElement) {
-  render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN), `beforeend`);
+  render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN, POINT_TYPE), `beforeend`);
 }
 
 if (sortMainElement) {

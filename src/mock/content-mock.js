@@ -7,6 +7,7 @@ import {
 } from './const.js';
 
 import {
+  getRandomIntegerNumber,
   getRandomArrayItem,
   getRandomDate,
   getRandomArray,
@@ -46,29 +47,16 @@ const randomArraypoints = () => {
 
 const generateEventContent = function () {
   const dayEventDate = moment(getRandomDate()).format(`MMM do DD`).substring(0, 5);
-  // не могу найти как вывести просто месяц и день
+  // -??не могу найти как вывести просто месяц и день
 
   return {
     eventDate: dayEventDate,
-    points: getAllEvent(3, randomArraypoints()),
+    points: getAllEvent(getRandomIntegerNumber(1, 4), randomArraypoints()),
   };
-};
 
-
-/**
- * разбирает generateEventContent в массив с обьектами
- * @param {*} count список данных(ключ:значение)
- * @param {*} eventForOneDay сдедал на будщее
- * @return{html} массив
- */
-const generatePoints = (count, eventForOneDay = generateEventContent) => {
-  return new Array(count)
-    .fill(``)
-    .map(eventForOneDay);
 };
 
 export {
   generateEventContent,
-  generatePoints,
   getRandomArrayItem,
 };

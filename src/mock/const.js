@@ -6,7 +6,9 @@ import {
 import {
   generateEventContent
 } from './content-mock.js';
-
+/**
+ * кол-во дней
+ */
 const ALLDAY = 5;
 
 const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
@@ -119,9 +121,8 @@ const POINT_TYPE = {
  */
 const EVENT_POINT = getRandomArrayItem(Object.keys(POINT_TYPE));
 /**
- * список эвентов
+ * массив предложений
  */
-
 const description = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget. `,
@@ -134,7 +135,9 @@ const description = [
   `Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus.`,
   `In rutrum ac purus sit amet tempus.`
 ];
-
+/**
+ * массив картинок
+ */
 const descriptionImg = [
   `  <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">`,
   `  <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">`,
@@ -143,6 +146,9 @@ const descriptionImg = [
   `  <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">`
 ];
 
+/**
+ * весь список ивентов
+ */
 const allEvent = getAllEvent(ALLDAY, generateEventContent());
 // console.log(allEvent);
 
