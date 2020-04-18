@@ -33,7 +33,8 @@ import {
 
 import {
   createMainContent,
-  createPointContainer
+  // createPointContainer,
+  Point
 } from './components/content.js';
 
 import {
@@ -56,7 +57,20 @@ import {
 const render = (container, template, place = `afterbegin`) => {
   container.insertAdjacentHTML(place, template);
 };
-
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+const newRender = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
 
 if (runMainElement) {
   render(runMainElement, createHeaderContainerTemplate());
@@ -86,7 +100,7 @@ if (sortMainElement) {
 }
 // пока времено. Обудамать или Обсудить  как сюда передавать
 // и для POINT_TOWN
-const vremenno = allEvent[1].points[1];
+const vremenno = allEvent[0].points[0];
 
 if (sortMainElement) {
   render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN, POINT_TYPE), `beforeend`);
@@ -99,9 +113,49 @@ if (sortMainElement) {
 const tripEventsList = document.querySelector(`.trip-days`);
 
 
-// // В зависимости от allEvent.length отрисовываем кол-во точек
+const renderPoint = (listElement, task) => {
+
+  // обработчики
+  // const replaceTaskToEdit = () => {
+  //   taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  // };
+
+  // const replaceEditToTask = () => {
+  //   taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  // };
+
+  // const onEscKeyDown = (evt) => {
+  //   const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+  //   if (isEscKey) {
+  //     replaceEditToTask();
+  //     document.removeEventListener(`keydown`, onEscKeyDown);
+  //   }
+  // };
+
+  const taskComponent = new Point(task);
+
+
+  // const taskEditComponent = new TaskEditComponent(task);
+  // // слушатели обработчиков
+  // const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  // editButton.addEventListener(`click`, () => {
+  //   replaceTaskToEdit();
+  //   document.addEventListener(`keydown`, onEscKeyDown);
+  // });
+  // const editForm = taskEditComponent.getElement().querySelector(`form`);
+  // editForm.addEventListener(`submit`, () => {
+  //   replaceEditToTask();
+  //   document.removeEventListener(`keydown`, onEscKeyDown);
+  // });
+  // console.dir(taskComponent.getElement());
+  newRender(listElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+// // В зависимости от allEvent.length отрисовываем кол-во точек путешествий
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
-    render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay]), `beforeend`);
+    // render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay]), `beforeend`);
+    renderPoint(tripEventsList, allEvent[eventDay]);
   }
 }

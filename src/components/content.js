@@ -1,3 +1,7 @@
+import {
+  createElement
+} from '../mock/utils.js';
+
 /**
  * Главный контейнер для контента
  * @return{html} возращает разметку
@@ -80,8 +84,8 @@ ${eventSelectedOffers}
   );
 };
 
-const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась`) => {
-
+const createDateDayTemplate = (dayEventDate = `дата сбилась`) => {
+  let eventDay = 0;
   return (
     `
     <div class="day__info">
@@ -94,18 +98,17 @@ const createDateDayTemplate = (eventDay, dayEventDate = `дата сбилась
 
 /**
  * Контейнеры для точек маршрута
- * @param {*} eventDay номер эвента по порядку
  * @param {*} allEventOneDay  список ивентов в день
  * @return{html} возращает разметку
  */
-const createPointContainer = (eventDay, allEventOneDay) => {
+const createPointContainer = (allEventOneDay) => {
 
   const {
     eventDate: dayEventDate,
     points: eventOneDay,
   } = allEventOneDay;
 
-  const dateMarkup = createDateDayTemplate(eventDay, dayEventDate);
+  const dateMarkup = createDateDayTemplate(dayEventDate);
 
   const pointsMarkup = eventOneDay.map((it) => createPointTemplate(it)).join(`\n`);
 
@@ -122,9 +125,34 @@ ${pointsMarkup}
   );
 };
 
+class Point {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    // console.dir(this._point);
+    return createPointContainer(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
 
 export {
   createMainContent,
   createPointContainer,
-  createPointTemplate
+  Point
 };

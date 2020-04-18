@@ -29,7 +29,7 @@ export const createSitePriceTemplate = () => {
 
 const createPathPointTown = (itemArray) => {
 
-  return itemArray.points[1].eventPointTown;
+  return itemArray.points[0].eventPointTown;
 };
 const createPathPointDate = (itemArray) => {
   return itemArray.eventDate;

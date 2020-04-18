@@ -33,11 +33,10 @@ const getRandomNewArray = (end = 1) => {
   return newArray;
 };
 
-
 /**
  * @param {*} allday кол-во дней или ивентов в дне
  * @param {*} events функция которая записывает значение в элемент массива
- *  @return{html} массив с обьектами от generateEventContent()
+ * @return{html} массив с обьектами от generateEventContent()
  */
 const getAllEvent = (allday, events) => {
   const clonesEvent = [];
@@ -48,6 +47,20 @@ const getAllEvent = (allday, events) => {
   return clonesEvent;
 };
 
+/**
+ * вспомогательная функция для создания DOM-элемента
+ * @param {*} template шаблон разметки
+ * @return{html} шаблон превращеный в DOM элемент
+ */
+const createElement = (template) => {
+  // создаем оболочку - вставляем шаблон - вытаскиваем из оболочкке уже DOM элемент
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -55,4 +68,5 @@ export {
   getRandomDate,
   getRandomNewArray,
   getAllEvent,
+  createElement,
 };
