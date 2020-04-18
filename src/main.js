@@ -1,7 +1,11 @@
 //  генерация разметки
 
+import {
+  POINT_TOWN,
+  POINT_TYPE,
+  allEvent
+} from './mock/const.js';
 
-const POINT_PATH = 3;
 /**
  * .trip-main
  */
@@ -14,21 +18,34 @@ const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
 // в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
 const [firstH2] = tripControlH2;
 
-import {createHeaderContainerTemplate} from './components/path.js';
-import {createSitePriceTemplate} from './components/path.js';
-import {createSitePathTemplate} from './components/path.js';
+import {
+  createSitePriceTemplate,
+  createHeaderContainerTemplate,
+  createSitePathTemplate,
+} from './components/path.js';
 
-import {createSiteMenuTemplate} from './components/menu.js';
-import {createSiteFiltrTemplate} from './components/filter.js';
+import {
+  createSiteMenuTemplate
+} from './components/menu.js';
+import {
+  createSiteFiltrTemplate
+} from './components/filter.js';
 
-import {createContentTemplate} from './components/content.js';
-import {createContentDayTemplate} from './components/content.js';
-import {createDayTemplate} from './components/content.js';
-import {createPointTemplate} from './components/content.js';
+import {
+  createMainContent,
+  createPointContainer
+} from './components/content.js';
 
-import {createSiteAddNewEventTemplate} from './components/form.js';
+import {
+  createSiteAddNewEventTemplate
+} from './components/form.js';
 
-import {createSiteSortTemplate} from './components/sort.js';
+import {
+  createSiteSortTemplate
+} from './components/sort.js';
+import {
+  creatSorting
+} from './mock/sort.js';
 
 /**
  * функция рендеринга изображений
@@ -47,7 +64,7 @@ if (runMainElement) {
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
-  render(pathElement, createSitePathTemplate());
+  render(pathElement, createSitePathTemplate(allEvent));
 }
 const priceElement = document.querySelector(`.trip-info`);
 if (priceElement) {
@@ -65,30 +82,26 @@ if (tripControlsElement) {
  */
 const sortMainElement = document.querySelector(`.trip-events`);
 if (sortMainElement) {
-  render(sortMainElement, createSiteSortTemplate(), `beforeend`);
+  render(sortMainElement, createSiteSortTemplate(creatSorting), `beforeend`);
 }
-if (sortMainElement) {
-  render(sortMainElement, createSiteAddNewEventTemplate(), `beforeend`);
-}
-if (sortMainElement) {
-  render(sortMainElement, createContentTemplate(), `beforeend`);
-}
-// после отрисовки контейнера контента отрисовываем контейнер для даты
-const tripDays = document.querySelector(`.trip-days`);
+// пока времено. Обудамать или Обсудить  как сюда передавать
+// и для POINT_TOWN
+const vremenno = allEvent[1].points[1];
 
-if (tripDays) {
-  render(tripDays, createContentDayTemplate(), `beforeend`);
+if (sortMainElement) {
+  render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN, POINT_TYPE), `beforeend`);
 }
-// и дату
-const dayInfo = document.querySelector(`.day__info`);
-if (dayInfo) {
-  render(dayInfo, createDayTemplate(), `beforeend`);
-}
-// и точку маршрута
-const tripEventsList = document.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < POINT_PATH; i++) {
+if (sortMainElement) {
+  render(sortMainElement, createMainContent(), `beforeend`);
+}
+
+const tripEventsList = document.querySelector(`.trip-days`);
+
+
+// // В зависимости от allEvent.length отрисовываем кол-во точек
+for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
-    render(tripEventsList, createPointTemplate(), `beforeend`);
+    render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay]), `beforeend`);
   }
 }

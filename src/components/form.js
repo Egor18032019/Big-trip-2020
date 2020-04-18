@@ -1,8 +1,79 @@
+
+import {
+  getRandomArrayItem,
+} from '../mock/utils.js';
+
 /**
- *   Новая форма
+ * Делает datalist выборки городов
+ * @param {*} town
+ * @return{html} разметку
+ */
+const pointTownEventList = (town) => {
+  return (
+    `
+ <option value="${town}"></option>
+    `
+  );
+};
+
+const eventAvailableOffer = (array) => {
+
+  return (
+    `
+    <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
+      <label class="event__offer-label" for="event-offer-luggage-1">
+      <span class="event__offer-title">${array.eventOfferTitle}</span>
+           +€&nbsp;
+       <span class="event__offer-price">${array.evenOfferPrice}</span>
+       </label>
+     </div>
+    `
+  );
+};
+
+/**
+ * отрисовывает описание(description)
+ * @param {*} description
+ * @param {*} descriptionImg
  * @return{html} возращает разметку
  */
-export const createSiteAddNewEventTemplate = () => {
+const creatPointDestination = (description, descriptionImg) => {
+  const pathDestination = description;
+  const destinationImg = descriptionImg;
+  return (
+    `
+   <p class="event__destination-description">${pathDestination}</p>
+   <div class="event__photos-container">
+    <div class="event__photos-tape">
+    ${destinationImg}
+    </div>
+  </div>
+`
+  );
+};
+
+
+/**
+ * Новая форма
+ * @param {*} vremennoOpisanie
+ * @param {*} vremennoTown
+ * @param {*} pointType
+ * @return{html} возращает разметку
+ */
+export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, pointType) => {
+  const {
+    eventPointDestination
+  } = vremennoOpisanie;
+
+  const keysPointType = Object.keys(pointType);
+  const eventType = getRandomArrayItem(keysPointType);
+
+  const pointEventList = vremennoTown.map((it) => pointTownEventList(it)).join(`\n`);
+
+  let offersForType = pointType[eventType];
+  const eventAvailableOffers = offersForType.map((it) => eventAvailableOffer(it)).join(`\n`);
+  const pointDestination = creatPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
   return (
     `
 <form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -10,7 +81,7 @@ export const createSiteAddNewEventTemplate = () => {
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" src="img/icons/flight.png" alt="Event type icon" width="17" height="17">
+                  <img class="event__type-icon" src="img/icons/${eventType}.png" alt="Event type icon" width="17" height="17">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -77,15 +148,13 @@ export const createSiteAddNewEventTemplate = () => {
 
               <div class="event__field-group  event__field-group--destination">
                 <label class="event__label  event__type-output" for="event-destination-1">
-                  Flight to
+                ${eventType} to
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
-                <datalist id="destination-list-1">
-                  <option value="Amsterdam"></option>
-                  <option value="Geneva"></option>
-                  <option value="Chamonix"></option>
-                  <option value="Saint Petersburg"></option>
-                </datalist>
+
+                  <datalist id="destination-list-1">
+                  ${pointEventList}
+                  </datalist>
               </div>
 
               <div class="event__field-group  event__field-group--time">
@@ -116,52 +185,14 @@ export const createSiteAddNewEventTemplate = () => {
                 <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                 <div class="event__available-offers">
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-                    <label class="event__offer-label" for="event-offer-luggage-1">
-                      <span class="event__offer-title">Add luggage</span>
-                      +
-                      €&nbsp;<span class="event__offer-price">30</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-                    <label class="event__offer-label" for="event-offer-comfort-1">
-                      <span class="event__offer-title">Switch to comfort class</span>
-                      +
-                      €&nbsp;<span class="event__offer-price">100</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-                    <label class="event__offer-label" for="event-offer-meal-1">
-                      <span class="event__offer-title">Add meal</span>
-                      +
-                      €&nbsp;<span class="event__offer-price">15</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-                    <label class="event__offer-label" for="event-offer-seats-1">
-                      <span class="event__offer-title">Choose seats</span>
-                      +
-                      €&nbsp;<span class="event__offer-price">5</span>
-                    </label>
-                  </div>
-
-                  <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                    <label class="event__offer-label" for="event-offer-train-1">
-                      <span class="event__offer-title">Travel by train</span>
-                      +
-                      €&nbsp;<span class="event__offer-price">40</span>
-                    </label>
-                  </div>
+                ${eventAvailableOffers}
                 </div>
               </section>
+
+              <section class="event__section  event__section--destination">
+              <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            ${pointDestination}
+            </section>
             </section>
           </form>
     `
