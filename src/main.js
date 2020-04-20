@@ -50,6 +50,11 @@ import {
   createSiteSortTemplate
 } from './components/sort.js';
 import {
+  newRender,
+  RenderPosition
+} from './mock/utils.js';
+
+import {
   creatSorting
 } from './mock/sort.js';
 
@@ -63,21 +68,6 @@ const render = (container, template, place = `afterbegin`) => {
   container.insertAdjacentHTML(place, template);
 };
 
-
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-const newRender = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
 
 if (runMainElement) {
   render(runMainElement, createHeaderContainerTemplate());
@@ -120,16 +110,16 @@ if (sortMainElement) {
 const tripEventsList = document.querySelector(`.trip-days`);
 
 
-const renderPoint = (listElement, task) => {
+const renderPoint = (listElement, task, iterator) => {
 
-  const pointComponent = new PointComponent(task);
+  const pointComponent = new PointComponent(task, iterator);
 
   newRender(listElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
-    renderPoint(tripEventsList, allEvent[eventDay]);
+    renderPoint(tripEventsList, allEvent[eventDay], eventDay);
   }
 }
 
@@ -138,8 +128,6 @@ const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
 const tripDaysItemArray = Array.from(tripDaysItem);
 
 const renderEvent = (listElement, allEventOneDay) => {
-
-
   const {
     points: eventOneDay,
   } = allEventOneDay;
@@ -149,6 +137,12 @@ const renderEvent = (listElement, allEventOneDay) => {
     const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
 
     const editButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
+
+    const editForm = formEditComponent.getElement();
+    const closeFormButton = editForm.querySelector(`.event__reset-btn`);
+    // сделать чтобы при нажатие на эту кнопку форма закрывалась
+    // const editFormButton = editForm.querySelector(`.event__rollup-btn`);
+
     /**
      * Заменяет  event на форму редактирования
      */
@@ -168,23 +162,25 @@ const renderEvent = (listElement, allEventOneDay) => {
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
+    const onSetupFormSubmit = function (evt) {
+      evt.preventDefault();
+      replaceEditToPoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    };
 
     if (editButton) {
       editButton.addEventListener(`click`, () => {
         replacePointToEdit();
         document.addEventListener(`keydown`, onEscKeyDown);
-        const editForm = formEditComponent.getElement().querySelector(`.event`);
-
-        editForm.addEventListener(`submit`, onSetupFormSubmit);
-
-        const onSetupFormSubmit = function (evt) {
-          evt.preventDefault();
-          replaceEditToPoint();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        };
       });
     }
 
+    // вешаем обработчик иммено на editForm который равен formEditComponent.getElement()
+    editForm.addEventListener(`submit`, onSetupFormSubmit);
+    // -?  почему он не удаляет то форму ??
+    closeFormButton.addEventListener(`click`, () => {
+      listElement.removeСhild(editForm);
+    });
 
     newRender(listElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
   }

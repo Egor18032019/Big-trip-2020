@@ -59,8 +59,21 @@ const createElement = (template) => {
 
   return newElement.firstElementChild;
 };
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
 
-
+const newRender = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -69,4 +82,6 @@ export {
   getRandomNewArray,
   getAllEvent,
   createElement,
+  newRender,
+  RenderPosition,
 };

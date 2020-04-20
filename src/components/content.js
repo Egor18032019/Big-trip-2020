@@ -3,11 +3,6 @@ import {
 } from '../mock/utils.js';
 
 /**
- * переменная для счетчика
- */
-let countDays = 0;
-
-/**
  * Главный контейнер для контента
  * @return{html} возращает разметку
  */
@@ -90,32 +85,29 @@ ${eventSelectedOffers}
 };
 
 
-const createDateDayTemplate = (allEventOneDay) => {
-  countDays = countDays + 1;
-  let showDay = countDays;
+const createDateDayTemplate = (allEventOneDay, iterator) => {
 
   const {
     eventDate: dayEventDate,
-
   } = allEventOneDay;
 
   return (
     `
-    <li class="trip-days__item  day">
-
+  <li class="trip-days__item  day">
     <div class="day__info">
-    <span class="day__counter">${showDay}</span>
+    <span class="day__counter">${iterator}</span>
     <time class="day__date" datetime="2019-03-18">${dayEventDate}</time>
-  </div>
-  <ul class="trip-events__list">
-  </ul>
+    </div>
+   <ul class="trip-events__list">
+   </ul>
   </li>
     `
   );
 };
 
 class PointComponent {
-  constructor(point) {
+  constructor(point, iterator) {
+    this._iterator = iterator + 1;
     this._point = point;
 
     this._element = null;
@@ -123,7 +115,7 @@ class PointComponent {
 
   getTemplate() {
     // console.dir(this._point);
-    return createDateDayTemplate(this._point);
+    return createDateDayTemplate(this._point, this._iterator);
   }
 
   getElement() {
