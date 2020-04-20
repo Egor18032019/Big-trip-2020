@@ -81,7 +81,7 @@ export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, po
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" src="img/icons/${eventType}.png" alt="Event type icon" width="17" height="17">
+                  <img class="event__type-icon" src="img/icons/${eventType.toLowerCase()}.png" alt="Event type icon" width="17" height="17">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 

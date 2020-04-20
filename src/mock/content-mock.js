@@ -51,7 +51,7 @@ const generateEventContent = function () {
 
   return {
     eventDate: dayEventDate,
-    points: getAllEvent(getRandomIntegerNumber(1, 4), randomArraypoints()),
+    points: getAllEvent(getRandomIntegerNumber(2, 4), randomArraypoints()),
   };
 
 };

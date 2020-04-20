@@ -6,6 +6,7 @@ import {
   allEvent
 } from './mock/const.js';
 
+
 /**
  * .trip-main
  */
@@ -17,6 +18,10 @@ const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
 const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
 // в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
 const [firstH2] = tripControlH2;
+
+import {
+  FormEditComponent
+} from './components/form-edit.js';
 
 import {
   createSitePriceTemplate,
@@ -33,8 +38,8 @@ import {
 
 import {
   createMainContent,
-  // createPointContainer,
-  Point
+  PointComponent,
+  EventComponent
 } from './components/content.js';
 
 import {
@@ -57,6 +62,8 @@ import {
 const render = (container, template, place = `afterbegin`) => {
   container.insertAdjacentHTML(place, template);
 };
+
+
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
@@ -115,47 +122,76 @@ const tripEventsList = document.querySelector(`.trip-days`);
 
 const renderPoint = (listElement, task) => {
 
-  // обработчики
-  // const replaceTaskToEdit = () => {
-  //   taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
-  // };
+  const pointComponent = new PointComponent(task);
 
-  // const replaceEditToTask = () => {
-  //   taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
-  // };
-
-  // const onEscKeyDown = (evt) => {
-  //   const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-  //   if (isEscKey) {
-  //     replaceEditToTask();
-  //     document.removeEventListener(`keydown`, onEscKeyDown);
-  //   }
-  // };
-
-  const taskComponent = new Point(task);
-
-
-  // const taskEditComponent = new TaskEditComponent(task);
-  // // слушатели обработчиков
-  // const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
-  // editButton.addEventListener(`click`, () => {
-  //   replaceTaskToEdit();
-  //   document.addEventListener(`keydown`, onEscKeyDown);
-  // });
-  // const editForm = taskEditComponent.getElement().querySelector(`form`);
-  // editForm.addEventListener(`submit`, () => {
-  //   replaceEditToTask();
-  //   document.removeEventListener(`keydown`, onEscKeyDown);
-  // });
-  // console.dir(taskComponent.getElement());
-  newRender(listElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
+  newRender(listElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-// // В зависимости от allEvent.length отрисовываем кол-во точек путешествий
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
-    // render(tripEventsList, createPointContainer(eventDay, allEvent[eventDay]), `beforeend`);
     renderPoint(tripEventsList, allEvent[eventDay]);
+  }
+}
+
+
+const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
+const tripDaysItemArray = Array.from(tripDaysItem);
+
+const renderEvent = (listElement, allEventOneDay) => {
+
+
+  const {
+    points: eventOneDay,
+  } = allEventOneDay;
+
+  for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
+    let eventComponent = new EventComponent(eventOneDay[eventDay]);
+    const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
+
+    const editButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
+    /**
+     * Заменяет  event на форму редактирования
+     */
+    const replacePointToEdit = () => {
+      listElement.replaceChild(formEditComponent.getElement(), eventComponent.getElement());
+    };
+    /**
+     * заменяет форму редактирования на  точку маршрута
+     */
+    const replaceEditToPoint = () => {
+      listElement.replaceChild(eventComponent.getElement(), formEditComponent.getElement());
+    };
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+      if (isEscKey) {
+        replaceEditToPoint();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    if (editButton) {
+      editButton.addEventListener(`click`, () => {
+        replacePointToEdit();
+        document.addEventListener(`keydown`, onEscKeyDown);
+        const editForm = formEditComponent.getElement().querySelector(`.event`);
+
+        editForm.addEventListener(`submit`, onSetupFormSubmit);
+
+        const onSetupFormSubmit = function (evt) {
+          evt.preventDefault();
+          replaceEditToPoint();
+          document.removeEventListener(`keydown`, onEscKeyDown);
+        };
+      });
+    }
+
+
+    newRender(listElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+  }
+};
+
+for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
+  if (tripDaysItemArray[eventDay]) {
+    renderEvent(tripDaysItemArray[eventDay], allEvent[eventDay]);
   }
 }
