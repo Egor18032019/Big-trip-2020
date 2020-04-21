@@ -2,8 +2,8 @@ import {
   POINT_TYPE,
   POINT_TOWN,
   EVENT_POINT,
-  description,
-  descriptionImg
+  DESCRIPTION,
+  DESCRIPTION_IMG
 } from './const.js';
 
 import {
@@ -12,7 +12,7 @@ import {
   getRandomDate,
   getRandomArray,
   getAllEvent,
-} from './utils';
+} from '../utils.js';
 
 // import {
 //   flatpickr
@@ -20,7 +20,7 @@ import {
 
 import moment from 'moment';
 
-const randomArraypoints = () => {
+const getRandomArraypoints = () => {
 
   const eventTown = getRandomArrayItem(POINT_TOWN);
   const startEvent = moment(getRandomDate()).format(`HH:MM`);
@@ -39,24 +39,24 @@ const randomArraypoints = () => {
     eventDuration: durationEvent, // как это считаеться ? и считаеться ли то ?
     eventPointTown: eventTown,
     eventPointDestination: {
-      pathDestination: getRandomArray(description, 1, 5),
-      destinationImg: getRandomArray(descriptionImg, 1, 5)
+      pathDestination: getRandomArray(DESCRIPTION, 1, 5),
+      destinationImg: getRandomArray(DESCRIPTION_IMG, 1, 5)
     },
   };
 };
 
-const generateEventContent = function () {
+const getEventContent = function () {
   const dayEventDate = moment(getRandomDate()).format(`MMM do DD`).substring(0, 5);
   // -??не могу найти как вывести просто месяц и день
 
   return {
     eventDate: dayEventDate,
-    points: getAllEvent(getRandomIntegerNumber(2, 4), randomArraypoints()),
+    points: getAllEvent(getRandomIntegerNumber(2, 4), getRandomArraypoints()),
   };
 
 };
 
 export {
-  generateEventContent,
+  getEventContent,
   getRandomArrayItem,
 };

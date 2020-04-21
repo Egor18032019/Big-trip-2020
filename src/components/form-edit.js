@@ -1,8 +1,8 @@
 import {
   createElement
-} from '../mock/utils.js';
+} from '../utils.js';
 
-const eventAvailableOffer = (array) => {
+const getEventAvailableOffer = (array) => {
 
   return (
     `
@@ -23,14 +23,14 @@ const eventAvailableOffer = (array) => {
  * @param {*}  eventOneDay;
  * @return{html} возращает разметку
  */
-const createSiteAddNewEventTemplate = (eventOneDay) => {
+const getFormEditEventTemplate = (eventOneDay) => {
 
   const eventType = eventOneDay.eventPoint;
 
   const pointEventList = eventOneDay.eventPointTown;
 
   let offersForType = eventOneDay.eventOffers;
-  const eventAvailableOffers = offersForType.map((it) => eventAvailableOffer(it)).join(`\n`);
+  const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it)).join(`\n`);
 
   return (
     `
@@ -164,7 +164,7 @@ const createSiteAddNewEventTemplate = (eventOneDay) => {
   );
 };
 
-class FormEditComponent {
+export default class FormEditComponent {
   constructor(point) {
     this._point = point;
 
@@ -172,7 +172,7 @@ class FormEditComponent {
   }
 
   getTemplate() {
-    return createSiteAddNewEventTemplate(this._point);
+    return getFormEditEventTemplate(this._point);
   }
 
   getElement() {
@@ -187,7 +187,3 @@ class FormEditComponent {
     this._element = null;
   }
 }
-
-export {
-  FormEditComponent
-};

@@ -1,8 +1,6 @@
 //  генерация разметки
 
 import {
-  POINT_TOWN,
-  POINT_TYPE,
   allEvent
 } from './mock/const.js';
 
@@ -19,32 +17,25 @@ const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
 // в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
 const [firstH2] = tripControlH2;
 
-import {
-  FormEditComponent
-} from './components/form-edit.js';
+import FormEditComponent from './components/form-edit.js';
 
 import {
-  createSitePriceTemplate,
   createHeaderContainerTemplate,
   createSitePathTemplate,
 } from './components/path.js';
 
 import {
-  createSiteMenuTemplate
+  getSiteMenuTemplate
 } from './components/menu.js';
 import {
-  createSiteFiltrTemplate
+  getSiteFiltrTemplate
 } from './components/filter.js';
 
-import {
-  createMainContent,
-  PointComponent,
-  EventComponent
-} from './components/content.js';
+import CreateMainContent from './components/content.js';
+import PointComponent from './components/points.js';
+import EventComponent from './components/events.js';
 
-import {
-  createSiteAddNewEventTemplate
-} from './components/form.js';
+// import FormComponent from './components/form.js';
 
 import {
   createSiteSortTemplate
@@ -52,7 +43,7 @@ import {
 import {
   newRender,
   RenderPosition
-} from './mock/utils.js';
+} from './utils.js';
 
 import {
   creatSorting
@@ -77,16 +68,12 @@ const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
   render(pathElement, createSitePathTemplate(allEvent));
 }
-const priceElement = document.querySelector(`.trip-info`);
-if (priceElement) {
-  render(priceElement, createSitePriceTemplate(), `beforeend`);
-}
 
 if (firstH2) {
-  render(firstH2, createSiteMenuTemplate(), `afterend`);
+  render(firstH2, getSiteMenuTemplate(), `afterend`);
 }
 if (tripControlsElement) {
-  render(tripControlsElement, createSiteFiltrTemplate(), `beforeend`);
+  render(tripControlsElement, getSiteFiltrTemplate(), `beforeend`);
 }
 /**
  * trip-events
@@ -95,16 +82,18 @@ const sortMainElement = document.querySelector(`.trip-events`);
 if (sortMainElement) {
   render(sortMainElement, createSiteSortTemplate(creatSorting), `beforeend`);
 }
-// пока времено. Обудамать или Обсудить  как сюда передавать
-// и для POINT_TOWN
-const vremenno = allEvent[0].points[0];
+
+/**
+ * Отрисовка основы для контента
+ * @param {*} listElement куда отрисовываем
+ */
+const renderMainContent = (listElement) => {
+  const mainContent = new CreateMainContent();
+  newRender(listElement, mainContent.getElement(), RenderPosition.BEFOREEND);
+};
 
 if (sortMainElement) {
-  render(sortMainElement, createSiteAddNewEventTemplate(vremenno, POINT_TOWN, POINT_TYPE), `beforeend`);
-}
-
-if (sortMainElement) {
-  render(sortMainElement, createMainContent(), `beforeend`);
+  renderMainContent(sortMainElement);
 }
 
 const tripEventsList = document.querySelector(`.trip-days`);
@@ -133,10 +122,11 @@ const renderEvent = (listElement, allEventOneDay) => {
   } = allEventOneDay;
 
   for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
-    let eventComponent = new EventComponent(eventOneDay[eventDay]);
+    const eventComponent = new EventComponent(eventOneDay[eventDay]);
     const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
 
-    const editButton = eventComponent.getElement().querySelector(`.event__rollup-btn`);
+    const eventPoint = eventComponent.getElement();
+    const editButton = eventPoint.querySelector(`.event__rollup-btn`);
 
     const editForm = formEditComponent.getElement();
     const closeFormButton = editForm.querySelector(`.event__reset-btn`);
@@ -179,7 +169,7 @@ const renderEvent = (listElement, allEventOneDay) => {
     editForm.addEventListener(`submit`, onSetupFormSubmit);
     // -?  почему он не удаляет то форму ??
     closeFormButton.addEventListener(`click`, () => {
-      listElement.removeСhild(editForm);
+      listElement.removeСhild(eventPoint);
     });
 
     newRender(listElement, eventComponent.getElement(), RenderPosition.BEFOREEND);

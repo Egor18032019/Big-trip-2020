@@ -1,10 +1,10 @@
 import {
   getRandomArrayItem,
   getAllEvent
-} from '../mock/utils.js';
+} from '../utils.js';
 
 import {
-  generateEventContent
+  getEventContent
 } from './content-mock.js';
 /**
  * кол-во дней
@@ -123,7 +123,7 @@ const EVENT_POINT = getRandomArrayItem(Object.keys(POINT_TYPE));
 /**
  * массив предложений
  */
-const description = [
+const DESCRIPTION = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget. `,
   `Fusce tristique felis at fermentum pharetra.`,
@@ -138,7 +138,7 @@ const description = [
 /**
  * массив картинок
  */
-const descriptionImg = [
+const DESCRIPTION_IMG = [
   `  <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">`,
   `  <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">`,
   `  <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">`,
@@ -149,7 +149,7 @@ const descriptionImg = [
 /**
  * весь список ивентов
  */
-const allEvent = getAllEvent(ALLDAY, generateEventContent());
+const allEvent = getAllEvent(ALLDAY, getEventContent());
 // console.log(allEvent);
 
 export {
@@ -158,6 +158,6 @@ export {
   POINT_TYPE,
   EVENT_POINT,
   allEvent,
-  description,
-  descriptionImg
+  DESCRIPTION,
+  DESCRIPTION_IMG
 };

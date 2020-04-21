@@ -2,7 +2,7 @@
  *   Фильтры
  * @return{html} возращает разметку
  */
-export const createSiteFiltrTemplate = () => {
+export const getSiteFiltrTemplate = () => {
   return (
     ` <form class="trip-filters" action="#" method="get">
         <div class="trip-filters__filter">
