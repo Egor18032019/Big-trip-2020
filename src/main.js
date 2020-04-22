@@ -19,11 +19,10 @@ const [firstH2] = tripControlH2;
 
 import FormEditComponent from './components/form-edit.js';
 
-import {
-  createHeaderContainerTemplate,
-  createSitePathTemplate,
-} from './components/path.js';
+import SitePathTemplate from './components/point.js';
+import SiteDateTemplate from './components/date.js';
 
+import SiteHeaderContainerTemplate from './components/path.js';
 import SiteMenuTemplate from './components/menu.js';
 import SiteFiltrTemplate from './components/filter.js';
 import SiteCostTemplate from './components/price.js';
@@ -32,60 +31,59 @@ import CreateMainContent from './components/content.js';
 import PointComponent from './components/points.js';
 import EventComponent from './components/events.js';
 
-// import FormComponent from './components/form.js';
-
-import {
-  createSiteSortTemplate
-} from './components/sort.js';
+import SiteSortTemplate from './components/sort.js';
 import {
   newRender,
   RenderPosition
 } from './utils.js';
 
-import {
-  creatSorting
-} from './mock/sort.js';
-
-/**
- * функция рендеринга изображений
- * @param {*} container  - куда будет всталвяться
- * @param {*} template шаблон разметки
- * @param {*} place позицию добавляемого элемента (`beforebegin`,`beforeend`,`afterbegin`,`afterend`)
- */
-const render = (container, template, place = `afterbegin`) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-
 if (runMainElement) {
-  render(runMainElement, createHeaderContainerTemplate());
+  const HeaderContainer = new SiteHeaderContainerTemplate(allEvent);
+  newRender(runMainElement, HeaderContainer.getElement(), RenderPosition.AFTERBEGIN);
 }
+
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
+const renderPath = (array) =>{
+  const tripInfoComponent = new SitePathTemplate(array);
+  newRender(pathElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
+  const dateComponent = new SiteDateTemplate(array);
+  newRender(pathElement, dateComponent.getElement(), RenderPosition.BEFOREEND);
+};
 const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
-  render(pathElement, createSitePathTemplate(allEvent));
+  renderPath(allEvent);
 }
+
+const renderCost = (array) =>{
+  const costComponent = new SiteCostTemplate(array);
+  newRender(costElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+};
 const costElement = document.querySelector(`.trip-info`);
 if (costElement) {
-  const costComponent = new SiteCostTemplate(allEvent);
-  newRender(costElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+  renderCost(allEvent);
 }
-
-if (firstH2) {
+const renderMenu = () =>{
   const siteComponent = new SiteMenuTemplate();
   newRender(firstH2, siteComponent.getElement(), RenderPosition.AFTEREND);
+};
+if (firstH2) {
+  renderMenu();
+}
+const renderFilter = () =>{
+  const siteFilter = new SiteFiltrTemplate();
+  newRender(tripControlsElement, siteFilter.getElement(), RenderPosition.BEFOREEND);
+};
+if (tripControlsElement) {
+  renderFilter();
 }
 
-if (tripControlsElement) {
-  const SiteFiltr = new SiteFiltrTemplate();
-  newRender(tripControlsElement, SiteFiltr.getElement(), RenderPosition.BEFOREEND);
-}
-/**
- * trip-events
- */
+const renderSorting = () =>{
+  const tripSort = new SiteSortTemplate();
+  newRender(sortMainElement, tripSort.getElement(), RenderPosition.BEFOREEND);
+};
 const sortMainElement = document.querySelector(`.trip-events`);
 if (sortMainElement) {
-  render(sortMainElement, createSiteSortTemplate(creatSorting), `beforeend`);
+  renderSorting();
 }
 
 /**
@@ -96,13 +94,11 @@ const renderMainContent = (listElement) => {
   const mainContent = new CreateMainContent();
   newRender(listElement, mainContent.getElement(), RenderPosition.BEFOREEND);
 };
-
 if (sortMainElement) {
   renderMainContent(sortMainElement);
 }
 
 const tripEventsList = document.querySelector(`.trip-days`);
-
 
 const renderPoint = (listElement, task, iterator) => {
 
@@ -110,13 +106,11 @@ const renderPoint = (listElement, task, iterator) => {
 
   newRender(listElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
-
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
     renderPoint(tripEventsList, allEvent[eventDay], eventDay);
   }
 }
-
 
 const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
 const tripDaysItemArray = Array.from(tripDaysItem);
