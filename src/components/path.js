@@ -13,22 +13,8 @@ export const createHeaderContainerTemplate = () => {
     </section>`
   );
 };
-/**
- *   Стоимость
- * @return{html} возращает разметку
- */
-export const createSitePriceTemplate = () => {
-  return (
-    `
-      <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-      </p>`
-  );
-};
-
 
 const createPathPointTown = (itemArray) => {
-
   return itemArray.points[0].eventPointTown;
 };
 const createPathPointDate = (itemArray) => {

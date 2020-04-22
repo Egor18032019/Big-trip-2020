@@ -15,7 +15,6 @@ export default class PointComponent {
     const {
       eventDate: dayEventDate,
     } = this._point;
-
     return (`
     <li class="trip-days__item  day">
       <div class="day__info">

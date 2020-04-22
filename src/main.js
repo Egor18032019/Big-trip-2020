@@ -24,12 +24,9 @@ import {
   createSitePathTemplate,
 } from './components/path.js';
 
-import {
-  getSiteMenuTemplate
-} from './components/menu.js';
-import {
-  getSiteFiltrTemplate
-} from './components/filter.js';
+import SiteMenuTemplate from './components/menu.js';
+import SiteFiltrTemplate from './components/filter.js';
+import SiteCostTemplate from './components/price.js';
 
 import CreateMainContent from './components/content.js';
 import PointComponent from './components/points.js';
@@ -68,12 +65,20 @@ const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
   render(pathElement, createSitePathTemplate(allEvent));
 }
+const costElement = document.querySelector(`.trip-info`);
+if (costElement) {
+  const costComponent = new SiteCostTemplate(allEvent);
+  newRender(costElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+}
 
 if (firstH2) {
-  render(firstH2, getSiteMenuTemplate(), `afterend`);
+  const siteComponent = new SiteMenuTemplate();
+  newRender(firstH2, siteComponent.getElement(), RenderPosition.AFTEREND);
 }
+
 if (tripControlsElement) {
-  render(tripControlsElement, getSiteFiltrTemplate(), `beforeend`);
+  const SiteFiltr = new SiteFiltrTemplate();
+  newRender(tripControlsElement, SiteFiltr.getElement(), RenderPosition.BEFOREEND);
 }
 /**
  * trip-events
