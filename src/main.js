@@ -43,7 +43,7 @@ if (runMainElement) {
 }
 
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
-const renderPath = (array) =>{
+const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
   newRender(pathElement, tripInfoComponent.getElement(), RenderPosition.AFTERBEGIN);
   const dateComponent = new SiteDateTemplate(array);
@@ -54,7 +54,7 @@ if (pathElement) {
   renderPath(allEvent);
 }
 
-const renderCost = (array) =>{
+const renderCost = (array) => {
   const costComponent = new SiteCostTemplate(array);
   newRender(costElement, costComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -62,14 +62,14 @@ const costElement = document.querySelector(`.trip-info`);
 if (costElement) {
   renderCost(allEvent);
 }
-const renderMenu = () =>{
+const renderMenu = () => {
   const siteComponent = new SiteMenuTemplate();
   newRender(firstH2, siteComponent.getElement(), RenderPosition.AFTEREND);
 };
 if (firstH2) {
   renderMenu();
 }
-const renderFilter = () =>{
+const renderFilter = () => {
   const siteFilter = new SiteFiltrTemplate();
   newRender(tripControlsElement, siteFilter.getElement(), RenderPosition.BEFOREEND);
 };
@@ -77,7 +77,7 @@ if (tripControlsElement) {
   renderFilter();
 }
 
-const renderSorting = () =>{
+const renderSorting = () => {
   const tripSort = new SiteSortTemplate();
   newRender(sortMainElement, tripSort.getElement(), RenderPosition.BEFOREEND);
 };
@@ -125,13 +125,11 @@ const renderEvent = (listElement, allEventOneDay) => {
     const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
 
     const eventPoint = eventComponent.getElement();
-    const editButton = eventPoint.querySelector(`.event__rollup-btn`);
+    const openPointButton = eventPoint.querySelector(`.event__rollup-btn`);
 
     const editForm = formEditComponent.getElement();
-    const closeFormButton = editForm.querySelector(`.event__reset-btn`);
-    // сделать чтобы при нажатие на эту кнопку форма закрывалась
-    // const editFormButton = editForm.querySelector(`.event__rollup-btn`);
-
+    const deleteFormButton = editForm.querySelector(`.event__reset-btn`);
+    const closeFormButton = editForm.querySelector(`.event__rollup-btn`);
     /**
      * Заменяет  event на форму редактирования
      */
@@ -144,31 +142,26 @@ const renderEvent = (listElement, allEventOneDay) => {
     const replaceEditToPoint = () => {
       listElement.replaceChild(eventComponent.getElement(), formEditComponent.getElement());
     };
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-      if (isEscKey) {
-        replaceEditToPoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
+
     const onSetupFormSubmit = function (evt) {
       evt.preventDefault();
       replaceEditToPoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
     };
 
-    if (editButton) {
-      editButton.addEventListener(`click`, () => {
-        replacePointToEdit();
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-    }
+    closeFormButton.addEventListener(`click`, () => {
+      replaceEditToPoint();
+      editForm.reset();
+    });
+    openPointButton.addEventListener(`click`, () => {
+      replacePointToEdit();
+    });
 
     // вешаем обработчик иммено на editForm который равен formEditComponent.getElement()
     editForm.addEventListener(`submit`, onSetupFormSubmit);
-    // -?  почему он не удаляет то форму ??
-    closeFormButton.addEventListener(`click`, () => {
-      listElement.removeСhild(eventPoint);
+    // -?  помоему на нажатие кнопки delete он должен удалить этот ивент. не могу придумать как это сделать
+    deleteFormButton.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      listElement.remove(eventComponent);
     });
 
     newRender(listElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
