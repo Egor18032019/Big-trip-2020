@@ -1,3 +1,12 @@
+// отрисовывает кнопки сортировки
+import {
+  creatSorting
+} from '../mock/sort.js'; // может это сюда перенести ?
+
+import {
+  createElement
+} from '../utils.js';
+
 /**
  * @param {*} name имя фильтра
  * @param {*} svg есть ли свг
@@ -20,11 +29,10 @@ const creatSort = (name, svg = ``, isChecked) => {
 
 /**
  *   Сортировка
- * @param {*} mockSort  - данные в виде массива ключ*значение
  * @return{html} возращает разметку всех фильтров
  */
-export const createSiteSortTemplate = (mockSort) => {
-  const creatSortMarkup = mockSort.map((it) => creatSort(it.name, it.icon, it.check)).join(``);
+const createSiteSortTemplate = () => {
+  const creatSortMarkup = creatSorting.map((it) => creatSort(it.name, it.icon, it.check)).join(``);
 
   return (
     `
@@ -36,3 +44,27 @@ ${creatSortMarkup}
     `
   );
 };
+
+export default class SiteSortTemplate {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteSortTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+

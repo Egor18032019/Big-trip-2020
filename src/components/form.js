@@ -1,14 +1,15 @@
-
+// отрисовка формы добавление нового эвента
 import {
   getRandomArrayItem,
-} from '../mock/utils.js';
+  createElement
+} from '../utils.js';
 
 /**
  * Делает datalist выборки городов
  * @param {*} town
  * @return{html} разметку
  */
-const pointTownEventList = (town) => {
+const getPointTownEventList = (town) => {
   return (
     `
  <option value="${town}"></option>
@@ -16,8 +17,12 @@ const pointTownEventList = (town) => {
   );
 };
 
-const eventAvailableOffer = (array) => {
-
+/**
+ * Выдает разметку  для offers
+ * @param {*} array массив где лежит ключ:значение
+ * @return{html} возращает разметку
+ */
+const getEventAvailableOffer = (array) => {
   return (
     `
     <div class="event__offer-selector">
@@ -38,7 +43,7 @@ const eventAvailableOffer = (array) => {
  * @param {*} descriptionImg
  * @return{html} возращает разметку
  */
-const creatPointDestination = (description, descriptionImg) => {
+const getPointDestination = (description, descriptionImg) => {
   const pathDestination = description;
   const destinationImg = descriptionImg;
   return (
@@ -53,7 +58,6 @@ const creatPointDestination = (description, descriptionImg) => {
   );
 };
 
-
 /**
  * Новая форма
  * @param {*} vremennoOpisanie
@@ -61,7 +65,7 @@ const creatPointDestination = (description, descriptionImg) => {
  * @param {*} pointType
  * @return{html} возращает разметку
  */
-export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, pointType) => {
+export const getSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, pointType) => {
   const {
     eventPointDestination
   } = vremennoOpisanie;
@@ -69,11 +73,11 @@ export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, po
   const keysPointType = Object.keys(pointType);
   const eventType = getRandomArrayItem(keysPointType);
 
-  const pointEventList = vremennoTown.map((it) => pointTownEventList(it)).join(`\n`);
+  const pointEventList = vremennoTown.map((it) => getPointTownEventList(it)).join(`\n`);
 
   let offersForType = pointType[eventType];
-  const eventAvailableOffers = offersForType.map((it) => eventAvailableOffer(it)).join(`\n`);
-  const pointDestination = creatPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
+  const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it)).join(`\n`);
+  const pointDestination = getPointDestination(eventPointDestination.pathDestination, eventPointDestination.destinationImg);
   return (
     `
 <form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -81,7 +85,7 @@ export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, po
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" src="img/icons/${eventType}.png" alt="Event type icon" width="17" height="17">
+                  <img class="event__type-icon" src="img/icons/${eventType.toLowerCase()}.png" alt="Event type icon" width="17" height="17">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -198,3 +202,27 @@ export const createSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, po
     `
   );
 };
+
+export default class FormComponent {
+  constructor(point) {
+    this._point = point;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getSiteAddNewEventTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
