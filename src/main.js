@@ -128,7 +128,6 @@ const renderEvent = (listElement, allEventOneDay) => {
     const openPointButton = eventPoint.querySelector(`.event__rollup-btn`);
 
     const editForm = formEditComponent.getElement();
-    const deleteFormButton = editForm.querySelector(`.event__reset-btn`);
     const closeFormButton = editForm.querySelector(`.event__rollup-btn`);
     /**
      * Заменяет  event на форму редактирования
@@ -158,11 +157,6 @@ const renderEvent = (listElement, allEventOneDay) => {
 
     // вешаем обработчик иммено на editForm который равен formEditComponent.getElement()
     editForm.addEventListener(`submit`, onSetupFormSubmit);
-    // -?  помоему на нажатие кнопки delete он должен удалить этот ивент. не могу придумать как это сделать
-    deleteFormButton.addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      listElement.remove(eventComponent);
-    });
 
     newRender(listElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
   }
