@@ -16,7 +16,10 @@ const getPathPointTown = (itemArray) => {
  * @return{html} возращает разметку
  */
 const getSitePathTemplate = (listEvent) => {
-  const pathPoints = listEvent.map((it) => getPathPointTown(it)).join(` &mdash; `);
+  let pathPoints = ``;
+  if (listEvent) {
+    pathPoints = listEvent.map((it) => getPathPointTown(it)).join(` &mdash; `);
+  }
   return (
     `
     <h1 class="trip-info__title">${pathPoints}</h1>

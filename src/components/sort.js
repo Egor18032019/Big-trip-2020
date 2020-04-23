@@ -45,7 +45,7 @@ ${creatSortMarkup}
   );
 };
 
-export default class SiteSortTemplate {
+export default class FirstFromTemplate {
   constructor(point) {
     this._point = point;
 

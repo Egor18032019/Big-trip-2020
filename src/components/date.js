@@ -13,7 +13,10 @@ const getPathPointDate = (itemArray) => {
  * @return{html} возращает разметку
  */
 const getSitePathTemplate = (listEvent) => {
-  const pathDate = listEvent.map((it) => getPathPointDate(it)).join(` &mdash; `);
+  let pathDate = ``;
+  if (listEvent) {
+    pathDate = listEvent.map((it) => getPathPointDate(it)).join(` &mdash; `);
+  }
   return (
     `
     <p class="trip-info__dates">${pathDate}</p>
