@@ -1,21 +1,18 @@
 //  генерация разметки
 
-// import {
-//   allEvent
-// } from './mock/const.js';
-// console.log(allEvent);
-const allEvent = 0;
+import {
+  allEvent
+} from './mock/const.js';
+// const allEvent = 0;
 /**
  * .trip-main
  */
 const runMainElement = document.querySelector(`.trip-main`);
+const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
 /**
  * `.trip-main__trip-controls в infoMainElement
  */
 const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
-const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
-// в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
-const [firstH2] = tripControlH2;
 
 import FormEditComponent from './components/form-edit.js';
 
@@ -93,8 +90,9 @@ const renderFirstForm = (listElement) => {
   newRender(listElement, tripFirstEventsForm.getElement(), RenderPosition.BEFOREEND);
 };
 if (!allEvent.length) {
-  console.log(!allEvent.length);
   renderFirstForm(sortMainElement);
+  // дисаблем кнопку для создание новых ивентов
+  firstButtonNewEvent.disabled = true;
 }
 
 /**
