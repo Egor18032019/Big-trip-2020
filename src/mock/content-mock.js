@@ -35,8 +35,8 @@ const getRandomArraypoints = () => {
     eventOffers: POINT_TYPE[EVENT_POINT],
     eventTimeStart: startEvent,
     eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
-    eventPrice: 50, // как это считаеться ? и считаеться ли то ?
-    eventDuration: durationEvent, // как это считаеться ? и считаеться ли то ?
+    eventPrice: 50,
+    eventDuration: durationEvent,
     eventPointTown: eventTown,
     eventPointDestination: {
       pathDestination: getRandomArray(DESCRIPTION, 1, 5),

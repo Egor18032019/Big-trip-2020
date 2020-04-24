@@ -3,19 +3,16 @@
 import {
   allEvent
 } from './mock/const.js';
-
-
+// const allEvent = 0;
 /**
  * .trip-main
  */
 const runMainElement = document.querySelector(`.trip-main`);
+const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
 /**
  * `.trip-main__trip-controls в infoMainElement
  */
 const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
-const tripControlH2 = tripControlsElement.querySelectorAll(`h2`);
-// в переменую firstH2 записываем первый элемент псевдо массива tripControlH2
-const [firstH2] = tripControlH2;
 
 import FormEditComponent from './components/form-edit.js';
 
@@ -26,6 +23,7 @@ import SiteHeaderContainerTemplate from './components/path.js';
 import SiteMenuTemplate from './components/menu.js';
 import SiteFiltrTemplate from './components/filter.js';
 import SiteCostTemplate from './components/price.js';
+import FormFirstEditComponent from './components/form-first.js';
 
 import CreateMainContent from './components/content.js';
 import PointComponent from './components/points.js';
@@ -38,7 +36,7 @@ import {
 } from './utils.js';
 
 if (runMainElement) {
-  const HeaderContainer = new SiteHeaderContainerTemplate(allEvent);
+  const HeaderContainer = new SiteHeaderContainerTemplate();
   newRender(runMainElement, HeaderContainer.getElement(), RenderPosition.AFTERBEGIN);
 }
 
@@ -64,11 +62,12 @@ if (costElement) {
 }
 const renderMenu = () => {
   const siteComponent = new SiteMenuTemplate();
-  newRender(firstH2, siteComponent.getElement(), RenderPosition.AFTEREND);
+  newRender(tripControlsElement, siteComponent.getElement(), RenderPosition.BEFOREEND);
 };
-if (firstH2) {
+if (tripControlsElement) {
   renderMenu();
 }
+
 const renderFilter = () => {
   const siteFilter = new SiteFiltrTemplate();
   newRender(tripControlsElement, siteFilter.getElement(), RenderPosition.BEFOREEND);
@@ -82,8 +81,18 @@ const renderSorting = () => {
   newRender(sortMainElement, tripSort.getElement(), RenderPosition.BEFOREEND);
 };
 const sortMainElement = document.querySelector(`.trip-events`);
-if (sortMainElement) {
+if (allEvent.length > 0 && sortMainElement) {
   renderSorting();
+}
+// если нет точек то рисуем форму приглашение
+const renderFirstForm = (listElement) => {
+  const tripFirstEventsForm = new FormFirstEditComponent();
+  newRender(listElement, tripFirstEventsForm.getElement(), RenderPosition.BEFOREEND);
+};
+if (!allEvent.length) {
+  renderFirstForm(sortMainElement);
+  // дисаблем кнопку для создание новых ивентов
+  firstButtonNewEvent.disabled = true;
 }
 
 /**
@@ -94,7 +103,7 @@ const renderMainContent = (listElement) => {
   const mainContent = new CreateMainContent();
   newRender(listElement, mainContent.getElement(), RenderPosition.BEFOREEND);
 };
-if (sortMainElement) {
+if (allEvent.length > 0 && sortMainElement) {
   renderMainContent(sortMainElement);
 }
 
@@ -142,17 +151,28 @@ const renderEvent = (listElement, allEventOneDay) => {
       listElement.replaceChild(eventComponent.getElement(), formEditComponent.getElement());
     };
 
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+      if (isEscKey) {
+        replaceEditToPoint();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
     const onSetupFormSubmit = function (evt) {
       evt.preventDefault();
       replaceEditToPoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
     };
 
     closeFormButton.addEventListener(`click`, () => {
       replaceEditToPoint();
       editForm.reset();
     });
+
     openPointButton.addEventListener(`click`, () => {
       replacePointToEdit();
+      document.addEventListener(`keydown`, onEscKeyDown);
     });
 
     // вешаем обработчик иммено на editForm который равен formEditComponent.getElement()
