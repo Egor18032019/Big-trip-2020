@@ -1,14 +1,7 @@
 // приглашение добавить первую точку маршрута, если таковые отсутствуют
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
-export default class FormFirstEditComponent {
-  constructor(point) {
-    this._point = point;
-
-    this._element = null;
-  }
+export default class FormFirstEditComponent extends AbstractComponent {
 
   getTemplate() {
     return (`
@@ -90,7 +83,7 @@ export default class FormFirstEditComponent {
           <datalist id="destination-list-1">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
-            <option value="Chamonix"></option>
+            <option value="Ekaterinburg"></option>
             <option value="Saint Petersburg"></option>
           </datalist>
         </div>
@@ -121,17 +114,6 @@ export default class FormFirstEditComponent {
     </form>`);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
 
 

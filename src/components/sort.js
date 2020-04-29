@@ -1,11 +1,10 @@
-// отрисовывает кнопки сортировки
+// отрисовывает кнопки сортировки Event/Time/Price
+
 import {
   creatSorting
 } from '../mock/sort.js'; // может это сюда перенести ?
 
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
 /**
  * @param {*} name имя фильтра
@@ -45,26 +44,15 @@ ${creatSortMarkup}
   );
 };
 
-export default class FirstFromTemplate {
+export default class FirstFromTemplate extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return createSiteSortTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-

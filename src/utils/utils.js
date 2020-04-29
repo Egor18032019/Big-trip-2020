@@ -47,34 +47,7 @@ const getAllEvent = (allday, events) => {
   return clonesEvent;
 };
 
-/**
- * вспомогательная функция для создания DOM-элемента
- * @param {*} template шаблон разметки
- * @return{html} шаблон превращеный в DOM элемент
- */
-const createElement = (template) => {
-  // создаем оболочку - вставляем шаблон - вытаскиваем из оболочкке уже DOM элемент
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
 
-  return newElement.firstElementChild;
-};
-const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  AFTEREND: `afterend`,
-  BEFOREEND: `beforeend`
-};
-
-const newRender = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -82,7 +55,4 @@ export {
   getRandomDate,
   getRandomNewArray,
   getAllEvent,
-  createElement,
-  newRender,
-  RenderPosition,
 };

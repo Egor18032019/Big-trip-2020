@@ -1,17 +1,11 @@
 // отрисовка меню
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
+
 /**
  *  Table и Stats
  * @return{html} возращает разметку
  */
-export default class SiteMenuTemplate {
-  constructor(point) {
-    this._point = point;
-
-    this._element = null;
-  }
+export default class SiteMenuTemplate extends AbstractComponent {
 
   getTemplate() {
     return (
@@ -22,14 +16,4 @@ export default class SiteMenuTemplate {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

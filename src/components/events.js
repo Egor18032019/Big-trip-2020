@@ -1,7 +1,5 @@
 // отрисовка эвентов в каждом дне
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
 /**
  * контейнер для Offers
@@ -71,28 +69,15 @@ ${eventSelectedOffers}
   );
 };
 
-export default class EventComponent {
+export default class EventComponent extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
-
     return getPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      // возвращает только первый элемент
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

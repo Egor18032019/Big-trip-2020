@@ -1,7 +1,7 @@
 import {
   getRandomArrayItem,
   getAllEvent
-} from '../utils.js';
+} from '../utils/utils.js';
 
 import {
   getEventContent

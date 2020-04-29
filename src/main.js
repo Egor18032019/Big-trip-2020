@@ -33,7 +33,7 @@ import SiteSortTemplate from './components/sort.js';
 import {
   newRender,
   RenderPosition
-} from './utils.js';
+} from './utils/render.js';
 
 if (runMainElement) {
   const HeaderContainer = new SiteHeaderContainerTemplate();

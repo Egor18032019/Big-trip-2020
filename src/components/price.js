@@ -1,18 +1,15 @@
 // отрисовывает стоимость
-
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
 /**
  *   Стоимость 1230
  * @return{html} возращает разметку
  */
-export default class SiteCostTemplate {
+export default class SiteCostTemplate extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
@@ -33,14 +30,5 @@ export default class SiteCostTemplate {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
 
-  removeElement() {
-    this._element = null;
-  }
 }

@@ -1,8 +1,5 @@
-// отрисовыает точки и даты маршрута
-import {
-  createElement
-} from '../utils.js';
-
+// отрисовыает даты маршрута
+import AbstractComponent from "../components/abstract-component.js";
 
 const getPathPointDate = (itemArray) => {
   return itemArray.eventDate;
@@ -24,24 +21,15 @@ const getSitePathTemplate = (listEvent) => {
   );
 };
 
-export default class SiteDateTemplate {
+export default class SiteDateTemplate extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return getSitePathTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
 }

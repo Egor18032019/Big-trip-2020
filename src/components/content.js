@@ -1,17 +1,10 @@
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
 /**
  * Главный контейнер для контента
  * @return{html} возращает разметку
  */
-export default class CreateMainContent {
-  constructor(point) {
-    this._point = point;
-
-    this._element = null;
-  }
+export default class CreateMainContent extends AbstractComponent {
 
   getTemplate() {
     return (
@@ -22,16 +15,4 @@ export default class CreateMainContent {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      // возвращает только первый элемент
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
