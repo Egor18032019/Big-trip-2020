@@ -173,4 +173,14 @@ export default class FormEditComponent extends AbstractComponent {
   getTemplate() {
     return getFormEditEventTemplate(this._point);
   }
+
+  setEditFormClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+  }
+
+  setEditFormSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
+
 }

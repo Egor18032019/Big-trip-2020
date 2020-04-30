@@ -12,7 +12,7 @@ import {
   getRandomDate,
   getRandomArray,
   getAllEvent,
-} from '../utils/utils.js';
+} from '../utils/common.js';
 
 // import {
 //   flatpickr

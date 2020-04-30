@@ -80,4 +80,8 @@ export default class EventComponent extends AbstractComponent {
     return getPointTemplate(this._point);
   }
 
+  setEditPointClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+  }
 }

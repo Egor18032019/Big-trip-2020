@@ -14,7 +14,6 @@ const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
  */
 const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
 
-import FormEditComponent from './components/form-edit.js';
 
 import SitePathTemplate from './components/point.js';
 import SiteDateTemplate from './components/date.js';
@@ -27,7 +26,8 @@ import FormFirstEditComponent from './components/form-first.js';
 
 import CreateMainContent from './components/content.js';
 import PointComponent from './components/points.js';
-import EventComponent from './components/events.js';
+
+import TripController from './controllers/board.js';
 
 import SiteSortTemplate from './components/sort.js';
 import {
@@ -94,7 +94,7 @@ if (!allEvent.length) {
   // дисаблем кнопку для создание новых ивентов
   firstButtonNewEvent.disabled = true;
 }
-
+// /////////////////
 /**
  * Отрисовка основы для контента
  * @param {*} listElement куда отрисовываем
@@ -120,70 +120,8 @@ for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
     renderPoint(tripEventsList, allEvent[eventDay], eventDay);
   }
 }
-
 const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
 const tripDaysItemArray = Array.from(tripDaysItem);
+const renderEvent = new TripController(tripDaysItemArray);
+renderEvent.render(allEvent);
 
-const renderEvent = (listElement, allEventOneDay) => {
-  const {
-    points: eventOneDay,
-  } = allEventOneDay;
-
-  for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
-    const eventComponent = new EventComponent(eventOneDay[eventDay]);
-    const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
-
-    const eventPoint = eventComponent.getElement();
-    const openPointButton = eventPoint.querySelector(`.event__rollup-btn`);
-
-    const editForm = formEditComponent.getElement();
-    const closeFormButton = editForm.querySelector(`.event__rollup-btn`);
-    /**
-     * Заменяет  event на форму редактирования
-     */
-    const replacePointToEdit = () => {
-      listElement.replaceChild(formEditComponent.getElement(), eventComponent.getElement());
-    };
-    /**
-     * заменяет форму редактирования на  точку маршрута
-     */
-    const replaceEditToPoint = () => {
-      listElement.replaceChild(eventComponent.getElement(), formEditComponent.getElement());
-    };
-
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-      if (isEscKey) {
-        replaceEditToPoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onSetupFormSubmit = function (evt) {
-      evt.preventDefault();
-      replaceEditToPoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    closeFormButton.addEventListener(`click`, () => {
-      replaceEditToPoint();
-      editForm.reset();
-    });
-
-    openPointButton.addEventListener(`click`, () => {
-      replacePointToEdit();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    // вешаем обработчик иммено на editForm который равен formEditComponent.getElement()
-    editForm.addEventListener(`submit`, onSetupFormSubmit);
-
-    newRender(listElement, eventComponent, RenderPosition.BEFOREEND);
-  }
-};
-
-for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
-  if (tripDaysItemArray[eventDay]) {
-    renderEvent(tripDaysItemArray[eventDay], allEvent[eventDay]);
-  }
-}
