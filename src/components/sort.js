@@ -4,6 +4,12 @@ import {
   creatSorting
 } from '../mock/sort.js'; // может это сюда перенести ?
 
+export const SortType = {
+  DEFAULT: `sort-event`,
+  DATE: `sort-time`,
+  PRICE: `sort-price`,
+};
+
 import AbstractComponent from "../components/abstract-component.js";
 
 /**
@@ -45,6 +51,7 @@ export default class FirstFromTemplate extends AbstractComponent {
   constructor(point) {
     super();
     this._point = point;
+    this._currenSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
@@ -58,18 +65,20 @@ export default class FirstFromTemplate extends AbstractComponent {
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      // console.log(evt.target);
+      // console.log(`aaa`);
 
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
+      // if (evt.target.tagName !== `A`) {
+      //   return;
+      // }
 
-      const sortType = evt.target.dataset.sortType;
+      // const sortType = evt.target.dataset.sortType;
 
-      if (this._currenSortType === sortType) {
-        return;
-      }
+      // if (this._currenSortType === sortType) {
+      //   return;
+      // }
 
-      this._currenSortType = sortType;
+      // this._currenSortType = sortType;
 
       handler(this._currenSortType);
     });

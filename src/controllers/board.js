@@ -1,6 +1,7 @@
 //  отрисовк точек
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
+import FirstFromTemplate from '../components/sort.js';
 
 import {
   newRender,
@@ -70,6 +71,7 @@ const getRenderEvent = (listElement, allEventOneDay) => {
 export default class TripController {
   constructor(container) {
     this._container = container;
+    this._sortComponent = new FirstFromTemplate();
   }
 
   render(tasks) {
@@ -78,5 +80,10 @@ export default class TripController {
         getRenderEvent(this._container[eventDay], tasks[eventDay]);
       }
     }
+    console.log(this._sortComponent);
+
+    this._sortComponent.setSortTypeChangeHandler(() => {
+
+    });
   }
 }
