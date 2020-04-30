@@ -1,4 +1,4 @@
-//  отрисовки основы для контента
+//  отрисовк точек
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
 
@@ -6,6 +6,8 @@ import {
   newRender,
   RenderPosition
 } from '../utils/render.js';
+
+// повесить на каждую обработчик на удаление
 const getRenderEvent = (listElement, allEventOneDay) => {
   const {
     points: eventOneDay,
@@ -46,6 +48,11 @@ const getRenderEvent = (listElement, allEventOneDay) => {
       replaceEditToPoint();
       formEditComponent.getElement().reset();
     });
+    formEditComponent.setDeleteClickHandler(() => {
+      listElement.removeChild(formEditComponent.getElement());
+      const node = eventComponent.getElement();
+      node.remove();
+    });
 
     eventComponent.setEditPointClickHandler(() => {
       replacePointToEdit();
@@ -66,9 +73,8 @@ export default class TripController {
   }
 
   render(tasks) {
-
     for (let eventDay = 0; eventDay < tasks.length; eventDay++) {
-      if (this._container[eventDay]) {
+      if (this._container[eventDay] || tasks[eventDay]) {
         getRenderEvent(this._container[eventDay], tasks[eventDay]);
       }
     }

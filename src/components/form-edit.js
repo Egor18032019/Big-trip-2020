@@ -179,6 +179,11 @@ export default class FormEditComponent extends AbstractComponent {
       .addEventListener(`click`, handler);
   }
 
+  setDeleteClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
+  }
+
   setEditFormSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
   }
