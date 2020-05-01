@@ -15,7 +15,7 @@ const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
 const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
 
 
-import SitePathTemplate from './components/point.js';
+import SitePathTemplate from './components/site-path.js';
 import SiteDateTemplate from './components/date.js';
 
 import SiteHeaderContainerTemplate from './components/path.js';
@@ -24,7 +24,7 @@ import SiteFiltrTemplate from './components/filter.js';
 import SiteCostTemplate from './components/price.js';
 import FormFirstEditComponent from './components/form-first.js';
 
-import TripController from './controllers/board.js';
+import TripController from './controllers/trip.js';
 
 
 import {

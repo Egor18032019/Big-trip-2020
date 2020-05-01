@@ -1,5 +1,5 @@
 // отрисовыает точки и даты маршрута
-import AbstractComponent from "../components/abstract-component.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getPathPointTown = (itemArray) => {
   let totalPath = ``;
