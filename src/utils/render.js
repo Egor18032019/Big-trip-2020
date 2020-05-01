@@ -21,7 +21,7 @@ const RenderPosition = {
  * @param {*} component класс который  нужно отрисовать и у которого обязан быть метод getElement
  * @param {*} place где именно отрисовываем
  */
-const newRender = (container, component, place) => {
+const render = (container, component, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(component.getElement());
@@ -37,14 +37,15 @@ const newRender = (container, component, place) => {
  * @param {*} oldComponent старый
  */
 const replace = (newComponent, oldComponent) => {
+  // с помощью метода класса находим ДОМ элемент - а потом от него с помощью свойства
+  // parentElement находим его родителя
   const parentElement = oldComponent.getElement().parentElement;
-  console.log(parentElement);
 
   const newElement = newComponent.getElement();
   const oldElement = oldComponent.getElement();
-
+  // два !! проверяет правда ли это
   const isExistElements = !!(parentElement && newElement && oldElement);
-  console.log(isExistElements);
+
   if (isExistElements && parentElement.contains(oldElement)) {
     parentElement.replaceChild(newElement, oldElement);
   }
@@ -57,7 +58,7 @@ const remove = (component) => {
 
 export {
   createElement,
-  newRender,
+  render,
   RenderPosition,
   replace,
   remove,

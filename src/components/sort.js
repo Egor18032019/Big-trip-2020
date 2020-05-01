@@ -59,7 +59,6 @@ export default class FirstFromTemplate extends AbstractComponent {
   }
 
   getSortType() {
-
   }
 
   setSortTypeChangeHandler(handler) {

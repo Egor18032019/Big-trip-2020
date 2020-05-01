@@ -4,11 +4,11 @@ import FormEditComponent from '../components/form-edit.js';
 import FirstFromTemplate from '../components/sort.js';
 
 import {
-  newRender,
-  RenderPosition
+  render,
+  RenderPosition,
+  replace,
 } from '../utils/render.js';
 
-// повесить на каждую обработчик на удаление
 const getRenderEvent = (listElement, allEventOneDay) => {
   const {
     points: eventOneDay,
@@ -22,13 +22,13 @@ const getRenderEvent = (listElement, allEventOneDay) => {
      * Заменяет  event на форму редактирования
      */
     const replacePointToEdit = () => {
-      listElement.replaceChild(formEditComponent.getElement(), eventComponent.getElement());
+      replace(formEditComponent, eventComponent);
     };
     /**
      * заменяет форму редактирования на  точку маршрута
      */
     const replaceEditToPoint = () => {
-      listElement.replaceChild(eventComponent.getElement(), formEditComponent.getElement());
+      replace(eventComponent, formEditComponent);
     };
 
     const onEscKeyDown = (evt) => {
@@ -63,7 +63,7 @@ const getRenderEvent = (listElement, allEventOneDay) => {
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
     formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
 
-    newRender(listElement, eventComponent, RenderPosition.BEFOREEND);
+    render(listElement, eventComponent, RenderPosition.BEFOREEND);
   }
 };
 
@@ -75,12 +75,10 @@ export default class TripController {
   }
 
   render(tasks) {
-    for (let eventDay = 0; eventDay < tasks.length; eventDay++) {
-      if (this._container[eventDay] || tasks[eventDay]) {
-        getRenderEvent(this._container[eventDay], tasks[eventDay]);
-      }
-    }
-    console.log(this._sortComponent);
+    tasks.forEach((it, iterator) => {
+      getRenderEvent(this._container[iterator], it);
+    });
+
 
     this._sortComponent.setSortTypeChangeHandler(() => {
 

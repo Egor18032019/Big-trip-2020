@@ -31,21 +31,20 @@ import TripController from './controllers/board.js';
 
 import SiteSortTemplate from './components/sort.js';
 import {
-  newRender,
+  render,
   RenderPosition
 } from './utils/render.js';
 
-if (runMainElement) {
-  const HeaderContainer = new SiteHeaderContainerTemplate();
-  newRender(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
-}
+
+const HeaderContainer = new SiteHeaderContainerTemplate();
+render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
-  newRender(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+  render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
   const dateComponent = new SiteDateTemplate(array);
-  newRender(pathElement, dateComponent, RenderPosition.BEFOREEND);
+  render(pathElement, dateComponent, RenderPosition.BEFOREEND);
 };
 const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
@@ -54,7 +53,7 @@ if (pathElement) {
 
 const renderCost = (array) => {
   const costComponent = new SiteCostTemplate(array);
-  newRender(costElement, costComponent, RenderPosition.BEFOREEND);
+  render(costElement, costComponent, RenderPosition.BEFOREEND);
 };
 const costElement = document.querySelector(`.trip-info`);
 if (costElement) {
@@ -62,7 +61,7 @@ if (costElement) {
 }
 const renderMenu = () => {
   const siteComponent = new SiteMenuTemplate();
-  newRender(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
+  render(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
 };
 if (tripControlsElement) {
   renderMenu();
@@ -70,7 +69,7 @@ if (tripControlsElement) {
 
 const renderFilter = () => {
   const siteFilter = new SiteFiltrTemplate();
-  newRender(tripControlsElement, siteFilter, RenderPosition.BEFOREEND);
+  render(tripControlsElement, siteFilter, RenderPosition.BEFOREEND);
 };
 if (tripControlsElement) {
   renderFilter();
@@ -78,7 +77,7 @@ if (tripControlsElement) {
 
 const renderSorting = () => {
   const tripSort = new SiteSortTemplate();
-  newRender(sortMainElement, tripSort, RenderPosition.BEFOREEND);
+  render(sortMainElement, tripSort, RenderPosition.BEFOREEND);
 };
 const sortMainElement = document.querySelector(`.trip-events`);
 if (allEvent.length > 0 && sortMainElement) {
@@ -87,7 +86,7 @@ if (allEvent.length > 0 && sortMainElement) {
 // если нет точек то рисуем форму приглашение
 const renderFirstForm = (listElement) => {
   const tripFirstEventsForm = new FormFirstEditComponent();
-  newRender(listElement, tripFirstEventsForm, RenderPosition.BEFOREEND);
+  render(listElement, tripFirstEventsForm, RenderPosition.BEFOREEND);
 };
 if (!allEvent.length) {
   renderFirstForm(sortMainElement);
@@ -101,7 +100,7 @@ if (!allEvent.length) {
  */
 const renderMainContent = (listElement) => {
   const mainContent = new CreateMainContent();
-  newRender(listElement, mainContent, RenderPosition.BEFOREEND);
+  render(listElement, mainContent, RenderPosition.BEFOREEND);
 };
 if (allEvent.length > 0 && sortMainElement) {
   renderMainContent(sortMainElement);
@@ -113,7 +112,7 @@ const renderPoint = (listElement, task, iterator) => {
 
   const pointComponent = new PointComponent(task, iterator);
 
-  newRender(listElement, pointComponent, RenderPosition.BEFOREEND);
+  render(listElement, pointComponent, RenderPosition.BEFOREEND);
 };
 for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
   if (tripEventsList) {
