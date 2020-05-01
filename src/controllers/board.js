@@ -109,11 +109,12 @@ export default class TripController {
       const pointComponent = new PointComponent(task, iterator);
       render(listElement, pointComponent, RenderPosition.BEFOREEND);
     };
-    for (let eventDay = 0; eventDay < tasks.length; eventDay++) {
-      if (tripEventsList) {
-        renderPoint(tripEventsList, tasks[eventDay], eventDay);
-      }
-    }
+
+    tasks.forEach((it, iterator) => {
+      renderPoint(tripEventsList, it, iterator);
+    });
+
+
     const renderEvents = (array) => {
       const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
       const tripDaysItemArray = Array.from(tripDaysItem);
@@ -129,13 +130,12 @@ export default class TripController {
       tripEventsList.innerHTML = ``;
       // сортитруем приходящий массив
       const sortedTasks = getSortedTasks(tasks, sortType);
-      console.log(sortedTasks);
+      // console.log(sortedTasks);
       // и отрисовывваем его
-      for (let eventDay = 0; eventDay < sortedTasks.length; eventDay++) {
-        if (tripEventsList) {
-          renderPoint(tripEventsList, sortedTasks[eventDay], eventDay);
-        }
-      }
+      sortedTasks.forEach((it, iterator) => {
+        renderPoint(tripEventsList, it, iterator);
+      });
+
       renderEvents(sortedTasks);
 
 
