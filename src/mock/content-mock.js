@@ -35,7 +35,7 @@ const getRandomArraypoints = () => {
     eventOffers: POINT_TYPE[EVENT_POINT],
     eventTimeStart: startEvent,
     eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
-    eventPrice: 50,
+    eventPrice: getRandomIntegerNumber(0, 50),
     eventDuration: durationEvent,
     eventPointTown: eventTown,
     eventPointDestination: {

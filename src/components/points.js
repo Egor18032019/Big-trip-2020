@@ -3,7 +3,7 @@ import AbstractComponent from "../components/abstract-component.js";
 
 
 export default class PointComponent extends AbstractComponent {
-  constructor(point, iterator) {
+  constructor(point, iterator = 0) {
     super();
 
     this._iterator = iterator;

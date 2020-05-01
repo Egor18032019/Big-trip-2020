@@ -20,8 +20,7 @@ const getRandomArray = (array, start, end = array.length) => {
     .map(() => getRandomArrayItem(array));
 };
 
-
-const getRandomDate = (start = new Date(2020, 4, 1), end = new Date()) => {
+const getRandomDate = (start = new Date(2020, 5, 3), end = new Date()) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 

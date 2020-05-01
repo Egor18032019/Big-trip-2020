@@ -24,12 +24,9 @@ import SiteFiltrTemplate from './components/filter.js';
 import SiteCostTemplate from './components/price.js';
 import FormFirstEditComponent from './components/form-first.js';
 
-import CreateMainContent from './components/content.js';
-import PointComponent from './components/points.js';
-
 import TripController from './controllers/board.js';
 
-import SiteSortTemplate from './components/sort.js';
+
 import {
   render,
   RenderPosition
@@ -75,14 +72,8 @@ if (tripControlsElement) {
   renderFilter();
 }
 
-const renderSorting = () => {
-  const tripSort = new SiteSortTemplate();
-  render(sortMainElement, tripSort, RenderPosition.BEFOREEND);
-};
+
 const sortMainElement = document.querySelector(`.trip-events`);
-if (allEvent.length > 0 && sortMainElement) {
-  renderSorting();
-}
 // если нет точек то рисуем форму приглашение
 const renderFirstForm = (listElement) => {
   const tripFirstEventsForm = new FormFirstEditComponent();
@@ -98,29 +89,15 @@ if (!allEvent.length) {
  * Отрисовка основы для контента
  * @param {*} listElement куда отрисовываем
  */
-const renderMainContent = (listElement) => {
-  const mainContent = new CreateMainContent();
-  render(listElement, mainContent, RenderPosition.BEFOREEND);
-};
-if (allEvent.length > 0 && sortMainElement) {
-  renderMainContent(sortMainElement);
-}
+// const renderMainContent = (listElement) => {
+//   const mainContent = new CreateMainContent();
+//   render(listElement, mainContent, RenderPosition.BEFOREEND);
+// };
+// if (allEvent.length > 0 && sortMainElement) {
+//   renderMainContent(sortMainElement);
+// }
 
-const tripEventsList = document.querySelector(`.trip-days`);
+const renderTripEvent = new TripController(sortMainElement);
+renderTripEvent.render(allEvent);
 
-const renderPoint = (listElement, task, iterator) => {
-
-  const pointComponent = new PointComponent(task, iterator);
-
-  render(listElement, pointComponent, RenderPosition.BEFOREEND);
-};
-for (let eventDay = 0; eventDay < allEvent.length; eventDay++) {
-  if (tripEventsList) {
-    renderPoint(tripEventsList, allEvent[eventDay], eventDay);
-  }
-}
-const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
-const tripDaysItemArray = Array.from(tripDaysItem);
-const renderEvent = new TripController(tripDaysItemArray);
-renderEvent.render(allEvent);
 
