@@ -84,18 +84,6 @@ if (!allEvent.length) {
   // дисаблем кнопку для создание новых ивентов
   firstButtonNewEvent.disabled = true;
 }
-// /////////////////
-/**
- * Отрисовка основы для контента
- * @param {*} listElement куда отрисовываем
- */
-// const renderMainContent = (listElement) => {
-//   const mainContent = new CreateMainContent();
-//   render(listElement, mainContent, RenderPosition.BEFOREEND);
-// };
-// if (allEvent.length > 0 && sortMainElement) {
-//   renderMainContent(sortMainElement);
-// }
 
 const renderTripEvent = new TripController(sortMainElement);
 renderTripEvent.render(allEvent);

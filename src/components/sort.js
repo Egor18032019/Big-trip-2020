@@ -73,7 +73,7 @@ class FirstFromTemplate extends AbstractComponent {
         return;
       }
 
-      // this._currenSortType = sortType;
+      this._currenSortType = sortType;
 
       handler(this._currenSortType);
     });

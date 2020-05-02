@@ -32,26 +32,10 @@ const getRandomNewArray = (end = 1) => {
   return newArray;
 };
 
-/**
- * @param {*} allday кол-во дней или ивентов в дне
- * @param {*} events функция которая записывает значение в элемент массива
- * @return{html} массив с обьектами от getEventContent()
- */
-const getAllEvent = (allday, events) => {
-  const clonesEvent = [];
-  for (let i = 0; i < allday; i++) {
-    const newCloneEvent = Object.assign({}, events);
-    clonesEvent.push(newCloneEvent);
-  }
-  return clonesEvent;
-};
-
-
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
   getRandomArray,
   getRandomDate,
   getRandomNewArray,
-  getAllEvent,
 };

@@ -1,7 +1,6 @@
 import {
   POINT_TYPE,
   POINT_TOWN,
-  EVENT_POINT,
   DESCRIPTION,
   DESCRIPTION_IMG
 } from './const.js';
@@ -11,7 +10,6 @@ import {
   getRandomArrayItem,
   getRandomDate,
   getRandomArray,
-  getAllEvent,
 } from '../utils/common.js';
 
 // import {
@@ -21,7 +19,7 @@ import {
 import moment from 'moment';
 
 const getRandomArraypoints = () => {
-
+  const eventPoint = getRandomArrayItem(Object.keys(POINT_TYPE));
   const eventTown = getRandomArrayItem(POINT_TOWN);
   const startEvent = moment(getRandomDate()).format(`HH:MM`);
   // -??  как сделать чтобы  getRandomDate принимала startEvent ?
@@ -30,9 +28,9 @@ const getRandomArraypoints = () => {
   const durationEventMinutes = endEvent.slice(3, 2) - startEvent.slice(3, 2);
   const durationEvent = `${durationEventHour}H ${durationEventMinutes}M`;
   return {
-    eventPoint: EVENT_POINT,
-    eventTitle: `${EVENT_POINT} to  ${eventTown}`,
-    eventOffers: POINT_TYPE[EVENT_POINT],
+    eventPoint,
+    eventTitle: `${eventPoint} to  ${eventTown}`,
+    eventOffers: POINT_TYPE[eventPoint],
     eventTimeStart: startEvent,
     eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
     eventPrice: getRandomIntegerNumber(0, 50),
@@ -45,16 +43,21 @@ const getRandomArraypoints = () => {
   };
 };
 
-const getEventContent = function () {
-  const dayEventDate = moment(getRandomDate()).format(`MMM do DD`).substring(0, 5);
-  // -??не могу найти как вывести просто месяц и день
-
-  return {
-    eventDate: dayEventDate,
-    points: getAllEvent(getRandomIntegerNumber(2, 4), getRandomArraypoints()),
-  };
-
+const createRandomArray = (length, handlerGenerateData) => {
+// создаем пустой массив - заданой длины - и заливаем его `ничего`
+  const randomValues = new Array(length).fill(`ничего`);
+  return randomValues.map(handlerGenerateData);
 };
+
+const getEventContent = function () {
+  const length = getRandomIntegerNumber(1, 5);
+  // передаем в функцию createRandomArray -> длину и функцию с перемеными которая при каждом вызвае будет даватьновое значение
+  return createRandomArray(length, () => ({
+    eventDate: moment(getRandomDate()).format(`MMM do DD`).substring(0, 5),
+    points: createRandomArray(getRandomIntegerNumber(1, 4), getRandomArraypoints),
+  }));
+};
+
 
 export {
   getEventContent,

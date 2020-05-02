@@ -1,7 +1,10 @@
 //  отрисовк точек
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
-import {FirstFromTemplate, SortType} from '../components/sort.js';
+import {
+  FirstFromTemplate,
+  SortType
+} from '../components/sort.js';
 import CreateMainContent from '../components/content.js';
 import PointComponent from '../components/points.js';
 
@@ -69,22 +72,32 @@ const getRenderEvent = (listElement, allEventOneDay) => {
 
 };
 
-const getSortedTasks = (tasks, sortType, from, to) => {
+
+const getSortedTasks = (tasks, sortType) => {
+
   let sortedTasks = [];
   const showingTasks = tasks.slice();
   switch (sortType) {
     case SortType.DATE:
-      sortedTasks = showingTasks.sort((a, b) => a.eventTimeStart - b.eventTimeStart);
+      sortedTasks = showingTasks.forEach((it) => {
+
+        it.points.sort((a, b) => a.eventTimeStart - b.eventTimeStart);
+
+      });
       break;
     case SortType.PRICE:
-      sortedTasks = showingTasks.sort((a, b) => b.eventPrice - a.eventPrice);
+      sortedTasks = showingTasks.forEach((it) => {
+        // console.log(it.points[0].eventPrice);
+        it.points.sort((a, b) => b.eventPrice - a.eventPrice);
+      });
       break;
     case SortType.DEFAULT:
       sortedTasks = showingTasks;
       break;
   }
+  // console.log(sortedTasks);
 
-  return sortedTasks.slice(from, to);
+  return sortedTasks.slice();
 };
 
 export default class TripController {
@@ -92,7 +105,6 @@ export default class TripController {
     this._container = container;
     this._sortComponent = new FirstFromTemplate();
     this._mainContent = new CreateMainContent();
-
   }
 
   render(tasks) {
@@ -125,20 +137,19 @@ export default class TripController {
     };
     renderEvents(tasks);
 
-    this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      // чистим
-      tripEventsList.innerHTML = ``;
-      // сортитруем приходящий массив
-      const sortedTasks = getSortedTasks(tasks, sortType);
-      // console.log(sortedTasks);
-      // и отрисовывваем его
-      sortedTasks.forEach((it, iterator) => {
-        renderPoint(tripEventsList, it, iterator);
-      });
-
-      renderEvents(sortedTasks);
-
-
-    });
+    this._sortComponent.setSortTypeChangeHandler(
+        (sortType) => {
+        // чистим
+          tripEventsList.innerHTML = ``;
+          // сортитруем приходящий массив
+          const sortedTasks = getSortedTasks(tasks, sortType);
+          // console.log(`сорт?`);
+          // и отрисовывваем его
+          sortedTasks.forEach((it, iterator) => {
+            renderPoint(tripEventsList, it, iterator);
+          });
+          renderEvents(sortedTasks);
+        }
+    );
   }
 }
