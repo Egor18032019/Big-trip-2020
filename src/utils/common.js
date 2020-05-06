@@ -40,6 +40,31 @@ const getEndRandomDate = (startDate, startEventTime) => {
   return endRandomDate;
 };
 
+const deepAssign = function () {
+  // Make sure there are objects to merge
+  let len = arguments.length;
+  if (len < 1) {
+    return;
+  }
+  if (len < 2) {
+    return arguments[0];
+  }
+
+  // Merge all objects into first
+  for (let i = 1; i < len; i++) {
+    for (let key in arguments[i]) {
+      // If it's an object, recursively merge
+      // Otherwise, push to key
+      if (Object.prototype.toString.call(arguments[i][key]) === `[object Object]`) {
+        arguments[0][key] = deepAssign(arguments[0][key] || {}, arguments[i][key]);
+      } else {
+        arguments[0][key] = arguments[i][key];
+      }
+    }
+  }
+  return arguments[0];
+};
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -47,4 +72,5 @@ export {
   getRandomDate,
   getRandomNewArray,
   getEndRandomDate,
+  deepAssign,
 };

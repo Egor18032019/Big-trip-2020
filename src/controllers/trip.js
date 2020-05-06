@@ -13,6 +13,9 @@ import {
   RenderPosition,
   replace,
 } from '../utils/render.js';
+import {
+  deepAssign
+} from '../utils/common.js';
 
 const getRenderEvent = (listElement, allEventOneDay) => {
   const {
@@ -80,28 +83,27 @@ const getRenderEvent = (listElement, allEventOneDay) => {
  */
 const getSortedTasks = (tasks, sortType) => {
   // console.log(tasks);
+  const showingTasks = deepAssign([], tasks);
   let sortedTasks = [];
-  const showingTasks = tasks.slice();
   switch (sortType) {
     case SortType.DATE:
       sortedTasks = showingTasks.map((it) => {
-      // в it заменяем  массиве it.poins уже отсортированным массивом
-      // --,,?? только время  не сортируюется
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventTimeStart - b.eventTimeStart));
+        // в it заменяем  массиве it.poins уже отсортированным массивом
+        // --,,?? только время  не сортируюется
+        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventTimeStart.getTime() - b.eventTimeStart.getTime()));
         return sortedTasks;
       });
       break;
     case SortType.PRICE:
       sortedTasks = showingTasks.map((it) => {
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventPrice - b.eventPrice));
+        sortedTasks = Object.assign(it, it.points.sort((a, b) => b.eventPrice - a.eventPrice));
         return sortedTasks;
       });
       break;
     case SortType.DEFAULT:
-      sortedTasks = showingTasks;
+      sortedTasks = tasks;
       break;
   }
-  // console.log(sortedTasks);
   return sortedTasks.slice();
 };
 

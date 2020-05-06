@@ -23,19 +23,22 @@ import moment from 'moment';
 const getRandomArraypoints = () => {
   const eventPoint = getRandomArrayItem(Object.keys(POINT_TYPE));
   const eventTown = getRandomArrayItem(POINT_TOWN);
-  const timeStartEvent = getRandomDate();
-  const startEvent = moment(timeStartEvent).format(`HH:MM`);
-  const endEvent = moment(getEndRandomDate(timeStartEvent, startEvent)).format(`HH:MM`);
 
-  const durationEventHour = endEvent.slice(0, 2) - startEvent.slice(0, 2);
-  const durationEventMinutes = endEvent.slice(3, 2) - startEvent.slice(3, 2);
-  const durationEvent = `${durationEventHour}H ${durationEventMinutes}M`;
+  const timeStartEvent = getRandomDate();
+  const startEvent = moment(timeStartEvent).format(`HH:mm`);
+
+  const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
+  // const endEvent = moment(timeEndEvent).format(`HH:mm`);
+
+  const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
+  const durationEvent = moment(getDurationEvent).format(`HH:mm`);
+  // --,,,??? почему не правильно считает ??
   return {
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
     eventOffers: POINT_TYPE[eventPoint],
-    eventTimeStart: startEvent,
-    eventTimeEnd: endEvent, // flatpickr.js как её подключить ?
+    eventTimeStart: timeStartEvent,
+    eventTimeEnd: timeEndEvent, // flatpickr.js как её подключить ?
     eventPrice: getRandomIntegerNumber(0, 50),
     eventDuration: durationEvent,
     eventPointTown: eventTown,
