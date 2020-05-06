@@ -32,10 +32,19 @@ const getRandomNewArray = (end = 1) => {
   return newArray;
 };
 
+const getEndRandomDate = (startDate, startEventTime) => {
+  const endRandomDate = new Date(startDate);
+  endRandomDate.setHours(getRandomIntegerNumber(+(startEventTime.slice(0, 2)), 24));
+  endRandomDate.setMinutes(getRandomIntegerNumber(0, 59));
+  // - ?? почем минуты то не работают также как часы ?
+  return endRandomDate;
+};
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
   getRandomArray,
   getRandomDate,
   getRandomNewArray,
+  getEndRandomDate,
 };

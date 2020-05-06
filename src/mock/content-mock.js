@@ -10,6 +10,7 @@ import {
   getRandomArrayItem,
   getRandomDate,
   getRandomArray,
+  getEndRandomDate,
 } from '../utils/common.js';
 
 // import {
@@ -18,14 +19,14 @@ import {
 
 import moment from 'moment';
 
+
 const getRandomArraypoints = () => {
   const eventPoint = getRandomArrayItem(Object.keys(POINT_TYPE));
   const eventTown = getRandomArrayItem(POINT_TOWN);
-  let timeStartEvent = getRandomDate();
+  const timeStartEvent = getRandomDate();
   const startEvent = moment(timeStartEvent).format(`HH:MM`);
-  // -??  как сделать чтобы  getRandomDate принимала startEvent ?
+  const endEvent = moment(getEndRandomDate(timeStartEvent, startEvent)).format(`HH:MM`);
 
-  const endEvent = moment(getRandomDate(timeStartEvent)).format(`HH:MM`);
   const durationEventHour = endEvent.slice(0, 2) - startEvent.slice(0, 2);
   const durationEventMinutes = endEvent.slice(3, 2) - startEvent.slice(3, 2);
   const durationEvent = `${durationEventHour}H ${durationEventMinutes}M`;
@@ -46,7 +47,7 @@ const getRandomArraypoints = () => {
 };
 
 const createRandomArray = (length, handlerGenerateData) => {
-// создаем пустой массив - заданой длины - и заливаем его `ничего`
+  // создаем пустой массив - заданой длины - и заливаем его `ничего`
   const randomValues = new Array(length).fill(`ничего`);
   return randomValues.map(handlerGenerateData);
 };
