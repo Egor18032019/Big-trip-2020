@@ -21,9 +21,11 @@ import moment from 'moment';
 const getRandomArraypoints = () => {
   const eventPoint = getRandomArrayItem(Object.keys(POINT_TYPE));
   const eventTown = getRandomArrayItem(POINT_TOWN);
-  const startEvent = moment(getRandomDate()).format(`HH:MM`);
+  let timeStartEvent = getRandomDate();
+  const startEvent = moment(timeStartEvent).format(`HH:MM`);
   // -??  как сделать чтобы  getRandomDate принимала startEvent ?
-  const endEvent = moment(getRandomDate()).format(`HH:MM`);
+
+  const endEvent = moment(getRandomDate(timeStartEvent)).format(`HH:MM`);
   const durationEventHour = endEvent.slice(0, 2) - startEvent.slice(0, 2);
   const durationEventMinutes = endEvent.slice(3, 2) - startEvent.slice(3, 2);
   const durationEvent = `${durationEventHour}H ${durationEventMinutes}M`;

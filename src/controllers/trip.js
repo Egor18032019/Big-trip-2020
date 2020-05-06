@@ -72,23 +72,29 @@ const getRenderEvent = (listElement, allEventOneDay) => {
 
 };
 
-
+/**
+ * Сортировка ивентов
+ * @param {*} tasks массив ивентов
+ * @param {*} sortType тип сортировки
+ * @return{html} возращает отсротированный массив
+ */
 const getSortedTasks = (tasks, sortType) => {
-
+  // console.log(tasks);
   let sortedTasks = [];
   const showingTasks = tasks.slice();
   switch (sortType) {
     case SortType.DATE:
-      sortedTasks = showingTasks.forEach((it) => {
-
-        it.points.sort((a, b) => a.eventTimeStart - b.eventTimeStart);
-
+      sortedTasks = showingTasks.map((it) => {
+      // в it заменяем  массиве it.poins уже отсортированным массивом
+      // --,,?? только время  не сортируюется
+        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventTimeStart - b.eventTimeStart));
+        return sortedTasks;
       });
       break;
     case SortType.PRICE:
-      sortedTasks = showingTasks.forEach((it) => {
-        // console.log(it.points[0].eventPrice);
-        it.points.sort((a, b) => b.eventPrice - a.eventPrice);
+      sortedTasks = showingTasks.map((it) => {
+        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventPrice - b.eventPrice));
+        return sortedTasks;
       });
       break;
     case SortType.DEFAULT:
@@ -96,7 +102,6 @@ const getSortedTasks = (tasks, sortType) => {
       break;
   }
   // console.log(sortedTasks);
-
   return sortedTasks.slice();
 };
 
