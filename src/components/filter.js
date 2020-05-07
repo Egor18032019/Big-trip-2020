@@ -1,18 +1,12 @@
-// отрисовывает фильтры
+// отрисовывает фильтры Everything/Future/Past
 
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
+
 /**
  *   Фильтры Everything/Future/Past
  * @return{html} возращает разметку
  */
-export default class SiteFiltrTemplate {
-  constructor(point) {
-    this._point = point;
-
-    this._element = null;
-  }
+export default class SiteFiltrTemplate extends AbstractComponent {
 
   getTemplate() {
     return (
@@ -37,15 +31,4 @@ export default class SiteFiltrTemplate {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }
-

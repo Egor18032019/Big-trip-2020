@@ -1,7 +1,6 @@
 // отрисовка эвентов в каждом дне
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
+import moment from 'moment';
 
 /**
  * контейнер для Offers
@@ -31,7 +30,10 @@ const getPointTemplate = (points) => {
     eventPrice,
     eventDuration,
   } = points;
-  // console.log(points);
+
+  const startEvent = moment(eventTimeStart).format(`HH:mm`);
+  const endEvent = moment(eventTimeEnd).format(`HH:mm`);
+
   const eventSelectedOffers = eventOffers.map((it) => getOffersTemplates(it)).join(`\n`);
 
   return (
@@ -46,9 +48,9 @@ const getPointTemplate = (points) => {
 
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">${eventTimeStart}</time>
+        <time class="event__start-time" datetime="2019-03-18T10:30">${startEvent}</time>
         —
-        <time class="event__end-time" datetime="2019-03-18T11:00">${eventTimeEnd}</time>
+        <time class="event__end-time" datetime="2019-03-18T11:00">${endEvent}</time>
       </p>
       <p class="event__duration">${eventDuration}</p>
     </div>
@@ -71,28 +73,19 @@ ${eventSelectedOffers}
   );
 };
 
-export default class EventComponent {
+export default class EventComponent extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
-
     return getPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      // возвращает только первый элемент
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditPointClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 }

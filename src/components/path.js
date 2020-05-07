@@ -1,16 +1,10 @@
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
+
 /**
  *  контайнер для  маршурта и стоимости
  * @return{html} возращает разметку
  */
-export default class SiteHeaderContainerTemplate {
-  constructor(point) {
-    this._point = point;
-
-    this._element = null;
-  }
+export default class SiteHeaderContainerTemplate extends AbstractComponent {
 
   getTemplate() {
     return (
@@ -21,17 +15,6 @@ export default class SiteHeaderContainerTemplate {
 
       </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,14 +1,13 @@
 // отрисовка дней маршрута
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
 
-export default class PointComponent {
-  constructor(point, iterator) {
+
+export default class PointComponent extends AbstractComponent {
+  constructor(point, iterator = 0) {
+    super();
+
     this._iterator = iterator;
     this._point = point;
-
-    this._element = null;
   }
 
   getTemplate() {
@@ -27,14 +26,4 @@ export default class PointComponent {
       `);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
 }

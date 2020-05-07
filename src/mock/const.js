@@ -1,9 +1,4 @@
 import {
-  getRandomArrayItem,
-  getAllEvent
-} from '../utils.js';
-
-import {
   getEventContent
 } from './content-mock.js';
 /**
@@ -117,10 +112,6 @@ const POINT_TYPE = {
 };
 
 /**
- * случайный ключ от списка("Taxi","Bus" и т..п)
- */
-const EVENT_POINT = getRandomArrayItem(Object.keys(POINT_TYPE));
-/**
  * массив предложений
  */
 const DESCRIPTION = [
@@ -149,14 +140,12 @@ const DESCRIPTION_IMG = [
 /**
  * весь список ивентов
  */
-const allEvent = getAllEvent(ALLDAY, getEventContent());
-// console.log(allEvent);
+const allEvent = getEventContent();
 
 export {
   ALLDAY,
   POINT_TOWN,
   POINT_TYPE,
-  EVENT_POINT,
   allEvent,
   DESCRIPTION,
   DESCRIPTION_IMG

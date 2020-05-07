@@ -1,6 +1,5 @@
-import {
-  createElement
-} from '../utils.js';
+import AbstractComponent from "../components/abstract-component.js";
+
 
 const getEventAvailableOffer = (array) => {
 
@@ -164,26 +163,29 @@ const getFormEditEventTemplate = (eventOneDay) => {
   );
 };
 
-export default class FormEditComponent {
+export default class FormEditComponent extends AbstractComponent {
   constructor(point) {
-    this._point = point;
+    super();
 
-    this._element = null;
+    this._point = point;
   }
 
   getTemplate() {
     return getFormEditEventTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setEditFormClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setDeleteClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
   }
+
+  setEditFormSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
+
 }
