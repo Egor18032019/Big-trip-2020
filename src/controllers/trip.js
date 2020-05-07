@@ -13,9 +13,6 @@ import {
   RenderPosition,
   replace,
 } from '../utils/render.js';
-import {
-  deepAssign
-} from '../utils/common.js';
 
 const getRenderEvent = (listElement, allEventOneDay) => {
   const {
@@ -72,26 +69,43 @@ const getRenderEvent = (listElement, allEventOneDay) => {
     render(listElement, eventComponent, RenderPosition.BEFOREEND);
   }
 
-
 };
 
 /**
  * Сортировка ивентов
- * @param {*} tasks массив ивентов
+ * @param {*} array массив ивентов
  * @param {*} sortType тип сортировки
  * @return{html} возращает отсротированный массив
  */
-const getSortedTasks = (tasks, sortType) => {
-  // console.log(tasks);
-  const showingTasks = deepAssign([], tasks);
+const getSortedTasks = (array, sortType) => {
+
+  const showingTasks = array.map((task) => {
+    // создаем новый массив с рузультатом вызова этой функции для каждого элемента старого массива
+    return Object.assign(
+        {},
+        task,
+        {
+          points: task.points.map((point) => Object.assign(
+              // так как внутри массива есть еще обьекты то снова воспользовался Object.assign
+              {},
+              point
+          )
+          )
+        });
+  });
   let sortedTasks = [];
   switch (sortType) {
     case SortType.DATE:
       sortedTasks = showingTasks.map((it) => {
         // в it заменяем  массиве it.poins уже отсортированным массивом
-        // --,,?? только время  не сортируюется
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => a.eventTimeStart.getTime() - b.eventTimeStart.getTime()));
+        sortedTasks = Object.assign(it, it.points.sort((a, b) => {
+          // считаем продолжительность в каждой точке
+          const durationA = a.eventTimeEnd.getTime() - a.eventTimeStart.getTime();
+          const durationB = b.eventTimeEnd.getTime() - b.eventTimeStart.getTime();
+          return durationB - durationA;
+        }));
         return sortedTasks;
+
       });
       break;
     case SortType.PRICE:
@@ -101,7 +115,7 @@ const getSortedTasks = (tasks, sortType) => {
       });
       break;
     case SortType.DEFAULT:
-      sortedTasks = tasks;
+      sortedTasks = array;
       break;
   }
   return sortedTasks.slice();
@@ -150,7 +164,6 @@ export default class TripController {
           tripEventsList.innerHTML = ``;
           // сортитруем приходящий массив
           const sortedTasks = getSortedTasks(tasks, sortType);
-          // console.log(`сорт?`);
           // и отрисовывваем его
           sortedTasks.forEach((it, iterator) => {
             renderPoint(tripEventsList, it, iterator);
