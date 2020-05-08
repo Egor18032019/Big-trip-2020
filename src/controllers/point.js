@@ -17,6 +17,7 @@ export default class PointController {
     this._eventComponent = null;
     this._formEditComponent = null;
 
+
     // this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
@@ -34,32 +35,32 @@ export default class PointController {
         /**
          * Заменяет  event на форму редактирования
          */
-        const replacePointToEdit = () => {
+        const _replacePointToEdit = () => {
           replace(this._formEditComponent, this._eventComponent);
         };
         /**
          * заменяет форму редактирования на  точку маршрута
          */
-        const replaceEditToPoint = () => {
+        const _replaceEditToPoint = () => {
           replace(this._eventComponent, this._formEditComponent);
         };
 
-        const onEscKeyDown = (evt) => {
+        const _onEscKeyDown = (evt) => {
           const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
           if (isEscKey) {
-            replaceEditToPoint();
-            document.removeEventListener(`keydown`, onEscKeyDown);
+            _replaceEditToPoint();
+            document.removeEventListener(`keydown`, _onEscKeyDown);
           }
         };
 
         const onSetupFormSubmit = function (evt) {
           evt.preventDefault();
-          replaceEditToPoint();
-          document.removeEventListener(`keydown`, onEscKeyDown);
+          _replaceEditToPoint();
+          document.removeEventListener(`keydown`, _onEscKeyDown);
         };
 
         this._formEditComponent.setEditFormClickHandler(() => {
-          replaceEditToPoint();
+          _replaceEditToPoint();
           this._formEditComponent.getElement().reset();
         });
         this._formEditComponent.setDeleteClickHandler(() => {
@@ -67,17 +68,16 @@ export default class PointController {
           const node = this._eventComponent.getElement();
           node.remove();
         });
-
         this._eventComponent.setEditPointClickHandler(() => {
-          replacePointToEdit();
-          document.addEventListener(`keydown`, onEscKeyDown);
+          _replacePointToEdit();
+          document.addEventListener(`keydown`, _onEscKeyDown);
         });
+
         // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
         this._formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
 
         render(listElement, this._eventComponent, RenderPosition.BEFOREEND);
       }
-
     };
 
     tasks.forEach((it, iterator) => {

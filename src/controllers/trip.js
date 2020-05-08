@@ -154,7 +154,7 @@ export default class TripController {
 
     const tripEventsList = document.querySelector(`.trip-days`);
 
-
+    // --?? сделать два контролера на точки и на ивенты (плюс назвать соответствено)
     this._tasks.forEach((it, iterator) => {
       renderPoint(tripEventsList, it, iterator);
     });
