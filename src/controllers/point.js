@@ -1,12 +1,7 @@
 // делаем для MVC
 // переносим отрисовку
 import EventComponent from '../components/events.js';
-import PointComponent from '../components/points.js';
 import FormEditComponent from '../components/form-edit.js';
-import {
-  FirstFromTemplate,
-  SortType
-} from '../components/sort.js';
 
 import {
   render,
@@ -14,75 +9,79 @@ import {
   replace,
 } from '../utils/render.js';
 
-const getRenderEvent = (listElement, allEventOneDay) => {
-  const {
-    points: eventOneDay,
-  } = allEventOneDay;
-
-  for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
-    const eventComponent = new EventComponent(eventOneDay[eventDay]);
-    const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
-    /**
-     * Заменяет  event на форму редактирования
-     */
-    const replacePointToEdit = () => {
-      replace(formEditComponent, eventComponent);
-    };
-    /**
-     * заменяет форму редактирования на  точку маршрута
-     */
-    const replaceEditToPoint = () => {
-      replace(eventComponent, formEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-      if (isEscKey) {
-        replaceEditToPoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onSetupFormSubmit = function (evt) {
-      evt.preventDefault();
-      replaceEditToPoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    };
-
-    formEditComponent.setEditFormClickHandler(() => {
-      replaceEditToPoint();
-      formEditComponent.getElement().reset();
-    });
-    formEditComponent.setDeleteClickHandler(() => {
-      listElement.removeChild(formEditComponent.getElement());
-      const node = eventComponent.getElement();
-      node.remove();
-    });
-
-    eventComponent.setEditPointClickHandler(() => {
-      replacePointToEdit();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-    // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-    formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
-
-    render(listElement, eventComponent, RenderPosition.BEFOREEND);
-  }
-
-};
 
 export default class PointController {
-  constructor(container) {}
+  constructor(container) {
+    this._container = container;
+
+    this._eventComponent = null;
+    this._formEditComponent = null;
+
+    // this._onEscKeyDown = this._onEscKeyDown.bind(this);
+  }
 
   render(tasks) {
-    const renderEvents = (array) => {
-      const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
-      const tripDaysItemArray = Array.from(tripDaysItem);
+    const tripDaysItemArray = Array.from(this._container);
 
-      array.forEach((it, iterator) => {
-        getRenderEvent(tripDaysItemArray[iterator], it);
-      });
+    const getRenderEvent = (listElement, allEventOneDay) => {
+      const {
+        points: eventOneDay,
+      } = allEventOneDay;
+
+      for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
+        this._eventComponent = new EventComponent(eventOneDay[eventDay]);
+        this._formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
+        /**
+         * Заменяет  event на форму редактирования
+         */
+        const replacePointToEdit = () => {
+          replace(this._formEditComponent, this._eventComponent);
+        };
+        /**
+         * заменяет форму редактирования на  точку маршрута
+         */
+        const replaceEditToPoint = () => {
+          replace(this._eventComponent, this._formEditComponent);
+        };
+
+        const onEscKeyDown = (evt) => {
+          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+          if (isEscKey) {
+            replaceEditToPoint();
+            document.removeEventListener(`keydown`, onEscKeyDown);
+          }
+        };
+
+        const onSetupFormSubmit = function (evt) {
+          evt.preventDefault();
+          replaceEditToPoint();
+          document.removeEventListener(`keydown`, onEscKeyDown);
+        };
+
+        this._formEditComponent.setEditFormClickHandler(() => {
+          replaceEditToPoint();
+          this._formEditComponent.getElement().reset();
+        });
+        this._formEditComponent.setDeleteClickHandler(() => {
+          listElement.removeChild(this._formEditComponent.getElement());
+          const node = this._eventComponent.getElement();
+          node.remove();
+        });
+
+        this._eventComponent.setEditPointClickHandler(() => {
+          replacePointToEdit();
+          document.addEventListener(`keydown`, onEscKeyDown);
+        });
+        // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
+        this._formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
+
+        render(listElement, this._eventComponent, RenderPosition.BEFOREEND);
+      }
+
     };
-    renderEvents(tasks);
+
+    tasks.forEach((it, iterator) => {
+      getRenderEvent(tripDaysItemArray[iterator], it);
+    });
   }
 }
