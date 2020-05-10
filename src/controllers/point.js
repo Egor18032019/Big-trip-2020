@@ -11,77 +11,75 @@ import {
 
 
 export default class PointController {
-  constructor(container) {
+  constructor(container, event) {
     this._container = container;
+    this._event = event;
 
     this._eventComponent = null;
     this._formEditComponent = null;
 
 
-    // this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    // не помогло
+    this._replacePointToEdit = this._replacePointToEdit.bind(this);
+    this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
   }
 
-  render(tasks) {
-    const tripDaysItemArray = Array.from(this._container);
+  render(event) {
 
-    const getRenderEvent = (listElement, allEventOneDay) => {
-      const {
-        points: eventOneDay,
-      } = allEventOneDay;
+    this._eventComponent = new EventComponent(event);
+    this._formEditComponent = new FormEditComponent(event);
 
-      for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
-        this._eventComponent = new EventComponent(eventOneDay[eventDay]);
-        this._formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
-        /**
-         * Заменяет  event на форму редактирования
-         */
-        const _replacePointToEdit = () => {
-          replace(this._formEditComponent, this._eventComponent);
-        };
-        /**
-         * заменяет форму редактирования на  точку маршрута
-         */
-        const _replaceEditToPoint = () => {
-          replace(this._eventComponent, this._formEditComponent);
-        };
-
-        const _onEscKeyDown = (evt) => {
-          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-          if (isEscKey) {
-            _replaceEditToPoint();
-            document.removeEventListener(`keydown`, _onEscKeyDown);
-          }
-        };
-
-        const onSetupFormSubmit = function (evt) {
-          evt.preventDefault();
-          _replaceEditToPoint();
-          document.removeEventListener(`keydown`, _onEscKeyDown);
-        };
-
-        this._formEditComponent.setEditFormClickHandler(() => {
-          _replaceEditToPoint();
-          this._formEditComponent.getElement().reset();
-        });
-        this._formEditComponent.setDeleteClickHandler(() => {
-          listElement.removeChild(this._formEditComponent.getElement());
-          const node = this._eventComponent.getElement();
-          node.remove();
-        });
-        this._eventComponent.setEditPointClickHandler(() => {
-          _replacePointToEdit();
-          document.addEventListener(`keydown`, _onEscKeyDown);
-        });
-
-        // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-        this._formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
-
-        render(listElement, this._eventComponent, RenderPosition.BEFOREEND);
-      }
-    };
-
-    tasks.forEach((it, iterator) => {
-      getRenderEvent(tripDaysItemArray[iterator], it);
+    this._formEditComponent.setEditFormClickHandler(() => {
+      this._replaceEditToPoint();
+      this._formEditComponent.getElement().reset();
     });
+    this._formEditComponent.setDeleteClickHandler(() => {
+      this._container.removeChild(this._formEditComponent.getElement());
+      const node = this._eventComponent.getElement();
+      node.remove();
+    });
+    // открытие по нажтию на галочку
+    this._eventComponent.setEditPointClickHandler(() => {
+      this._replacePointToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
+    });
+
+
+    // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
+    //    биндим на контекст
+    this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
+
+    render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }
+
+  /**
+   * Заменяет  event на форму редактирования
+   */
+  _replacePointToEdit() {
+    replace(this._formEditComponent, this._eventComponent);
+  }
+  /**
+   * заменяет форму редактирования на  точку маршрута
+   */
+  _replaceEditToPoint() {
+    replace(this._eventComponent, this._formEditComponent);
+  }
+
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      this._replaceEditToPoint();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
+  _onSetupFormSubmit(evt) {
+    evt.preventDefault();
+    // this._replaceEditToPoint();
+    replace(this._eventComponent, this._formEditComponent);
+
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
 }

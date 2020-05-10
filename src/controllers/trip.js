@@ -160,10 +160,17 @@ export default class TripController {
     });
 
     const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
+    const tripDaysItemArray = Array.from(tripDaysItem);
 
-    const pointController = new PointController(tripDaysItem);
 
-    pointController.render(this._tasks);
+    this._tasks.forEach((day, iterator) => {
+      const pointController = new PointController(tripDaysItemArray[iterator]);
+      day.points.forEach((it) => {
+
+        pointController.render(it);
+
+      });
+    });
 
   }
 
