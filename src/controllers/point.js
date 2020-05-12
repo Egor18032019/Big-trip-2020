@@ -26,7 +26,6 @@ export default class PointController {
     this._mode = Mode.DEFAULT;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    // не помогло
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
   }
@@ -45,7 +44,7 @@ export default class PointController {
       const node = this._eventComponent.getElement();
       node.remove();
     });
-    // открытие по нажтию на галочку
+    // открытие по нажатию на галочку
     this._eventComponent.setEditPointClickHandler(() => {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
@@ -89,6 +88,8 @@ export default class PointController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
+
+  // прописываем закрытие формы если открыта другая
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceEditToPoint();
