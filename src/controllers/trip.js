@@ -164,8 +164,9 @@ export default class TripController {
 
 
     this._tasks.forEach((day, iterator) => {
-      const pointController = new PointController(tripDaysItemArray[iterator]);
+
       day.points.forEach((it) => {
+        const pointController = new PointController(tripDaysItemArray[iterator]);
 
         pointController.render(it);
 
