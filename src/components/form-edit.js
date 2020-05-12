@@ -1,13 +1,30 @@
 import AbstractComponent from "../components/abstract-component.js";
+const styleOffers = {
+  "Rent a car": `luggage`,
+  "Order Uber": `comfort`,
+  "Поймать попопутку": `meal`,
+  "Rent a vagon": `luggage`,
+  "Order traindriver": `comfort`,
+  "Выйти покурить": `meal`,
+  "Rent a Ship": `luggage`,
+  "Order Ship": `comfort`,
+  "Пропиратить шхуну": `meal`,
+  "add luggage": `luggage`,
+  "add meal": `comfort`,
+  "Choose seats": `meal`,
+  "Швеский стол": `luggage`,
+  "Больше мясо": `comfort`,
+  "Choose table": `meal`,
 
+};
 
 const getEventAvailableOffer = (array) => {
-
+  let keyStyleOffers = array.eventOfferTitle;
   return (
     `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-      <label class="event__offer-label" for="event-offer-luggage-1">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${styleOffers[keyStyleOffers]}-1" type="checkbox" name="event-offer-luggage" checked="">
+      <label class="event__offer-label" for="event-offer-${styleOffers[keyStyleOffers]}-1">
       <span class="event__offer-title">${array.eventOfferTitle}</span>
            +€&nbsp;
        <span class="event__offer-price">${array.evenOfferPrice}</span>

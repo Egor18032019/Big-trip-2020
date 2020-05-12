@@ -102,7 +102,7 @@ export default class TripController {
 
       day.points.forEach((it) => {
 
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange);
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
 
         pointController.render(it);
         // инстансы евентов закидвываем в обсервер
@@ -144,8 +144,5 @@ export default class TripController {
 
   _onDataChange() {
     console.log(`добавил в избранное`);
-
   }
-
-
 }

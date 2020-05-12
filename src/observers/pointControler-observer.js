@@ -11,8 +11,9 @@ export default class PointControllerObserver {
     this.observers = this.observers.filter((subscriber) => subscriber !== fn);
   }
 
-  collapse() {
+  callClose() {
     this.observers.forEach((it) => it.setDefaultView());
   }
+
 
 }

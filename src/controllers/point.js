@@ -9,16 +9,21 @@ import {
   replace,
 } from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
 
 export default class PointController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, eventObserver) {
     this._container = container;
-    // _onDataChange - это обсервер ,
+    this._eventObserver = eventObserver;
     this._onDataChange = onDataChange;
 
     this._eventComponent = null;
     this._formEditComponent = null;
-
+    // флаг
+    this._mode = Mode.DEFAULT;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     // не помогло
@@ -62,13 +67,19 @@ export default class PointController {
    * Заменяет  event на форму редактирования
    */
   _replacePointToEdit() {
+    this._eventObserver.callClose();
     replace(this._formEditComponent, this._eventComponent);
+    // флаг
+    this._mode = Mode.EDIT;
+
   }
   /**
    * заменяет форму редактирования на  точку маршрута
    */
   _replaceEditToPoint() {
     replace(this._eventComponent, this._formEditComponent);
+    this._mode = Mode.DEFAULT;
+
   }
 
   _onEscKeyDown(evt) {
@@ -78,10 +89,14 @@ export default class PointController {
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
-
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToPoint();
+    }
+  }
   _onSetupFormSubmit(evt) {
     evt.preventDefault();
-    // this._replaceEditToPoint();
+    // this._formEditComponent.getElement().reset();
     replace(this._eventComponent, this._formEditComponent);
 
     document.removeEventListener(`keydown`, this._onEscKeyDown);
