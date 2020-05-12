@@ -1,7 +1,6 @@
 //  отрисовк точек
-import EventComponent from '../components/events.js';
-import FormEditComponent from '../components/form-edit.js';
 import PointController from '../controllers/point.js';
+import PointControllerObserver from '../observers/pointControler-observer.js';
 import {
   FirstFromTemplate,
   SortType
@@ -12,74 +11,7 @@ import PointComponent from '../components/points.js';
 import {
   render,
   RenderPosition,
-  replace,
 } from '../utils/render.js';
-
-
-const renderEvents = (array) => {
-  const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
-  const tripDaysItemArray = Array.from(tripDaysItem);
-  const getRenderEvent = (listElement, allEventOneDay) => {
-    const {
-      points: eventOneDay,
-    } = allEventOneDay;
-
-    for (let eventDay = 0; eventDay < eventOneDay.length; eventDay++) {
-      const eventComponent = new EventComponent(eventOneDay[eventDay]);
-      const formEditComponent = new FormEditComponent(eventOneDay[eventDay]);
-      /**
-       * Заменяет  event на форму редактирования
-       */
-      const replacePointToEdit = () => {
-        replace(formEditComponent, eventComponent);
-      };
-      /**
-       * заменяет форму редактирования на  точку маршрута
-       */
-      const replaceEditToPoint = () => {
-        replace(eventComponent, formEditComponent);
-      };
-
-      const onEscKeyDown = (evt) => {
-        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-        if (isEscKey) {
-          replaceEditToPoint();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        }
-      };
-
-      const onSetupFormSubmit = function (evt) {
-        evt.preventDefault();
-        replaceEditToPoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      };
-
-      formEditComponent.setEditFormClickHandler(() => {
-        replaceEditToPoint();
-        formEditComponent.getElement().reset();
-      });
-      formEditComponent.setDeleteClickHandler(() => {
-        listElement.removeChild(formEditComponent.getElement());
-        const node = eventComponent.getElement();
-        node.remove();
-      });
-
-      eventComponent.setEditPointClickHandler(() => {
-        replacePointToEdit();
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-      // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-      formEditComponent.setEditFormSubmitHandler(onSetupFormSubmit);
-
-      render(listElement, eventComponent, RenderPosition.BEFOREEND);
-    }
-
-  };
-  array.forEach((it, iterator) => {
-    getRenderEvent(tripDaysItemArray[iterator], it);
-  });
-};
-
 
 const renderPoint = (listElement, task, iterator) => {
   const pointComponent = new PointComponent(task, iterator);
@@ -137,10 +69,13 @@ export default class TripController {
   constructor(container) {
     this._container = container;
     this._tasks = [];
+    // обсервер
+    this.pointObserver = new PointControllerObserver();
     this._mainContent = new CreateMainContent();
     this._sortComponent = new FirstFromTemplate();
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
   render(tasks) {
@@ -166,10 +101,14 @@ export default class TripController {
     this._tasks.forEach((day, iterator) => {
 
       day.points.forEach((it) => {
-        const pointController = new PointController(tripDaysItemArray[iterator]);
+
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange);
 
         pointController.render(it);
-
+        // инстансы евентов закидвываем в обсервер
+        this.pointObserver.subscribe(
+            pointController
+        );
       });
     });
 
@@ -186,6 +125,27 @@ export default class TripController {
     sortedTasks.forEach((it, iterator) => {
       renderPoint(tripEventsList, it, iterator);
     });
-    renderEvents(sortedTasks);
+    sortedTasks.forEach((day, iterator) => {
+      const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
+      const tripDaysItemArray = Array.from(tripDaysItem);
+      day.points.forEach((it) => {
+
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange);
+
+        pointController.render(it);
+        // инстансы евентов закидвываем в обсервер
+        this.pointObserver.subscribe(
+            pointController
+        );
+      });
+    });
+
   }
+
+  _onDataChange() {
+    console.log(`добавил в избранное`);
+
+  }
+
+
 }

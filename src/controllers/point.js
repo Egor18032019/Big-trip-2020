@@ -11,9 +11,10 @@ import {
 
 
 export default class PointController {
-  constructor(container, event) {
+  constructor(container, onDataChange) {
     this._container = container;
-    this._event = event;
+    // _onDataChange - это обсервер ,
+    this._onDataChange = onDataChange;
 
     this._eventComponent = null;
     this._formEditComponent = null;
@@ -46,7 +47,7 @@ export default class PointController {
     });
     // добавление в избранное
     this._formEditComponent.setFavoriteFormClickHandler(() => {
-      document.addEventListener(`keydown`, console.log(`нажал на избранное`));
+      this._onDataChange();
     });
 
 
