@@ -128,22 +128,16 @@ export default class TripController {
     sortedTasks.forEach((day, iterator) => {
       const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
       const tripDaysItemArray = Array.from(tripDaysItem);
+
       day.points.forEach((it) => {
 
         const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
 
         pointController.render(it);
-        // отписываемся
-        this.pointObserver.unsubscribe(
-
-        );
-        // инстансы евентов закидвываем в обсервер
-        this.pointObserver.subscribe(
-            pointController
-        );
+        // убираем в обсервере старые инстансы
+        this.pointObserver.unsubscribe(pointController);
       });
     });
-    // console.log(this.pointObserver);
   }
 
   _onDataChange() {
