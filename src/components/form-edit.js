@@ -1,4 +1,8 @@
 import SmartComponent from "../components/smart-component.js";
+import flatpickr from "flatpickr";
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+// import "flatpickr/dist/flatpickr.min.css";  - не работает так
+import moment from 'moment';
 
 const styleOffers = {
   "Rent a car": `luggage`,
@@ -50,6 +54,7 @@ const getFormEditEventTemplate = (eventOneDay, iterator) => {
   let offersForType = eventOneDay.eventOffers;
   const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it, iterator)).join(`\n`);
   const isFavorite = `${eventOneDay.favorite ? `checked=""` : ``}`;
+  const eventEndTime = moment().format();
   return (
     `
     <form class="event event--edit" action="#" method="post">
@@ -141,7 +146,7 @@ const getFormEditEventTemplate = (eventOneDay, iterator) => {
       <label class="visually-hidden" for="event-end-time-${iterator}">
         To
       </label>
-      <input class="event__input  event__input--time" id="event-end-time-${iterator}" type="text" name="event-end-time" value="18/03/19 13:35">
+      <input class="event__input  event__input--time" id="event-end-time-${iterator}" type="text" name="event-end-time" value="${eventEndTime}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -192,6 +197,8 @@ export default class FormEditComponent extends SmartComponent {
     this._deleteClickHandler = null;
     this._favoriteFormClickHandler = null;
     this._editFormSubmitHandler = null;
+    this._flatpickr = null;
+    this._applyFlatpickr();
   }
 
   getTemplate() {
@@ -239,5 +246,29 @@ export default class FormEditComponent extends SmartComponent {
 
   rerender() {
     super.rerender();
+    this._applyFlatpickr();
   }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
+      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+
+    // искать имено так
+    const dateEndElement = this.getElement().querySelector(`[name="event-end-time"`);
+    if (dateEndElement) {
+      this._flatpickr = flatpickr(dateEndElement, {
+        enableTime: true,
+        altFormat: `d/m/y H:i`,
+        altInput: true,
+        [`time_24hr`]: true,
+      });
+    }
+  }
+
+
 }
