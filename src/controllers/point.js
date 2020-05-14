@@ -15,9 +15,11 @@ const Mode = {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, eventObserver) {
+  constructor(container, onDataChange, eventObserver, iterator) {
     this._container = container;
+    this._iterator = iterator;
     this._eventObserver = eventObserver;
+
     this._onDataChange = onDataChange;
 
     this._eventComponent = null;
@@ -33,31 +35,36 @@ export default class PointController {
   render(event) {
 
     this._eventComponent = new EventComponent(event);
-    this._formEditComponent = new FormEditComponent(event);
-
-    this._formEditComponent.setEditFormClickHandler(() => {
-      this._replaceEditToPoint();
-      this._formEditComponent.getElement().reset();
-    });
+    this._formEditComponent = new FormEditComponent(event, this._iterator);
+    // Замена форма на ивент
+    this._formEditComponent.setEditFormClickHandler(
+        () => {
+          this._replaceEditToPoint();
+          this._formEditComponent.getElement().reset();
+        }
+    );
     this._formEditComponent.setDeleteClickHandler(() => {
       this._container.removeChild(this._formEditComponent.getElement());
       const node = this._eventComponent.getElement();
       node.remove();
     });
-    // открытие по нажатию на галочку
+    // замена ивента на форму редактрирования
     this._eventComponent.setEditPointClickHandler(() => {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
     // добавление в избранное
     this._formEditComponent.setFavoriteFormClickHandler(() => {
-      this._onDataChange();
+      this._onDataChange(event);
+      event.favorite = !event.favorite;
     });
 
 
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
     //    биндим на контекст
     this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
+    // перерисовка формы при выборе
+    this._formEditComponent.setChoiseClickHandler(this._setNewFormView.bind(this));
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }
@@ -66,11 +73,12 @@ export default class PointController {
    * Заменяет  event на форму редактирования
    */
   _replacePointToEdit() {
+    // обсервер кричит всем закройся(перебирает масиив и  вызывает у каждого элемента setDefaultView)
     this._eventObserver.callClose();
+    // заменяем элемент
     replace(this._formEditComponent, this._eventComponent);
-    // флаг
+    // и именно у этого элемента меняем флаг
     this._mode = Mode.EDIT;
-
   }
   /**
    * заменяет форму редактирования на  точку маршрута
@@ -78,7 +86,6 @@ export default class PointController {
   _replaceEditToPoint() {
     replace(this._eventComponent, this._formEditComponent);
     this._mode = Mode.DEFAULT;
-
   }
 
   _onEscKeyDown(evt) {
@@ -95,12 +102,16 @@ export default class PointController {
       this._replaceEditToPoint();
     }
   }
+
   _onSetupFormSubmit(evt) {
     evt.preventDefault();
-    // this._formEditComponent.getElement().reset();
     replace(this._eventComponent, this._formEditComponent);
 
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+  // перерисовка формы при выборе
+  _setNewFormView() {
+    // evt.preventDefault();
   }
 
 }

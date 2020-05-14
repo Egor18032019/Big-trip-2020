@@ -25,14 +25,15 @@ const getRandomArraypoints = () => {
   const eventTown = getRandomArrayItem(POINT_TOWN);
 
   const timeStartEvent = getRandomDate();
-  const startEvent = moment(timeStartEvent).format(`HH:mm`);
+  const startEvent = moment(timeStartEvent).format(`hh:mm`);
 
   const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
   // const endEvent = moment(timeEndEvent).format(`HH:mm`);
 
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
-  const durationEvent = moment(getDurationEvent).format(`HH:mm`);
+  const durationEvent = moment(getDurationEvent).format(`hh:mm`);
   // --,,,??? почему не правильно считает ??
+  const favorite = true;
   return {
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
@@ -46,6 +47,8 @@ const getRandomArraypoints = () => {
       pathDestination: getRandomArray(DESCRIPTION, 1, 5),
       destinationImg: getRandomArray(DESCRIPTION_IMG, 1, 5)
     },
+    favorite,
+    // добавить фаворит
   };
 };
 

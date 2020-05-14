@@ -102,7 +102,7 @@ export default class TripController {
 
       day.points.forEach((it) => {
 
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver, iterator);
 
         pointController.render(it);
         // инстансы евентов закидвываем в обсервер
@@ -116,7 +116,7 @@ export default class TripController {
 
   _onSortTypeChange(sortType) {
     const tripEventsList = document.querySelector(`.trip-days`);
-
+    // console.log(this.pointObserver);
     // чистим
     tripEventsList.innerHTML = ``;
     // сортитруем приходящий массив
@@ -130,16 +130,20 @@ export default class TripController {
       const tripDaysItemArray = Array.from(tripDaysItem);
       day.points.forEach((it) => {
 
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange);
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
 
         pointController.render(it);
+        // отписываемся
+        this.pointObserver.unsubscribe(
+
+        );
         // инстансы евентов закидвываем в обсервер
         this.pointObserver.subscribe(
             pointController
         );
       });
     });
-
+    // console.log(this.pointObserver);
   }
 
   _onDataChange() {
