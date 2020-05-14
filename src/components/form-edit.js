@@ -54,6 +54,7 @@ const getFormEditEventTemplate = (eventOneDay, iterator) => {
   let offersForType = eventOneDay.eventOffers;
   const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it, iterator)).join(`\n`);
   const isFavorite = `${eventOneDay.favorite ? `checked=""` : ``}`;
+  const eventStartTime = moment().format();
   const eventEndTime = moment().format();
   return (
     `
@@ -141,7 +142,7 @@ const getFormEditEventTemplate = (eventOneDay, iterator) => {
       <label class="visually-hidden" for="event-start-time-${iterator}">
         From
       </label>
-      <input class="event__input  event__input--time" id="event-start-time-${iterator}" type="text" name="event-start-time" value="18/03/19 12:25">
+      <input class="event__input  event__input--time" id="event-start-time-${iterator}" type="text" name="event-start-time" value="${eventStartTime}">
       —
       <label class="visually-hidden" for="event-end-time-${iterator}">
         To
@@ -197,7 +198,8 @@ export default class FormEditComponent extends SmartComponent {
     this._deleteClickHandler = null;
     this._favoriteFormClickHandler = null;
     this._editFormSubmitHandler = null;
-    this._flatpickr = null;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
     this._applyFlatpickr();
   }
 
@@ -232,11 +234,6 @@ export default class FormEditComponent extends SmartComponent {
     this._editFormSubmitHandler = handler;
   }
 
-  setChoiseClickHandler() {
-    this.rerender();
-  }
-
-
   recoveryListeners() {
     this.setEditFormClickHandler(this._editFormClickHandler);
     this.setFavoriteFormClickHandler(this._favoriteFormClickHandler);
@@ -250,18 +247,21 @@ export default class FormEditComponent extends SmartComponent {
   }
 
   _applyFlatpickr() {
-    if (this._flatpickr) {
-      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
-      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
-      this._flatpickr.destroy();
-      this._flatpickr = null;
-    }
-
-
     // искать имено так
-    const dateEndElement = this.getElement().querySelector(`[name="event-end-time"`);
+    const dateEndElement = this.getElement().querySelector(`[name="event-end-time"]`);
+    const dateStartElement = this.getElement().querySelector(`[name="event-start-time"]`);
+
+    if (dateStartElement) {
+      this._flatpickrStart = flatpickr(dateStartElement, {
+        enableTime: true,
+        altFormat: `d/m/y H:i`,
+        altInput: true,
+        [`time_24hr`]: true,
+        defaultDate: Date.now()
+      });
+    }
     if (dateEndElement) {
-      this._flatpickr = flatpickr(dateEndElement, {
+      this._flatpickrEnd = flatpickr(dateEndElement, {
         enableTime: true,
         altFormat: `d/m/y H:i`,
         altInput: true,
@@ -269,6 +269,19 @@ export default class FormEditComponent extends SmartComponent {
       });
     }
   }
+  // вынес отдельно удаление
+  removeFlatpickrElement() {
+    if (this._flatpickrStart) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+    }
 
+    if (this._flatpickrEnd) {
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
+
+    super.removeElement();
+  }
 
 }
