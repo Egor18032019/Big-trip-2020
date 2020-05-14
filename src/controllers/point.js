@@ -57,14 +57,15 @@ export default class PointController {
     this._formEditComponent.setFavoriteFormClickHandler(() => {
       this._onDataChange(event);
       event.favorite = !event.favorite;
+      this._formEditComponent.rerender();
+      // и что бы запомнилась -> приравниваем
+      this._formEditComponent = this._formEditComponent;
     });
 
 
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
     //    биндим на контекст
     this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
-    // перерисовка формы при выборе
-    this._formEditComponent.setChoiseClickHandler(this._setNewFormView.bind(this));
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }
@@ -108,10 +109,6 @@ export default class PointController {
     replace(this._eventComponent, this._formEditComponent);
 
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-  }
-  // перерисовка формы при выборе
-  _setNewFormView() {
-    // evt.preventDefault();
   }
 
 }
