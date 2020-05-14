@@ -1,5 +1,4 @@
-// делаем для MVC
-// переносим отрисовку
+// отрисовка одного ивента
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
 
@@ -66,6 +65,7 @@ export default class PointController {
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
     //    биндим на контекст
     this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
+    this._formEditComponent._subscribeOnEvents();
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }

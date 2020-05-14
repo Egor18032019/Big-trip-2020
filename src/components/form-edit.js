@@ -201,6 +201,9 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
     this._applyFlatpickr();
+    this._type = point.eventPoint;
+    this._city = point.eventPointTown;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -234,11 +237,31 @@ export default class FormEditComponent extends SmartComponent {
     this._editFormSubmitHandler = handler;
   }
 
+  // выношу все слушатели которые изменяют форму отдельно
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.event__type-list`)
+      .addEventListener(`change`, (evt) => {
+        this._type = evt.target.value;
+        this.rerender();
+      });
+
+    element.querySelector(`.event__input--destination`)
+    .addEventListener(`change`, (evt) => {
+      this._city = evt.target.value;
+
+      this.rerender();
+    });
+  }
+
+
   recoveryListeners() {
     this.setEditFormClickHandler(this._editFormClickHandler);
     this.setFavoriteFormClickHandler(this._favoriteFormClickHandler);
     this.setDeleteClickHandler(this._deleteClickHandler);
     this.setEditFormSubmitHandler(this._editFormSubmitHandler);
+    this._subscribeOnEvents();
   }
 
   rerender() {

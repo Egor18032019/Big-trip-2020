@@ -116,7 +116,6 @@ export default class TripController {
 
   _onSortTypeChange(sortType) {
     const tripEventsList = document.querySelector(`.trip-days`);
-    // console.log(this.pointObserver);
     // чистим
     tripEventsList.innerHTML = ``;
     // сортитруем приходящий массив
