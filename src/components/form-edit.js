@@ -3,25 +3,11 @@ import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 // import "flatpickr/dist/flatpickr.min.css";  - не работает так
 import moment from 'moment';
+import {
+  POINT_TYPE,
+  styleOffers
+} from '../mock/const.js';
 
-const styleOffers = {
-  "Rent a car": `luggage`,
-  "Order Uber": `comfort`,
-  "Поймать попопутку": `meal`,
-  "Rent a vagon": `luggage`,
-  "Order traindriver": `comfort`,
-  "Выйти покурить": `meal`,
-  "Rent a Ship": `luggage`,
-  "Order Ship": `comfort`,
-  "Пропиратить шхуну": `meal`,
-  "add luggage": `luggage`,
-  "add meal": `comfort`,
-  "Choose seats": `meal`,
-  "Швеский стол": `luggage`,
-  "Больше мясо": `comfort`,
-  "Choose table": `meal`,
-
-};
 
 const getEventAvailableOffer = (array, iterator) => {
   let keyStyleOffers = array.eventOfferTitle;
@@ -52,6 +38,7 @@ const getFormEditEventTemplate = (eventOneDay, iterator) => {
   const pointEventList = eventOneDay.eventPointTown;
 
   let offersForType = eventOneDay.eventOffers;
+
   const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it, iterator)).join(`\n`);
   const isFavorite = `${eventOneDay.favorite ? `checked=""` : ``}`;
   const eventStartTime = moment().format();
@@ -201,14 +188,13 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
     this._applyFlatpickr();
-    this._city = point.eventPointTown;
     this._subscribeOnEvents();
   }
 
   getTemplate() {
     return getFormEditEventTemplate(this._point, this._iterator);
   }
-
+  // --??? как сделать правильный резет
   reset() {
     this.rerender();
   }
@@ -248,6 +234,7 @@ export default class FormEditComponent extends SmartComponent {
         // замена первой буквы на заглавную
         let smallCase = evt.target.value;
         this._point.eventPoint = smallCase[0].toUpperCase() + smallCase.slice(1);
+        this._point.eventOffers = POINT_TYPE[this._point.eventPoint];
         this.rerender();
       });
 

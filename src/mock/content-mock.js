@@ -44,7 +44,6 @@ const getRandomArraypoints = () => {
       destinationImg: getRandomArray(DESCRIPTION_IMG, 1, 5)
     },
     favorite,
-    // добавить фаворит
   };
 };
 
