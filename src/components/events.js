@@ -78,6 +78,8 @@ export default class EventComponent extends AbstractComponent {
     super();
 
     this._point = point;
+    this._editFormClickHandler = null;
+
   }
 
   getTemplate() {
@@ -87,5 +89,6 @@ export default class EventComponent extends AbstractComponent {
   setEditPointClickHandler(handler) {
     this.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, handler);
+    this._editFormClickHandler = handler;
   }
 }

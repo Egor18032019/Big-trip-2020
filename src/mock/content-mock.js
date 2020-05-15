@@ -13,10 +13,6 @@ import {
   getEndRandomDate,
 } from '../utils/common.js';
 
-// import {
-//   flatpickr
-// } from '../../node_modules/flatpickr';
-
 import moment from 'moment';
 
 
@@ -33,12 +29,13 @@ const getRandomArraypoints = () => {
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
   // --,,,??? почему не правильно считает ??
+  const favorite = true;
   return {
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
     eventOffers: POINT_TYPE[eventPoint],
     eventTimeStart: timeStartEvent,
-    eventTimeEnd: timeEndEvent, // flatpickr.js как её подключить ?
+    eventTimeEnd: timeEndEvent,
     eventPrice: getRandomIntegerNumber(0, 50),
     eventDuration: durationEvent,
     eventPointTown: eventTown,
@@ -46,6 +43,7 @@ const getRandomArraypoints = () => {
       pathDestination: getRandomArray(DESCRIPTION, 1, 5),
       destinationImg: getRandomArray(DESCRIPTION_IMG, 1, 5)
     },
+    favorite,
   };
 };
 

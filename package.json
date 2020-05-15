@@ -18,9 +18,11 @@
     "node": "10"
   },
   "dependencies": {
+    "css-loader": "^3.5.3",
     "flatpickr": "^4.6.3",
     "moment": "^2.24.0",
+    "style-loader": "^1.2.1",
     "webpack": "^4.42.1",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   }
 }

@@ -23,5 +23,14 @@ module.exports = {
     contentBase: path.join(__dirname, `public`),
     // Лучше открывать в режиме инкогнито, чтобы браузер не кэшировал файлы сборки
     watchContentBase: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [`style-loader`, `css-loader`],
+      },
+    ],
   }
+
 };

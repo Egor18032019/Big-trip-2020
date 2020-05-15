@@ -8,6 +8,24 @@ const ALLDAY = 5;
 
 const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
 
+const styleOffers = {
+  "Rent a car": `luggage`,
+  "Order Uber": `comfort`,
+  "Поймать попопутку": `meal`,
+  "Rent a vagon": `luggage`,
+  "Order traindriver": `comfort`,
+  "Выйти покурить": `meal`,
+  "Rent a Ship": `luggage`,
+  "Order Ship": `comfort`,
+  "Пропиратить шхуну": `meal`,
+  "add luggage": `luggage`,
+  "add meal": `comfort`,
+  "Choose seats": `meal`,
+  "Швеский стол": `luggage`,
+  "Больше мясо": `comfort`,
+  "Choose table": `meal`,
+};
+
 const POINT_TYPE = {
   "Taxi": [{
     eventOfferTitle: `Rent a car`,
@@ -148,5 +166,6 @@ export {
   POINT_TYPE,
   allEvent,
   DESCRIPTION,
-  DESCRIPTION_IMG
+  DESCRIPTION_IMG,
+  styleOffers
 };

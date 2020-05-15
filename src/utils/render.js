@@ -56,6 +56,7 @@ const remove = (component) => {
   component.removeElement();
 };
 
+
 export {
   createElement,
   render,
