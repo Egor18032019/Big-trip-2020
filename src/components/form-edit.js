@@ -201,7 +201,6 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
     this._applyFlatpickr();
-    this._type = point.eventPoint;
     this._city = point.eventPointTown;
     this._subscribeOnEvents();
   }
@@ -211,7 +210,7 @@ export default class FormEditComponent extends SmartComponent {
   }
 
   reset() {
-    this.getElement().reset();
+    this.rerender();
   }
 
   setEditFormClickHandler(handler) {
@@ -243,16 +242,21 @@ export default class FormEditComponent extends SmartComponent {
 
     element.querySelector(`.event__type-list`)
       .addEventListener(`change`, (evt) => {
-        this._type = evt.target.value;
+        // console.log(evt.target.textContent); - пустая  строка
+        // -? почему не даёт текст ?
+
+        // замена первой буквы на заглавную
+        let smallCase = evt.target.value;
+        this._point.eventPoint = smallCase[0].toUpperCase() + smallCase.slice(1);
         this.rerender();
       });
 
     element.querySelector(`.event__input--destination`)
-    .addEventListener(`change`, (evt) => {
-      this._city = evt.target.value;
-
-      this.rerender();
-    });
+      .addEventListener(`change`, (evt) => {
+        this._point.eventPointTown = evt.target.value;
+        // --?? не могу понять как тут должно работать
+        this.rerender();
+      });
   }
 
 
