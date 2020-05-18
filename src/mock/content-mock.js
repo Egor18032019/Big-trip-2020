@@ -25,7 +25,8 @@ const getRandomArraypoints = () => {
 
   const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
   // const endEvent = moment(timeEndEvent).format(`HH:mm`);
-
+  // console.log(timeEndEvent);
+  // console.log(timeStartEvent);
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
   // --,,,??? почему не правильно считает ??

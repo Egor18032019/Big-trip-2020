@@ -1,7 +1,7 @@
 /* eslint-disable strict */
-// -???? а вот этот 'path'  он где ?
 const path = require(`path`);
-
+// установка плагина для обрезки moment
+const MomentLocalesPlugin = require(`moment-locales-webpack-plugin`);
 module.exports = {
   // установите режим сборки для разработки;
   mode: `development`,
@@ -25,12 +25,14 @@ module.exports = {
     watchContentBase: true
   },
   module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [`style-loader`, `css-loader`],
-      },
-    ],
-  }
-
+    rules: [{
+      test: /\.css$/i,
+      use: [`style-loader`, `css-loader`],
+    }],
+  },
+  plugins: [
+    new MomentLocalesPlugin({
+      localesToKeep: [`es-us`],
+    })
+  ]
 };
