@@ -24,14 +24,12 @@ const getRandomArraypoints = () => {
   const startEvent = moment(timeStartEvent).format(`HH:mm`);
 
   const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
-  // const endEvent = moment(timeEndEvent).format(`HH:mm`);
-  // console.log(timeEndEvent);
-  // console.log(timeStartEvent);
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
   // --,,,??? почему не правильно считает ??
   const favorite = true;
   return {
+    id: String(new Date() + Math.random()),
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
     eventOffers: POINT_TYPE[eventPoint],

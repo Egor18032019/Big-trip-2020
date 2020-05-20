@@ -257,7 +257,6 @@ export default class FormEditComponent extends SmartComponent {
 
   rerender() {
     super.rerender();
-    this.removeFlatpickrElement();
     this._applyFlatpickr();
   }
 
@@ -284,6 +283,7 @@ export default class FormEditComponent extends SmartComponent {
       });
     }
   }
+
   // вынес отдельно удаление
   removeFlatpickrElement() {
     if (this._flatpickrStart) {

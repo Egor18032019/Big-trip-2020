@@ -140,6 +140,6 @@ export default class TripController {
   }
 
   _onDataChange() {
-    // console.log(`добавил в избранное`);
+    console.log(`добавил в избранное`);
   }
 }
