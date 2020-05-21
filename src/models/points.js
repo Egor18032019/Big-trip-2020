@@ -1,17 +1,38 @@
-export default class Points {
-  constructor() {
-    this._points = [];
+import {
+  getEventByFilter
+} from "../utils/filter.js";
+import {
+  FilterType
+} from "../mock/const.js";
 
+export default class PointsModel {
+  constructor() {
+    this._activeFilterType = FilterType.EVERYTHING;
+    this._filterChangeHandlers = [];
+    this._points = [];
+    /**
+     * обсервер
+     */
     this._dataChangeHandlers = [];
+
   }
 
   getTasks() {
-    return this._points;
+    return getEventByFilter(this._points, this._activeFilterType);
+  }
+
+  getTasksAll() {
+    return this._tasks;
   }
 
   setTasks(points) {
     this._points = Array.from(points);
     this._callHandlers(this._dataChangeHandlers);
+  }
+
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._callHandlers(this._filterChangeHandlers);
   }
 
   updateTask(id, point) {
@@ -35,4 +56,9 @@ export default class Points {
   _callHandlers(handlers) {
     handlers.forEach((handler) => handler());
   }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
+
 }

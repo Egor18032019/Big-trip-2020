@@ -160,6 +160,12 @@ const DESCRIPTION_IMG = [
  */
 const allEvent = getEventContent();
 
+const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
+
 export {
   ALLDAY,
   POINT_TOWN,
@@ -167,5 +173,6 @@ export {
   allEvent,
   DESCRIPTION,
   DESCRIPTION_IMG,
-  styleOffers
+  styleOffers,
+  FilterType
 };

@@ -1,3 +1,6 @@
+import moment from 'moment';
+
+
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
@@ -39,6 +42,22 @@ const getEndRandomDate = (startDate, startEventTime) => {
   return endRandomDate;
 };
 
+
+const isPast = (dueDate, date) => {
+  return dueDate > date && !isOneDay(date, dueDate);
+};
+
+const isFuture = (dueDate, date) => {
+  return dueDate < date && !isOneDay(date, dueDate);
+};
+
+const isOneDay = (dateA, dateB) => {
+  const a = moment(dateA);
+  const b = moment(dateB);
+  // --?? не понял это. Жора поясни что тут считается(утащил с лекции)
+  return a.diff(b, `days`) === 0 && dateA.getDate() === dateB.getDate();
+};
+
 export {
   getRandomIntegerNumber,
   getRandomArrayItem,
@@ -46,4 +65,7 @@ export {
   getRandomDate,
   getRandomNewArray,
   getEndRandomDate,
+  isPast,
+  isFuture,
+  isOneDay
 };

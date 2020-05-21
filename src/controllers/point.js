@@ -6,6 +6,7 @@ import {
   render,
   RenderPosition,
   replace,
+  remove,
 } from '../utils/render.js';
 
 const Mode = {
@@ -108,6 +109,12 @@ export default class PointController {
     evt.preventDefault();
     replace(this._eventComponent, this._formEditComponent);
 
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  destroy() {
+    remove(this._formEditComponent);
+    remove(this._eventComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 

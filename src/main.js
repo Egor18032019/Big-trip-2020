@@ -4,6 +4,7 @@ import {
   allEvent
 } from './mock/const.js';
 // const allEvent = 0;
+
 /**
  * .trip-main
  */
@@ -20,22 +21,25 @@ import SiteDateTemplate from './components/date.js';
 
 import SiteHeaderContainerTemplate from './components/path.js';
 import SiteMenuTemplate from './components/menu.js';
-import SiteFiltrTemplate from './components/filter.js';
+import FilterController from "./controllers/filter.js";
+
 import SiteCostTemplate from './components/price.js';
 import FormFirstEditComponent from './components/form-first.js';
 
 import TripController from './controllers/trip.js';
-
 
 import {
   render,
   RenderPosition
 } from './utils/render.js';
 
+import PointModel from "./models/points.js";
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
-
+const PointsModel = new PointModel();
+PointsModel.setTasks(allEvent);
+console.log(PointsModel);
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
@@ -64,14 +68,8 @@ if (tripControlsElement) {
   renderMenu();
 }
 
-const renderFilter = () => {
-  const siteFilter = new SiteFiltrTemplate();
-  render(tripControlsElement, siteFilter, RenderPosition.BEFOREEND);
-};
-if (tripControlsElement) {
-  renderFilter();
-}
-
+const filterController = new FilterController(tripControlsElement, PointsModel);
+filterController.render();
 
 const sortMainElement = document.querySelector(`.trip-events`);
 // если нет точек то рисуем форму приглашение
@@ -85,7 +83,7 @@ if (!allEvent.length) {
   firstButtonNewEvent.disabled = true;
 }
 
-const renderTripEvent = new TripController(sortMainElement);
+const renderTripEvent = new TripController(sortMainElement, PointsModel);
 renderTripEvent.render(allEvent);
 
 
