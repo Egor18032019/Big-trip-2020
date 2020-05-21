@@ -4,28 +4,22 @@ import {
 } from "../mock/const.js";
 import {
   render,
-  replace,
   RenderPosition
 } from "../utils/render.js";
-import {
-  getPastEvent,
-  getFutureEvent,
-  getTasksInOneDay,
-  getEventByFilter,
-} from "../utils/filter.js";
+
 
 export default class FilterController {
-  constructor(container, tasksModel) {
+  constructor(container, pointModel) {
     this._container = container;
-    this._tasksModel = tasksModel;
+    this._pointModel = pointModel;
 
-    this._activeFilterType = FilterType.PAST;
+    this._activeFilterType = FilterType.EVERYTHING;
     this._filterComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._tasksModel.setDataChangeHandler(this._onDataChange);
+    this._pointModel.setDataChangeHandler(this._onDataChange);
   }
 
   render() {
@@ -44,7 +38,7 @@ export default class FilterController {
 
   _onFilterChange(filterType) {
     this._activeFilterType = filterType;
-
+    this._pointModel.setFilterType(filterType);
   }
 
   _onDataChange() {

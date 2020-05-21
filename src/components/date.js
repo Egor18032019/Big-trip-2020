@@ -1,8 +1,11 @@
 // отрисовыает даты маршрута
 import AbstractComponent from "../components/abstract-component.js";
+import moment from "moment";
 
 const getPathPointDate = (itemArray) => {
-  return itemArray.eventDate;
+  const dayEventDate = moment(itemArray.eventDate).format(`MMM do DD`).substring(0, 5);
+
+  return dayEventDate;
 };
 /**
  *  Маршрут и  дата

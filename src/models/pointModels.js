@@ -30,7 +30,7 @@ export default class PointsModel {
     this._callHandlers(this._dataChangeHandlers);
   }
 
-  setFilter(filterType) {
+  setFilterType(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }

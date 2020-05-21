@@ -121,8 +121,7 @@ export default class TripController {
   _onSortTypeChange(sortType) {
     const tripEventsList = document.querySelector(`.trip-days`);
     // чистим
-    // -,,,??? не могу чистить this._removePoints()
-    tripEventsList.innerHTML = ``;
+    this._removePoints();
     // сортитруем приходящий массив
     const sortedTasks = getSortedTasks(this._tasksModel.getTasks(), sortType);
     // и отрисовывваем его
@@ -155,13 +154,14 @@ export default class TripController {
   }
 
   _removePoints() {
-    console.log(`удалить нах`);
-    this.pointController.destroy();
+    // - не могу настроить чем .destroy()
+    const tripEventsList = document.querySelector(`.trip-days`);
+    tripEventsList.innerHTML = ``;
   }
 
   // надо ли ?
   _updateTasks() {
-    this._removeTasks();
+    this._removePoints();
     this._renderPoints(this._tasksModel.getTasks());
   }
 

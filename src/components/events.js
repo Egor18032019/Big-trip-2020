@@ -48,9 +48,9 @@ const getPointTemplate = (points) => {
 
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">${startEvent}</time>
+        <time class="event__start-time" datetime="${startEvent}">${startEvent}</time>
         —
-        <time class="event__end-time" datetime="2019-03-18T11:00">${endEvent}</time>
+        <time class="event__end-time" datetime="${endEvent}</">${endEvent}</time>
       </p>
       <p class="event__duration">${eventDuration}</p>
     </div>

@@ -21,14 +21,14 @@ const getPastEvent = (tasks, date) => {
 
 /**
  * Прошедшие ивенты
- * @param {*} tasks
- * @param {*} date
+ * @param {*} tasks массив с данными
+ * @param {*} date сегодняшная дата
  * @return {*} отфильтрованый массив
  */
 const getFutureEvent = (tasks, date) => {
-  return tasks.filter((task) => {
-    const dueDate = task.dueDate;
 
+  return tasks.filter((task) => {
+    const dueDate = task.eventDate;
     if (!dueDate) {
       return false;
     }

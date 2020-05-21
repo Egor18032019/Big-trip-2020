@@ -44,11 +44,11 @@ const getEndRandomDate = (startDate, startEventTime) => {
 
 
 const isPast = (dueDate, date) => {
-  return dueDate > date && !isOneDay(date, dueDate);
+  return dueDate < date && !isOneDay(date, dueDate);
 };
 
 const isFuture = (dueDate, date) => {
-  return dueDate < date && !isOneDay(date, dueDate);
+  return dueDate > date && !isOneDay(date, dueDate);
 };
 
 const isOneDay = (dateA, dateB) => {

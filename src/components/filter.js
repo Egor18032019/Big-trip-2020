@@ -1,9 +1,6 @@
 // отрисовывает фильтры Everything/Future/Past
 
 import AbstractComponent from "../components/abstract-component.js";
-import {
-  FilterType
-} from "../mock/const.js";
 
 const FILTER_ID_PREFIX = `filter-`;
 
@@ -13,18 +10,23 @@ const getFilterNameById = (id) => {
 };
 
 const getOneFilterTemplate = (it) => {
+  const {
+    name,
+    checked
+  } = it;
   return (
     `
     <div class="trip-filters__filter">
-    <input id="filter-${it}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${it}" checked>
-    <label class="trip-filters__filter-label" for="filter-${it}">${it}</label>
+    <input id="filter-${name}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${it}"
+    ${checked ? `checked` : ``}>
+    <label class="trip-filters__filter-label" for="filter-${name}">${name}</label>
     </div>
   `
   );
 };
 
-const getFiltersTemplate = () => {
-  let pathDate = Object.values(FilterType).map((filterType) => getOneFilterTemplate(filterType)).join(` `);
+const getFiltersTemplate = (filters) => {
+  let pathDate = filters.map((filterType) => getOneFilterTemplate(filterType)).join(` `);
   return pathDate;
 };
 
@@ -33,12 +35,17 @@ const getFiltersTemplate = () => {
  * @return{html} возращает разметку
  */
 export default class SiteFiltrTemplate extends AbstractComponent {
+  constructor(filters) {
+    super();
+
+    this._filters = filters;
+  }
 
   getTemplate() {
     return (
       ` <form class="trip-filters" action="#" method="get">
 
-      ${getFiltersTemplate()}
+      ${getFiltersTemplate(this._filters)}
 
         <button class="visually-hidden" type="submit">Accept filter</button>
       </form>`
@@ -49,7 +56,6 @@ export default class SiteFiltrTemplate extends AbstractComponent {
     this.getElement().addEventListener(`change`, (evt) => {
       const filterName = getFilterNameById(evt.target.id);
       handler(filterName);
-      console.log(`нажал на флитр`);
     });
   }
 }

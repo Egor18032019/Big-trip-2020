@@ -56,7 +56,7 @@ const getEventContent = function () {
   const length = getRandomIntegerNumber(1, 5);
   // передаем в функцию createRandomArray -> длину и функцию с перемеными которая при каждом вызвае будет даватьновое значение
   return createRandomArray(length, () => ({
-    eventDate: moment(getRandomDate()).format(`MMM do DD`).substring(0, 5),
+    eventDate: getRandomDate(),
     points: createRandomArray(getRandomIntegerNumber(1, 4), getRandomArraypoints),
   }));
 };

@@ -1,5 +1,6 @@
 // отрисовка дней маршрута
 import AbstractComponent from "../components/abstract-component.js";
+import moment from "moment";
 
 
 export default class PointComponent extends AbstractComponent {
@@ -12,8 +13,9 @@ export default class PointComponent extends AbstractComponent {
 
   getTemplate() {
     const {
-      eventDate: dayEventDate,
+      eventDate,
     } = this._point;
+    const dayEventDate = moment(eventDate).format(`MMM do DD`).substring(0, 5);
     return (`
     <li class="trip-days__item  day">
       <div class="day__info">

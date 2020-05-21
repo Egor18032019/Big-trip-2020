@@ -33,13 +33,12 @@ import {
   RenderPosition
 } from './utils/render.js';
 
-import PointModel from "./models/points.js";
+import PointModel from "./models/pointModels.js";
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 const PointsModel = new PointModel();
 PointsModel.setTasks(allEvent);
-console.log(PointsModel);
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
