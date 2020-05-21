@@ -15,7 +15,7 @@ export default class PointComponent extends AbstractComponent {
     const {
       eventDate,
     } = this._point;
-    const dayEventDate = moment(eventDate).format(`MMM do DD`).substring(0, 5);
+    const dayEventDate = moment(eventDate).format(`MMM Do YY`).substring(0, 5);
     return (`
     <li class="trip-days__item  day">
       <div class="day__info">

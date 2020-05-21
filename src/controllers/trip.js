@@ -145,7 +145,7 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldData, newData) {
-    console.log(`добавил в избранное`);
+    // console.log(`добавил в избранное`);
     const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
     if (isSuccess) {
