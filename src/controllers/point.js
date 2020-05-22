@@ -55,9 +55,9 @@ export default class PointController {
     });
     // добавление в избранное
     this._formEditComponent.setFavoriteFormClickHandler(() => {
-      this._onDataChange(event);
+      // --,??? Жора б не могу понять как тут что делать
+      this._onDataChange(this._formEditComponent, event, event.favorite);
       event.favorite = !event.favorite;
-      this._formEditComponent.rerender();
       // и что бы запомнилась -> приравниваем
       this._formEditComponent = this._formEditComponent;
     });

@@ -42,7 +42,7 @@ export default class PointsModel {
       return false;
     }
 
-    this._points = [].concat(this._points.slice(0, index), point, this._tasks.slice(index + 1));
+    this._points = [].concat(this._points.slice(0, index), point, this._points.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 

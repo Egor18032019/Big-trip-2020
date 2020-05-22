@@ -65,8 +65,8 @@ export default class TripController {
     this._container = container;
     this._tasksModel = tasksModel;
     /**
-   * обсревер на точки маршурта
-   */
+     * обсревер на точки маршурта
+     */
     this.pointObserver = new PointControllerObserver();
     /**
      * обсервер на дни
@@ -150,12 +150,12 @@ export default class TripController {
     });
   }
 
-  _onDataChange(pointController, oldData, newData) {
+  _onDataChange(controler, oldData, newData) {
     // console.log(`добавил в избранное`);
     const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
     if (isSuccess) {
-      pointController.render(newData);
+      controler.render(newData);
     }
   }
 
@@ -163,10 +163,10 @@ export default class TripController {
     this.pointObserver.observers.forEach(
         (point) => point.destroy()
     );
+    this.pointObserver.observers = [];
     this.dayObserver.observers.forEach(
         (dayControler) => dayControler.destroy()
     );
-    this.pointObserver.observers = [];
     this.dayObserver.observers = [];
 
   }
