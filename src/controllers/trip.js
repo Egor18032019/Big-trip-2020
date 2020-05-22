@@ -1,5 +1,8 @@
 //  отрисовк точек
-import PointController from '../controllers/point.js';
+import PointController, {
+  Mode as TaskControllerMode,
+  EmptyTask
+} from '../controllers/point.js';
 import PointControllerObserver from '../observers/pointControler-observer.js';
 import {
   FirstFromTemplate,
@@ -150,12 +153,27 @@ export default class TripController {
     });
   }
 
-  _onDataChange(controler, oldData, newData) {
+  _onDataChange(taskController, oldData, newData) {
     // console.log(`добавил в избранное`);
-    const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+    if (oldData === EmptyTask) {
+      // флаг
+      this._creatingTask = null;
+      if (newData === null) {
+        taskController.destroy();
+        this._updateTasks();
+      } else {
+        this._tasksModel.addTask(newData);
+        taskController.render(newData, TaskControllerMode.DEFAULT);
+      }
+    } else if (newData === null) {
+      this._tasksModel.removeTask(oldData.id);
+      this._updateTasks();
+    } else {
+      const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
-    if (isSuccess) {
-      controler.render(newData);
+      if (isSuccess) {
+        taskController.render(newData, TaskControllerMode.DEFAULT);
+      }
     }
   }
 

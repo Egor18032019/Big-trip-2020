@@ -183,6 +183,7 @@ export default class FormEditComponent extends SmartComponent {
 
     this._editFormClickHandler = null;
     this._deleteClickHandler = null;
+    this._deleteButtonClickHandler = null;
     this._favoriteFormClickHandler = null;
     this._editFormSubmitHandler = null;
     this._flatpickrStart = null;
@@ -267,13 +268,15 @@ export default class FormEditComponent extends SmartComponent {
     const dateStartElement = this.getElement().querySelector(`[name="event-start-time"]`);
 
     if (dateStartElement) {
-      this._flatpickrStart = flatpickr(dateStartElement, {
-        enableTime: true,
-        altFormat: `d/m/y H:i`,
-        altInput: true,
-        [`time_24hr`]: true,
-        defaultDate: Date.now()
-      });
+      this._flatpickrStart = flatpickr(
+          dateStartElement, {
+            enableTime: true,
+            altFormat: `d/m/y H:i`,
+            altInput: true,
+            [`time_24hr`]: true,
+            defaultDate: Date.now()
+          }
+      );
     }
     if (dateEndElement) {
       this._flatpickrEnd = flatpickr(dateEndElement, {
@@ -298,6 +301,31 @@ export default class FormEditComponent extends SmartComponent {
     }
 
     super.removeElement();
+  }
+
+  // создать функциию которая выдаст нам оббьект(в нужной нам структуре)
+  //  который надо передать в модель
+  // 1.32 не 7 лекции
+  getData() {
+    const tripEventType = `тип выбраного ивента`;
+    const tripEventStartTime = `что пользователь выбрал в старте`;
+    const tripEndTime = `input.value что выбрал в конце`;
+    const isFavorite = `избранное или нет`;
+    const tripEventActiveOffers = `какие оферы выбрал`;
+    const tripEventBasePrice = `проставленную цену`;
+    const tripEventDestination = `пункт назначения`;
+
+    const tripEvent = {
+      type: tripEventType,
+      start: tripEventStartTime,
+      end: tripEndTime,
+      isFavorite,
+      activeOffers: tripEventActiveOffers,
+      basePrice: tripEventBasePrice,
+      destination: tripEventDestination,
+    };
+
+    return tripEvent;
   }
 
 }

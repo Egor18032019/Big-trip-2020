@@ -9,10 +9,11 @@ import {
   remove,
 } from '../utils/render.js';
 
-const Mode = {
+export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
+export const EmptyTask = {};
 
 export default class PointController {
   constructor(container, onDataChange, eventObserver, iterator) {
@@ -57,7 +58,6 @@ export default class PointController {
     this._formEditComponent.setFavoriteFormClickHandler(() => {
       // --,??? Жора б не могу понять как тут что делать
       this._onDataChange(this._formEditComponent, event, event.favorite);
-      event.favorite = !event.favorite;
       // и что бы запомнилась -> приравниваем
       this._formEditComponent = this._formEditComponent;
     });
