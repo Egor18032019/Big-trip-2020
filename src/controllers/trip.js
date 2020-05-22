@@ -6,17 +6,12 @@ import {
   SortType
 } from '../components/sort.js';
 import CreateMainContent from '../components/content.js';
-import PointComponent from '../components/points.js';
+import DayController from '../controllers/day.js';
 
 import {
   render,
   RenderPosition,
 } from '../utils/render.js';
-
-const renderPoint = (listElement, task, iterator, onDataChange) => {
-  const pointComponent = new PointComponent(task, iterator, onDataChange);
-  render(listElement, pointComponent, RenderPosition.BEFOREEND);
-};
 
 /**
  * Сортировка ивентов
@@ -97,7 +92,8 @@ export default class TripController {
 
     // --?? сделать два контролера на точки и на ивенты (плюс назвать соответствено)
     tasks.forEach((it, iterator) => {
-      renderPoint(tripEventsList, it, iterator, this._onDataChange);
+      const dayControler = new DayController(tripEventsList, iterator);
+      dayControler.render(it);
     });
 
     const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
@@ -126,7 +122,8 @@ export default class TripController {
     const sortedTasks = getSortedTasks(this._tasksModel.getTasks(), sortType);
     // и отрисовывваем его
     sortedTasks.forEach((it, iterator) => {
-      renderPoint(tripEventsList, it, iterator, this._onDataChange);
+      const dayControler = new DayController(tripEventsList, iterator);
+      dayControler.render(it);
     });
 
     sortedTasks.forEach((day, iterator) => {
@@ -155,6 +152,7 @@ export default class TripController {
 
   _removePoints() {
     // - не могу настроить чем .destroy()
+    dayControler.destroy();
     const tripEventsList = document.querySelector(`.trip-days`);
     tripEventsList.innerHTML = ``;
   }

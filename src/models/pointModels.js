@@ -5,19 +5,15 @@ import {
   FilterType
 } from "../mock/const.js";
 
-import PointControllerObserver from '../observers/pointControler-observer.js';
-
-
 export default class PointsModel {
   constructor() {
     this._activeFilterType = FilterType.EVERYTHING;
-    this._filterChangeHandlers = [];
     this._points = [];
     /**
      * обсервер
-     * п
      */
-    this._dataChangeHandlers = new PointControllerObserver();
+    this._dataChangeHandlers = [];
+    this._filterChangeHandlers = [];
 
   }
 
@@ -31,7 +27,7 @@ export default class PointsModel {
 
   setTasks(points) {
     this._points = Array.from(points);
-    this._dataChangeHandlers.subscribe();
+    this._callHandlers(this._dataChangeHandlers);
   }
 
   setFilterType(filterType) {
@@ -54,10 +50,12 @@ export default class PointsModel {
   }
 
   setDataChangeHandler(handler) {
-    this._dataChangeHandlers.subscribe(handler);
+    this._dataChangeHandlers.push(handler);
   }
-  // -? Жора ю не могу понять как работает это
+
+  // -?не могу понять как работает (())
   _callHandlers(handlers) {
+    // console.log(handlers);
     handlers.forEach((handler) => handler());
   }
 

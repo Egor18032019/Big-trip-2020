@@ -28,4 +28,8 @@ export default class PointComponent extends AbstractComponent {
       `);
   }
 
+  setDeleteClickHandler() {
+    // console.log(handler);
+  }
+
 }
