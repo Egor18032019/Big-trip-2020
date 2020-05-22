@@ -64,8 +64,14 @@ export default class TripController {
   constructor(container, tasksModel) {
     this._container = container;
     this._tasksModel = tasksModel;
-    // обсервер
+    /**
+   * обсревер на точки маршурта
+   */
     this.pointObserver = new PointControllerObserver();
+    /**
+     * обсервер на дни
+     */
+    this.dayObserver = new PointControllerObserver();
     this._mainContent = new CreateMainContent();
     this._sortComponent = new FirstFromTemplate();
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -94,6 +100,8 @@ export default class TripController {
     tasks.forEach((it, iterator) => {
       const dayControler = new DayController(tripEventsList, iterator);
       dayControler.render(it);
+      // закидываем инстансы в обсервер
+      this.dayObserver.subscribe(dayControler);
     });
 
     const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
@@ -124,6 +132,7 @@ export default class TripController {
     sortedTasks.forEach((it, iterator) => {
       const dayControler = new DayController(tripEventsList, iterator);
       dayControler.render(it);
+      this.dayObserver.subscribe(dayControler);
     });
 
     sortedTasks.forEach((day, iterator) => {
@@ -151,13 +160,17 @@ export default class TripController {
   }
 
   _removePoints() {
-    // - не могу настроить чем .destroy()
-    dayControler.destroy();
-    const tripEventsList = document.querySelector(`.trip-days`);
-    tripEventsList.innerHTML = ``;
+    this.pointObserver.observers.forEach(
+        (point) => point.destroy()
+    );
+    this.dayObserver.observers.forEach(
+        (dayControler) => dayControler.destroy()
+    );
+    this.pointObserver.observers = [];
+    this.dayObserver.observers = [];
+
   }
 
-  // надо ли ?
   _updateTasks() {
     this._removePoints();
     this._renderPoints(this._tasksModel.getTasks());

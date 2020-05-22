@@ -18,7 +18,7 @@ export default class DayController {
 
   render(day) {
 
-    this._dayComponent = new PointComponent(day);
+    this._dayComponent = new PointComponent(day, this._iterator);
 
     this._dayComponent.setDeleteClickHandler(() => {
       // console.log(`удалить день`);

@@ -257,6 +257,7 @@ export default class FormEditComponent extends SmartComponent {
 
   rerender() {
     super.rerender();
+    this.removeFlatpickrElement();
     this._applyFlatpickr();
   }
 
