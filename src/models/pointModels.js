@@ -5,6 +5,9 @@ import {
   FilterType
 } from "../mock/const.js";
 
+import PointControllerObserver from '../observers/pointControler-observer.js';
+
+
 export default class PointsModel {
   constructor() {
     this._activeFilterType = FilterType.EVERYTHING;
@@ -12,8 +15,9 @@ export default class PointsModel {
     this._points = [];
     /**
      * обсервер
+     * п
      */
-    this._dataChangeHandlers = [];
+    this._dataChangeHandlers = new PointControllerObserver();
 
   }
 
@@ -27,7 +31,7 @@ export default class PointsModel {
 
   setTasks(points) {
     this._points = Array.from(points);
-    this._callHandlers(this._dataChangeHandlers);
+    this._dataChangeHandlers.subscribe();
   }
 
   setFilterType(filterType) {
@@ -50,9 +54,9 @@ export default class PointsModel {
   }
 
   setDataChangeHandler(handler) {
-    this._dataChangeHandlers.push(handler);
+    this._dataChangeHandlers.subscribe(handler);
   }
-
+  // -? Жора ю не могу понять как работает это
   _callHandlers(handlers) {
     handlers.forEach((handler) => handler());
   }
