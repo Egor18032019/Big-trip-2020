@@ -4,7 +4,7 @@ import moment from "moment";
 
 
 export default class PointComponent extends AbstractComponent {
-  constructor(point, iterator = 0) {
+  constructor(point = 0, iterator = 0) {
     super();
 
     this._iterator = iterator;
@@ -15,12 +15,21 @@ export default class PointComponent extends AbstractComponent {
     const {
       eventDate,
     } = this._point;
-    const dayEventDate = moment(eventDate).format(`MMM Do YY`).substring(0, 5);
+
+    let dayEventDate;
+    let iterator = this._iterator;
+    if (eventDate) {
+      dayEventDate = moment(eventDate).format(`D MMM`);
+      iterator = iterator + 1;
+    } else {
+      dayEventDate = ``;
+      iterator = ``;
+    }
     return (`
     <li class="trip-days__item  day">
       <div class="day__info">
-      <span class="day__counter">${this._iterator + 1}</span>
-      <time class="day__date" datetime="2019-03-18">${dayEventDate}</time>
+      <span class="day__counter">${iterator}</span>
+      <time class="day__date" datetime="${dayEventDate}">${dayEventDate}</time>
       </div>
      <ul class="trip-events__list">
      </ul>

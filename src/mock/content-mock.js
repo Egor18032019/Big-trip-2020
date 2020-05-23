@@ -27,9 +27,9 @@ const getRandomArraypoints = () => {
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
   // --,,,??? почему не правильно считает ??
-  const favorite = true;
+  const favorite = false;
   return {
-    id: String(new Date() + Math.random()),
+    id: new Date().getTime(),
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
     eventOffers: POINT_TYPE[eventPoint],
@@ -61,8 +61,14 @@ const getEventContent = function () {
   }));
 };
 
+const getEvents = function () {
+  // const length = getRandomIntegerNumber(1, 5);
+  return createRandomArray(getRandomIntegerNumber(1, 10), getRandomArraypoints);
+};
+
 
 export {
+  getEvents,
   getEventContent,
   getRandomArrayItem,
 };

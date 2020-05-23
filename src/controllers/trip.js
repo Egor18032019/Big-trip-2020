@@ -16,6 +16,41 @@ import {
   RenderPosition,
 } from '../utils/render.js';
 
+const getSortedEventsByDate = (events) => {
+  const eventsByDate = new Map();
+
+  events.forEach((event) => {
+    const {
+      eventTimeStart
+    } = event;
+    const date = new Date(
+        eventTimeStart.getFullYear(),
+        eventTimeStart.getMonth(),
+        eventTimeStart.getDate()
+    );
+    const ids = date.getTime();
+
+    if (eventsByDate.has(ids)) {
+      const data = eventsByDate.get(ids);
+      data.points.push(event);
+      eventsByDate.set(ids, data);
+    } else {
+      eventsByDate.set(ids, {
+        eventDate: date,
+        points: [event]
+      });
+    }
+  });
+
+  const eventWithDate = [];
+
+  for (const [key, value] of eventsByDate) {
+    eventWithDate.push(value);
+  }
+
+  return eventWithDate.sort((a, b) => a.eventDate - b.eventDate);
+};
+
 /**
  * Сортировка ивентов
  * @param {*} array массив ивентов
@@ -25,39 +60,23 @@ import {
 const getSortedTasks = (array, sortType) => {
 
   const showingTasks = array.map((task) => {
-    // создаем новый массив с рузультатом вызова этой функции для каждого элемента старого массива
-    return Object.assign({},
-        task, {
-          points: task.points.map((point) => Object.assign(
-          // так как внутри массива есть еще обьекты то снова воспользовался Object.assign
-              {},
-              point
-          ))
-        });
+    return Object.assign({}, task);
   });
   let sortedTasks = [];
   switch (sortType) {
     case SortType.DATE:
-      sortedTasks = showingTasks.map((it) => {
-        // в it заменяем  массиве it.poins уже отсортированным массивом
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => {
-          // считаем продолжительность в каждой точке
-          const durationA = a.eventTimeEnd.getTime() - a.eventTimeStart.getTime();
-          const durationB = b.eventTimeEnd.getTime() - b.eventTimeStart.getTime();
-          return durationB - durationA;
-        }));
-        return sortedTasks;
-
+      sortedTasks = showingTasks.sort((a, b) => {
+        // считаем продолжительность в каждой точке
+        const durationA = a.eventTimeEnd.getTime() - a.eventTimeStart.getTime();
+        const durationB = b.eventTimeEnd.getTime() - b.eventTimeStart.getTime();
+        return durationB - durationA;
       });
       break;
     case SortType.PRICE:
-      sortedTasks = showingTasks.map((it) => {
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => b.eventPrice - a.eventPrice));
-        return sortedTasks;
-      });
+      sortedTasks = showingTasks.sort((a, b) => b.eventPrice - a.eventPrice);
       break;
     case SortType.DEFAULT:
-      sortedTasks = array;
+      sortedTasks = getSortedEventsByDate(showingTasks);
       break;
   }
   return sortedTasks.slice();
@@ -92,16 +111,12 @@ export default class TripController {
     if (tasks.length > 0 && this._container) {
       render(this._container, this._mainContent, RenderPosition.BEFOREEND);
     }
-
-    this._renderPoints(tasks);
+    this._renderPoints(getSortedTasks(tasks, SortType.DEFAULT), SortType.DEFAULT);
   }
 
-  _renderPoints(tasks) {
-    const tripEventsList = document.querySelector(`.trip-days`);
-
-    // --?? сделать два контролера на точки и на ивенты (плюс назвать соответствено)
-    tasks.forEach((it, iterator) => {
-      const dayControler = new DayController(tripEventsList, iterator);
+  _renderByDate(container, sortedEventByDate) {
+    sortedEventByDate.forEach((it, iterator) => {
+      const dayControler = new DayController(container, iterator);
       dayControler.render(it);
       // закидываем инстансы в обсервер
       this.dayObserver.subscribe(dayControler);
@@ -110,7 +125,7 @@ export default class TripController {
     const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
     const tripDaysItemArray = Array.from(tripDaysItem);
 
-    tasks.forEach((day, iterator) => {
+    sortedEventByDate.forEach((day, iterator) => {
 
       day.points.forEach((it) => {
 
@@ -125,45 +140,49 @@ export default class TripController {
     });
   }
 
+  _renderPoints(tasks, sortType) {
+
+    const tripDays = document.querySelector(`.trip-days`);
+
+    if (sortType === SortType.DEFAULT) {
+      this._renderByDate(tripDays, tasks);
+      return;
+    }
+
+    // Отрисовка основы для точек маршрута
+    const dayControler = new DayController(tripDays);
+    dayControler.render();
+    this.dayObserver.subscribe(dayControler);
+
+    const tripDaysItem = document.querySelector(`.trip-events__list`);
+    tasks.forEach((task) => {
+      const pointController = new PointController(tripDaysItem, this._onDataChange, this.pointObserver);
+
+      pointController.render(task);
+      this.pointObserver.subscribe(
+          pointController
+      );
+    });
+  }
+
   _onSortTypeChange(sortType) {
-    const tripEventsList = document.querySelector(`.trip-days`);
     // чистим
     this._removePoints();
     // сортитруем приходящий массив
     const sortedTasks = getSortedTasks(this._tasksModel.getTasks(), sortType);
-    // и отрисовывваем его
-    sortedTasks.forEach((it, iterator) => {
-      const dayControler = new DayController(tripEventsList, iterator);
-      dayControler.render(it);
-      this.dayObserver.subscribe(dayControler);
-    });
-
-    sortedTasks.forEach((day, iterator) => {
-      const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
-      const tripDaysItemArray = Array.from(tripDaysItem);
-
-      day.points.forEach((it) => {
-
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
-
-        pointController.render(it);
-        // убираем в обсервере старые инстансы
-        this.pointObserver.unsubscribe(pointController);
-      });
-    });
+    this._renderPoints(sortedTasks, sortType);
   }
 
-  _onDataChange(taskController, oldData, newData) {
-    // console.log(`добавил в избранное`);
+  _onDataChange(pointController, oldData, newData) {
     if (oldData === EmptyTask) {
       // флаг
       this._creatingTask = null;
       if (newData === null) {
-        taskController.destroy();
+        pointController.destroy();
         this._updateTasks();
       } else {
         this._tasksModel.addTask(newData);
-        taskController.render(newData, TaskControllerMode.DEFAULT);
+        this.pointController.render(newData, TaskControllerMode.DEFAULT);
       }
     } else if (newData === null) {
       this._tasksModel.removeTask(oldData.id);
@@ -172,7 +191,7 @@ export default class TripController {
       const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
 
       if (isSuccess) {
-        taskController.render(newData, TaskControllerMode.DEFAULT);
+        this.pointController.render(newData, TaskControllerMode.DEFAULT);
       }
     }
   }
@@ -197,6 +216,4 @@ export default class TripController {
   _onFilterChange() {
     this._updateTasks();
   }
-
-
 }

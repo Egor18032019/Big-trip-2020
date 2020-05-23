@@ -3,6 +3,9 @@
 import {
   allEvent
 } from './mock/const.js';
+import {
+  getEvents
+} from './mock/content-mock';
 // const allEvent = 0;
 
 /**
@@ -35,10 +38,12 @@ import {
 
 import PointModel from "./models/pointModels.js";
 
+const EVENTS = getEvents();
+
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 const PointsModel = new PointModel();
-PointsModel.setTasks(allEvent);
+PointsModel.setTasks(EVENTS);
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
@@ -48,7 +53,7 @@ const renderPath = (array) => {
 };
 const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
-  renderPath(allEvent);
+  renderPath(EVENTS);
 }
 
 const renderCost = (array) => {
@@ -83,6 +88,4 @@ if (!allEvent.length) {
 }
 
 const renderTripEvent = new TripController(sortMainElement, PointsModel);
-renderTripEvent.render(allEvent);
-
-
+renderTripEvent.render();
