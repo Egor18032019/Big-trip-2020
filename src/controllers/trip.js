@@ -127,7 +127,6 @@ export default class TripController {
     const tripDaysItemArray = Array.from(tripDaysItem);
 
     sortedEventByDate.forEach((day, iterator) => {
-
       day.points.forEach((it) => {
 
         const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver, iterator);
@@ -141,7 +140,7 @@ export default class TripController {
     });
   }
 
-  _renderPoints(tasks, sortType) {
+  _renderPoints(tasks, sortType = SortType.DEFAULT) {
 
     const tripDays = document.querySelector(`.trip-days`);
 
@@ -185,12 +184,12 @@ export default class TripController {
       // если пришла пуста новая форма  то удаляем из _PointModel этот элемент
       this._PointModel.removeTask(oldForm.id);
       this._updateTasks();
+
     } else {
       const isSuccess = this._PointModel.updateTask(oldForm.id, newForm);
 
       if (isSuccess) {
-        pointController.render(newForm);
-        // rerender();
+        this._updateTasks();
       }
     }
   }
@@ -208,10 +207,12 @@ export default class TripController {
   }
 
   _updateTasks() {
+    //  брекпоинт ставить debugger;
     this._removePoints();
     let ass = this._PointModel.getFilter();
     if (ass === `everything`) {
-      this._renderPoints(this._PointModel.getTasksAll());
+      // подумать
+      this._renderPoints(getSortedTasks(this._PointModel.getTasksAll(), SortType.DEFAULT), SortType.DEFAULT);
 
     } else {
       this._renderPoints(this._PointModel.getTasks());

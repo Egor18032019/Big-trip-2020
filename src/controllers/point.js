@@ -59,9 +59,7 @@ export default class PointController {
         favorite: evt.target.checked
         // !event.favorite
       };
-      // console.log(`в избранное`)
       this._onDataChange(this._formEditComponent, event, newEvent);
-      // console.log(newEvent)
     });
 
 
@@ -110,9 +108,9 @@ setDefaultView() {
 _onSetupFormSubmit(evt) {
   evt.preventDefault();
   const newFormSubmit = this._formEditComponent.getData();
-  this._onDataChange(this._formEditComponent, event, newFormSubmit);
-  console.log(`отправил`)
-  console.log(newFormSubmit)
+  this._replaceEditToPoint()
+  this._onDataChange(this._formEditComponent, newFormSubmit, newFormSubmit);
+  // console.log(newFormSubmit)
   document.removeEventListener(`keydown`, this._onEscKeyDown);
 }
 

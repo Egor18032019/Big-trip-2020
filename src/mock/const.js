@@ -26,6 +26,21 @@ const styleOffers = {
   "Choose table": `meal`,
 };
 
+// для преворота обьекта с ключами
+let styleOffers2 = {};
+let keys = Object.keys(styleOffers);
+keys.forEach(function (key) {
+  let val = styleOffers[key];
+  styleOffers2[val] = key;
+});
+
+const styleOffersReverde = {
+  "comfort": `Больше мясо`,
+  "luggage": `Швеский стол`,
+  "​meal": `Choose table`,
+};
+
+
 const POINT_TYPE = {
   "Taxi": [{
     eventOfferTitle: `Rent a car`,
@@ -174,5 +189,6 @@ export {
   DESCRIPTION,
   DESCRIPTION_IMG,
   styleOffers,
-  FilterType
+  FilterType,
+  styleOffersReverde
 };

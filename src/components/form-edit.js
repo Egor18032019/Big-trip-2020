@@ -5,7 +5,7 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import moment from 'moment';
 import {
   POINT_TYPE,
-  styleOffers
+  styleOffers,
 } from '../mock/const.js';
 
 const Mode = {
@@ -152,7 +152,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">
 
-    ${mode === Mode.DEFAULT ? `Cancel` : ` Delete`}
+    ${mode === Mode.DEFAULT ? `Delete` : ` Cancel`}
     </button>
 
     <input id="event-favorite-${id}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite}>
@@ -197,6 +197,12 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrEnd = null;
     this._applyFlatpickr();
     this._subscribeOnEvents();
+    // тут получаем данные -> потом меняем в слушателях и передаем в getData() в новый обьект
+    this._point.eventPoint = this._point.eventPoint;
+    this._point.eventOffers = this._point.eventOffers;
+    this._point.eventPointTown = this._point.eventPointTown;
+    this._point.eventPrice = this._point.eventPrice;
+    this._tripEventActiveOffers = this._point.eventOffers;
   }
 
   getTemplate() {
@@ -233,24 +239,61 @@ export default class FormEditComponent extends SmartComponent {
   // выношу все слушатели которые изменяют форму отдельно
   _subscribeOnEvents() {
     const element = this.getElement();
-
+    // изменения иконки и затем удобств
     element.querySelector(`.event__type-list`)
       .addEventListener(`change`, (evt) => {
-        // console.log(evt.target.textContent); - пустая  строка
-        // -? почему не даёт текст ?
-
         // замена первой буквы на заглавную
         let smallCase = evt.target.value;
         this._point.eventPoint = smallCase[0].toUpperCase() + smallCase.slice(1);
+        this._point.eventTitle = this._point.eventPoint;
+
         this._point.eventOffers = POINT_TYPE[this._point.eventPoint];
-        this.rerender();
+        this.render();
+
       });
     // изменение города назначения
     element.querySelector(`.event__input--destination`)
       .addEventListener(`change`, (evt) => {
         this._point.eventPointTown = evt.target.value;
-        // --?? не могу понять как тут должно работать
       });
+    // доступные удобства
+    const availableOffersElement = element.querySelector(`.event__available-offers`);
+
+    availableOffersElement.addEventListener(`change`, (evt) => {
+      // чистим массив удобств которые мы передаем в getData
+      // this._tripEventActiveOffers = [];
+      // тут должны получить чекнутые инпуты и занести их в массив
+      // console.log(evt.target.checked);
+      if (!evt.target.checked) {
+        // находим значение чекнутого ивента
+        const eventOfferTitle = availableOffersElement.querySelector(`.event__offer-title`).textContent;
+        const evenOfferPrice = availableOffersElement.querySelector(`.event__offer-price`).textContent;
+        // и закидываем их в массив новый удобств
+        let offer = {
+          eventOfferTitle,
+          evenOfferPrice,
+        };
+        this._tripEventActiveOffers.push(offer);
+      } else {
+        const eventOfferTitle = availableOffersElement.querySelector(`.event__offer-title`).textContent;
+        const evenOfferPrice = availableOffersElement.querySelector(`.event__offer-price`).textContent;
+        // и закидываем их в массив новый удобств
+        let offer = {
+          eventOfferTitle,
+          evenOfferPrice,
+        };
+        // какой нить фильтр который бы фильтровал массив _tripEventActiveOffers
+        // и возвращал бы массив только с чекнутыми инпутами
+        this._tripEventActiveOffers = this._tripEventActiveOffers.filter((it) => it !== offer);
+      }
+
+    });
+    // изменение цены
+    element.querySelector(`.event__input--price`)
+      .addEventListener(`change`, (evt) => {
+        this._point.eventPrice = evt.target.value;
+      });
+
   }
 
 
@@ -313,25 +356,21 @@ export default class FormEditComponent extends SmartComponent {
   //  который надо передать в модель
   // 1.32 на 7 лекции
   getData() {
-    const tripEventType = `тип выбраного ивента`;
-    const tripEventStartTime = `что пользователь выбрал в старте`;
-    const tripEndTime = `input.value что выбрал в конце`;
+
     const isFavorite = `избранное или нет`;
-    const tripEventActiveOffers = `какие оферы выбрал`;
-    const tripEventBasePrice = `проставленную цену`;
-    const tripEventDestination = `пункт назначения`;
+
 
     const tripEvent = {
-      id: new Date().getTime(),
-      eventPoint: tripEventType,
-      eventTitle: `Testovie dannie`,
-      eventOffers: tripEventActiveOffers,
+      id: this._point.id,
+      eventPoint: this._point.eventPoint,
+      eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
+      eventOffers: this._tripEventActiveOffers,
 
-      eventTimeStart: tripEventStartTime,
-      eventTimeEnd: tripEndTime,
-      eventPrice: tripEventBasePrice,
+      eventTimeStart: new Date(),
+      eventTimeEnd: new Date(),
+      eventPrice: this._point.eventPrice,
       eventDuration: 11,
-      eventPointTown: tripEventDestination,
+      eventPointTown: this._point.eventPointTown,
       eventPointDestination: {
         pathDestination: `тестовысе слова`,
         destinationImg: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
