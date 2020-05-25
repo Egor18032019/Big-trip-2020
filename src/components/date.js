@@ -12,19 +12,22 @@ const getPathPointDate = (itemArray) => {
  * @return {*} массив с самой ранней датой и с самой поздней
  */
 const getPathPointSortingDates = (allEvent) => {
+  if (!allEvent) {
+    return ``;
+  } else {
+    const allDates = allEvent.map((it) => getPathPointDate(it));
 
-  const allDates = allEvent.map((it) => getPathPointDate(it));
+    // ищем самую ранюю дату
+    const tripEventsStartDates = allDates.sort((a, b) => a - b);
+    const tripEventsStartDatesGood = moment(tripEventsStartDates[0]).format(`MMM Do YY`).substring(0, 5);
 
-  // ищем самую ранюю дату
-  const tripEventsStartDates = allDates.sort((a, b) => a - b);
-  const tripEventsStartDatesGood = moment(tripEventsStartDates[0]).format(`MMM Do YY`).substring(0, 5);
+    // ищем самую позднию дату
+    const tripEventsEndtDates = allDates.sort((a, b) => a - b);
+    const tripEventsEndDatesGood = moment(tripEventsEndtDates[tripEventsEndtDates.length - 1]).format(`MMM Do YY`).substring(0, 5);
 
-  // ищем самую позднию дату
-  const tripEventsEndtDates = allDates.sort((a, b) => a - b);
-  const tripEventsEndDatesGood = moment(tripEventsEndtDates[tripEventsEndtDates.length - 1]).format(`MMM Do YY`).substring(0, 5);
-
-  // отдаем раннюю дату и позднею дату(без месяца)
-  return [tripEventsStartDatesGood, tripEventsEndDatesGood];
+    // отдаем раннюю дату и позднею дату(без месяца)
+    return [tripEventsStartDatesGood, tripEventsEndDatesGood];
+  }
 };
 
 
@@ -37,10 +40,14 @@ const getSitePathTemplate = (listEvent) => {
 
   const durationEvents = getPathPointSortingDates(listEvent);
   let pathDate;
-  if (durationEvents[0] !== durationEvents[1]) {
-    pathDate = durationEvents[0] + ` - ` + durationEvents[1];
+  if (!durationEvents) {
+    pathDate = ``;
   } else {
-    pathDate = durationEvents[0] + ` за день успеем`;
+    if (durationEvents[0] !== durationEvents[1]) {
+      pathDate = durationEvents[0] + ` - ` + durationEvents[1];
+    } else {
+      pathDate = durationEvents[0] + ` за день успеем`;
+    }
   }
   return (
     `

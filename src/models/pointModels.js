@@ -5,6 +5,10 @@ import {
   FilterType
 } from "../mock/const.js";
 
+import {
+
+} from '../mock/content-mock';
+
 export default class PointsModel {
   constructor() {
     this._activeFilterType = FilterType.EVERYTHING;
@@ -22,7 +26,11 @@ export default class PointsModel {
   }
 
   getTasksAll() {
-    return this._tasks;
+    return this._points;
+  }
+
+  getFilter() {
+    return this._activeFilterType;
   }
 
   setTasks(points) {
@@ -36,27 +44,13 @@ export default class PointsModel {
   }
 
   removeTask(id) {
-    const index = this._tasks.findIndex((it) => it.id === id);
+    const index = this._points.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
-
-    this._callHandlers(this._dataChangeHandlers);
-
-    return true;
-  }
-
-  removeTask(id) {
-    const index = this._tasks.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._tasks = [].concat(this._tasks.slice(0, index), this._tasks.slice(index + 1));
+    this._points = [].concat(this._points.slice(0, index), this._points.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 

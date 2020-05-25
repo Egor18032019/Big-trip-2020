@@ -3,10 +3,10 @@
 import {
   allEvent
 } from './mock/const.js';
+
 import {
   getEvents
 } from './mock/content-mock';
-// const allEvent = 0;
 
 /**
  * .trip-main
@@ -44,6 +44,8 @@ const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 const PointsModel = new PointModel();
 PointsModel.setTasks(EVENTS);
+
+// console.log(EVENTS);
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
@@ -62,7 +64,7 @@ const renderCost = (array) => {
 };
 const costElement = document.querySelector(`.trip-info`);
 if (costElement) {
-  renderCost(allEvent);
+  renderCost(EVENTS);
 }
 const renderMenu = () => {
   const siteComponent = new SiteMenuTemplate();
@@ -81,7 +83,7 @@ const renderFirstForm = (listElement) => {
   const tripFirstEventsForm = new FormFirstEditComponent();
   render(listElement, tripFirstEventsForm, RenderPosition.BEFOREEND);
 };
-if (!allEvent.length) {
+if (!EVENTS.length) {
   renderFirstForm(sortMainElement);
   // дисаблем кнопку для создание новых ивентов
   firstButtonNewEvent.disabled = true;

@@ -51,6 +51,7 @@ const getSortedEventsByDate = (events) => {
   return eventWithDate.sort((a, b) => a.eventDate - b.eventDate);
 };
 
+
 /**
  * Сортировка ивентов
  * @param {*} array массив ивентов
@@ -85,7 +86,7 @@ const getSortedTasks = (array, sortType) => {
 export default class TripController {
   constructor(container, tasksModel) {
     this._container = container;
-    this._tasksModel = tasksModel;
+    this._PointModel = tasksModel;
     /**
      * обсревер на точки маршурта
      */
@@ -100,11 +101,11 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
-    this._tasksModel.setFilterChangeHandler(this._onFilterChange);
+    this._PointModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render() {
-    const tasks = this._tasksModel.getTasks();
+    const tasks = this._PointModel.getTasks();
     // отрисовываем сортировку
     render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
     // Отрисовка основы для контента
@@ -169,29 +170,27 @@ export default class TripController {
     // чистим
     this._removePoints();
     // сортитруем приходящий массив
-    const sortedTasks = getSortedTasks(this._tasksModel.getTasks(), sortType);
+    const sortedTasks = getSortedTasks(this._PointModel.getTasks(), sortType);
     this._renderPoints(sortedTasks, sortType);
   }
 
-  _onDataChange(pointController, oldData, newData) {
-    if (oldData === EmptyTask) {
-      // флаг
+  _onDataChange(pointController, oldForm, newForm) {
+    // если пришла пустая форма то ?
+    if (oldForm === EmptyTask) {
+      // флаг -- тут или в моделе ?
       this._creatingTask = null;
-      if (newData === null) {
-        pointController.destroy();
-        this._updateTasks();
-      } else {
-        this._tasksModel.addTask(newData);
-        this.pointController.render(newData, TaskControllerMode.DEFAULT);
-      }
-    } else if (newData === null) {
-      this._tasksModel.removeTask(oldData.id);
+      this._PointModel.updateTask(newForm);
+
+    } else if (newForm === null) {
+      // если пришла пуста новая форма  то удаляем из _PointModel этот элемент
+      this._PointModel.removeTask(oldForm.id);
       this._updateTasks();
     } else {
-      const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+      const isSuccess = this._PointModel.updateTask(oldForm.id, newForm);
 
       if (isSuccess) {
-        this.pointController.render(newData, TaskControllerMode.DEFAULT);
+        pointController.render(newForm);
+        // rerender();
       }
     }
   }
@@ -210,7 +209,13 @@ export default class TripController {
 
   _updateTasks() {
     this._removePoints();
-    this._renderPoints(this._tasksModel.getTasks());
+    let ass = this._PointModel.getFilter();
+    if (ass === `everything`) {
+      this._renderPoints(this._PointModel.getTasksAll());
+
+    } else {
+      this._renderPoints(this._PointModel.getTasks());
+    }
   }
 
   _onFilterChange() {
