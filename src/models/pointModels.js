@@ -72,7 +72,7 @@ export default class PointsModel {
   }
 
   addTask(task) {
-    this._tasks = [].concat(task, this._tasks);
+    this._points = [].concat(task, this._points);
     this._callHandlers(this._dataChangeHandlers);
   }
 

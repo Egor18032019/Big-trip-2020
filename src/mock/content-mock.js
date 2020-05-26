@@ -46,6 +46,27 @@ const getRandomArraypoints = () => {
   };
 };
 
+
+const NewFormDataId = {
+  eventPoint: `Flight`,
+  eventTitle: `sss`,
+  eventOffers: [{
+    eventOfferTitle: `add luggage`,
+    evenOfferPrice: ` 20`
+  }, {
+    eventOfferTitle: `add meal`,
+    evenOfferPrice: `  21`
+  }, {
+    eventOfferTitle: `Choose seats`,
+    evenOfferPrice: `5 $ `
+  }],
+  eventPrice: ``,
+  eventPointTown: ``,
+  favorite: false,
+  id: new Date().getTime(),
+};
+
+
 const createRandomArray = (length, handlerGenerateData) => {
   // создаем пустой массив - заданой длины - и заливаем его `ничего`
   const randomValues = new Array(length).fill(`ничего`);
@@ -71,4 +92,5 @@ export {
   getEvents,
   getEventContent,
   getRandomArrayItem,
+  NewFormDataId,
 };

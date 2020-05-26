@@ -8,10 +8,9 @@ import {
   styleOffers,
 } from '../mock/const.js';
 
-const Mode = {
-  DEFAULT: `default`,
-  EDIT: `edit`,
-};
+import {
+  Mode
+} from '../controllers/point.js';
 
 
 const getEventAvailableOffer = (array, id) => {
@@ -146,7 +145,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="160">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${eventOneDay.eventPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

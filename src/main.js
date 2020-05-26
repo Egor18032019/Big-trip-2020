@@ -12,7 +12,7 @@ import {
  * .trip-main
  */
 const runMainElement = document.querySelector(`.trip-main`);
-const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
+const firstButtonNewEvent = runMainElement.querySelector(`.trip-main__event-add-btn`);
 /**
  * `.trip-main__trip-controls в infoMainElement
  */
@@ -28,6 +28,7 @@ import FilterController from "./controllers/filter.js";
 
 import SiteCostTemplate from './components/price.js';
 import FormFirstEditComponent from './components/form-first.js';
+import FormEditComponent from './components/form-edit.js';
 
 import TripController from './controllers/trip.js';
 
@@ -35,6 +36,9 @@ import {
   render,
   RenderPosition
 } from './utils/render.js';
+import {
+  NewFormDataId
+} from './mock/content-mock.js';
 
 import PointModel from "./models/pointModels.js";
 
@@ -42,10 +46,7 @@ const EVENTS = getEvents();
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
-const PointsModel = new PointModel();
-PointsModel.setTasks(EVENTS);
 
-// console.log(EVENTS);
 // отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
 const renderPath = (array) => {
   const tripInfoComponent = new SitePathTemplate(array);
@@ -57,7 +58,6 @@ const pathElement = document.querySelector(`.trip-info__main`);
 if (pathElement) {
   renderPath(EVENTS);
 }
-
 const renderCost = (array) => {
   const costComponent = new SiteCostTemplate(array);
   render(costElement, costComponent, RenderPosition.BEFOREEND);
@@ -73,7 +73,8 @@ const renderMenu = () => {
 if (tripControlsElement) {
   renderMenu();
 }
-
+const PointsModel = new PointModel();
+PointsModel.setTasks(EVENTS);
 const filterController = new FilterController(tripControlsElement, PointsModel);
 filterController.render();
 
@@ -91,3 +92,11 @@ if (!EVENTS.length) {
 
 const renderTripEvent = new TripController(sortMainElement, PointsModel);
 renderTripEvent.render();
+
+
+// добавление нового ивента
+firstButtonNewEvent.addEventListener(`click`, () => {
+  firstButtonNewEvent.disabled = true;
+  let newEventForm = new FormEditComponent(NewFormDataId);
+  render(sortMainElement, newEventForm, RenderPosition.AFTERBEGIN);
+});

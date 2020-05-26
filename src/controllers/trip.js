@@ -1,8 +1,5 @@
 //  отрисовк точек
-import PointController, {
-  Mode as TaskControllerMode,
-  EmptyTask
-} from '../controllers/point.js';
+import PointController from '../controllers/point.js';
 import PointControllerObserver from '../observers/pointControler-observer.js';
 import {
   FirstFromTemplate,
@@ -174,10 +171,11 @@ export default class TripController {
   }
 
   _onDataChange(pointController, oldForm, newForm) {
-    // если пришла пустая форма то ?
-    if (oldForm === EmptyTask) {
+    if (oldForm === null) {
+      // создали новый ивент = пришла oldForm = 0,
       // флаг -- тут или в моделе ?
-      this._creatingTask = null;
+      this._PointModel.addTask(newForm);
+      // добавили в модель новый елемент
       this._PointModel.updateTask(newForm);
 
     } else if (newForm === null) {

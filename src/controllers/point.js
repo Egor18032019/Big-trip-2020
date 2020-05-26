@@ -13,6 +13,7 @@ import PointsModel from '../models/pointModels.js';
 export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
+  ADDING: `adding`,
 };
 export const EmptyTask = {};
 
@@ -26,10 +27,11 @@ export default class PointController {
 
     this._eventComponent = null;
     this._formEditComponent = null;
-
+    this._creatingTask = null;
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
+
   }
 
   render(event, mode = Mode.DEFAULT) {
@@ -109,8 +111,6 @@ export default class PointController {
 
   _onSetupFormSubmit(evt) {
     evt.preventDefault();
-
-
     const newFormSubmit = this._formEditComponent.getData();
     this._replaceEditToPoint()
     this._onDataChange(this._formEditComponent, this._formEditComponent.getItem(), newFormSubmit);
@@ -122,5 +122,15 @@ export default class PointController {
     remove(this._eventComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
+  createTask() {
+    if (this._creatingTask) {
+      return;
+    }
+
+    const taskListElement = this._eventComponent.getElement();
+    this._creatingTask = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
+    this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING);
+  }
+
 
 }
