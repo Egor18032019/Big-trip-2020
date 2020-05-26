@@ -8,6 +8,10 @@ import {
   getEvents
 } from './mock/content-mock';
 
+import {
+  Mode
+} from './controllers/point.js';
+
 /**
  * .trip-main
  */
@@ -95,8 +99,10 @@ renderTripEvent.render();
 
 
 // добавление нового ивента
+// перенести в point.js
+const afterThis = sortMainElement.querySelector(`.trip-events__trip-sort`);
 firstButtonNewEvent.addEventListener(`click`, () => {
   firstButtonNewEvent.disabled = true;
-  let newEventForm = new FormEditComponent(NewFormDataId);
-  render(sortMainElement, newEventForm, RenderPosition.AFTERBEGIN);
+  let newEventForm = new FormEditComponent(NewFormDataId, Mode.ADDING);
+  render(afterThis, newEventForm, RenderPosition.AFTERNODE);
 });

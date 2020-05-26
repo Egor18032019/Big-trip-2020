@@ -8,7 +8,6 @@ import {
   replace,
   remove,
 } from '../utils/render.js';
-import PointsModel from '../models/pointModels.js';
 
 export const Mode = {
   DEFAULT: `default`,
@@ -35,15 +34,15 @@ export default class PointController {
   }
 
   render(event, mode = Mode.DEFAULT) {
-    this._mode = mode
+    this._mode = mode;
     this._eventComponent = new EventComponent(event);
     this._formEditComponent = new FormEditComponent(event, this._mode);
     // Замена форма на ивент
     this._formEditComponent.setEditFormClickHandler(
-      () => {
-        this._replaceEditToPoint();
-        this._formEditComponent.getElement().reset();
-      }
+        () => {
+          this._replaceEditToPoint();
+          this._formEditComponent.getElement().reset();
+        }
     );
     this._formEditComponent.setDeleteClickHandler(() => {
       this._onDataChange(this, event, null);
@@ -54,19 +53,10 @@ export default class PointController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
     // добавление в избранное
-    this._formEditComponent.setFavoriteFormClickHandler(
-      (evt) => {
-        let newEvent = {
-          ...event,
-          favorite: evt.target.checked
-          // !event.favorite
-        };
-        this._onDataChange(this._formEditComponent, event, newEvent);
-      });
+    this._formEditComponent.setFavoriteFormClickHandler();
 
 
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-    //    биндим на контекст
     this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
     this._formEditComponent._subscribeOnEvents();
 
@@ -112,7 +102,7 @@ export default class PointController {
   _onSetupFormSubmit(evt) {
     evt.preventDefault();
     const newFormSubmit = this._formEditComponent.getData();
-    this._replaceEditToPoint()
+    this._replaceEditToPoint();
     this._onDataChange(this._formEditComponent, this._formEditComponent.getItem(), newFormSubmit);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
@@ -122,15 +112,5 @@ export default class PointController {
     remove(this._eventComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
-  createTask() {
-    if (this._creatingTask) {
-      return;
-    }
-
-    const taskListElement = this._eventComponent.getElement();
-    this._creatingTask = new TaskController(taskListElement, this._onDataChange, this._onViewChange);
-    this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING);
-  }
-
 
 }

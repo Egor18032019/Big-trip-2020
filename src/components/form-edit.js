@@ -48,7 +48,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventEndTime = moment().format();
   return (
     `
-    <form class="event event--edit" action="#" method="post">
+    <form class=" ${mode === Mode.ADDING ? `trip-events__item` : ``} event event--edit" action="#" method="post">
     <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
@@ -285,7 +285,8 @@ export default class FormEditComponent extends SmartComponent {
     return selectedOffers;
   }
   _getFavoriteStatus() {
-    return (this.getElement().querySelector(`.event__favorite-checkbox:checked`)) ? true : false;
+    return this.getElement().querySelector(`.event__favorite-checkbox`).checked;
+    // return (this.getElement().querySelector(`.event__favorite-checkbox:checked`)) ? true : false;
   }
 
   recoveryListeners() {
@@ -360,9 +361,8 @@ export default class FormEditComponent extends SmartComponent {
         pathDestination: `тестовысе слова`,
         destinationImg: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
       },
-      isFavorite: this._getFavoriteStatus(),
+      favorite: this._getFavoriteStatus(),
     };
-
 
     return tripEvent;
   }
