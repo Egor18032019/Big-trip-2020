@@ -187,7 +187,6 @@ export default class TripController {
 
     } else {
       const isSuccess = this._PointModel.updateTask(oldForm.id, newForm);
-
       if (isSuccess) {
         this._updateTasks();
       }
@@ -209,11 +208,10 @@ export default class TripController {
   _updateTasks() {
     //  брекпоинт ставить debugger;
     this._removePoints();
-    let ass = this._PointModel.getFilter();
-    if (ass === `everything`) {
+    let typeFilter = this._PointModel.getFilter();
+    if (typeFilter === `everything`) {
       // подумать
       this._renderPoints(getSortedTasks(this._PointModel.getTasksAll(), SortType.DEFAULT), SortType.DEFAULT);
-
     } else {
       this._renderPoints(this._PointModel.getTasks());
     }

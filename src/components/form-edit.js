@@ -197,6 +197,8 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrEnd = null;
     this._applyFlatpickr();
     this._subscribeOnEvents();
+    this._getSelectedOffers();
+    this._getFavoriteStatus();
     // тут получаем данные -> потом меняем в слушателях и передаем в getData() в новый обьект
     this._point.eventPoint = this._point.eventPoint;
     this._point.eventOffers = this._point.eventOffers;
@@ -204,6 +206,11 @@ export default class FormEditComponent extends SmartComponent {
     this._point.eventPrice = this._point.eventPrice;
     this._tripEventActiveOffers = this._point.eventOffers;
   }
+
+  getItem() {
+    return this._point;
+  }
+
 
   getTemplate() {
     return getFormEditEventTemplate(this._point, this._mode);
@@ -256,38 +263,6 @@ export default class FormEditComponent extends SmartComponent {
       .addEventListener(`change`, (evt) => {
         this._point.eventPointTown = evt.target.value;
       });
-    // доступные удобства
-    const availableOffersElement = element.querySelector(`.event__available-offers`);
-
-    availableOffersElement.addEventListener(`change`, (evt) => {
-      // чистим массив удобств которые мы передаем в getData
-      // this._tripEventActiveOffers = [];
-      // тут должны получить чекнутые инпуты и занести их в массив
-      // console.log(evt.target.checked);
-      if (!evt.target.checked) {
-        // находим значение чекнутого ивента
-        const eventOfferTitle = availableOffersElement.querySelector(`.event__offer-title`).textContent;
-        const evenOfferPrice = availableOffersElement.querySelector(`.event__offer-price`).textContent;
-        // и закидываем их в массив новый удобств
-        let offer = {
-          eventOfferTitle,
-          evenOfferPrice,
-        };
-        this._tripEventActiveOffers.push(offer);
-      } else {
-        const eventOfferTitle = availableOffersElement.querySelector(`.event__offer-title`).textContent;
-        const evenOfferPrice = availableOffersElement.querySelector(`.event__offer-price`).textContent;
-        // и закидываем их в массив новый удобств
-        let offer = {
-          eventOfferTitle,
-          evenOfferPrice,
-        };
-        // какой нить фильтр который бы фильтровал массив _tripEventActiveOffers
-        // и возвращал бы массив только с чекнутыми инпутами
-        this._tripEventActiveOffers = this._tripEventActiveOffers.filter((it) => it !== offer);
-      }
-
-    });
     // изменение цены
     element.querySelector(`.event__input--price`)
       .addEventListener(`change`, (evt) => {
@@ -296,6 +271,23 @@ export default class FormEditComponent extends SmartComponent {
 
   }
 
+  _getSelectedOffers() {
+    let selectedOffers = [];
+    const offers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`);
+    offers.forEach((item) => {
+      const eventOfferTitle = item.parentElement.querySelector(`.event__offer-title`).textContent;
+      const evenOfferPrice = item.parentElement.querySelector(`.event__offer-price`).textContent;
+      let offerElement = {
+        eventOfferTitle,
+        evenOfferPrice,
+      };
+      selectedOffers.push(offerElement);
+    });
+    return selectedOffers;
+  }
+  _getFavoriteStatus() {
+    return (this.getElement().querySelector(`.event__favorite-checkbox:checked`)) ? true : false;
+  }
 
   recoveryListeners() {
     this.setEditFormClickHandler(this._editFormClickHandler);
@@ -304,13 +296,11 @@ export default class FormEditComponent extends SmartComponent {
     this.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._subscribeOnEvents();
   }
-
   rerender() {
     this.removeFlatpickrElement();
     super.render();
     this._applyFlatpickr();
   }
-
   _applyFlatpickr() {
     // искать имено так
     const dateEndElement = this.getElement().querySelector(`[name="event-end-time"]`);
@@ -336,7 +326,6 @@ export default class FormEditComponent extends SmartComponent {
       });
     }
   }
-
   // вынес отдельно удаление
   removeFlatpickrElement() {
     if (this._flatpickrStart) {
@@ -357,14 +346,11 @@ export default class FormEditComponent extends SmartComponent {
   // 1.32 на 7 лекции
   getData() {
 
-    const isFavorite = `избранное или нет`;
-
-
     const tripEvent = {
       id: this._point.id,
       eventPoint: this._point.eventPoint,
       eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
-      eventOffers: this._tripEventActiveOffers,
+      eventOffers: this._getSelectedOffers(),
 
       eventTimeStart: new Date(),
       eventTimeEnd: new Date(),
@@ -375,7 +361,7 @@ export default class FormEditComponent extends SmartComponent {
         pathDestination: `тестовысе слова`,
         destinationImg: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
       },
-      isFavorite,
+      isFavorite: this._getFavoriteStatus(),
     };
 
 

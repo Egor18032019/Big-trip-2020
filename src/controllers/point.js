@@ -44,80 +44,83 @@ export default class PointController {
       }
     );
     this._formEditComponent.setDeleteClickHandler(() => {
-        this._onDataChange(this, event, null);
+      this._onDataChange(this, event, null);
     });
-  // замена ивента на форму редактрирования
-  this._eventComponent.setEditPointClickHandler(() => {
-    this._replacePointToEdit();
-    document.addEventListener(`keydown`, this._onEscKeyDown);
-  });
-  // добавление в избранное
-  this._formEditComponent.setFavoriteFormClickHandler(
-    (evt) => {
-      let newEvent = {
-        ...event,
-        favorite: evt.target.checked
-        // !event.favorite
-      };
-      this._onDataChange(this._formEditComponent, event, newEvent);
+    // замена ивента на форму редактрирования
+    this._eventComponent.setEditPointClickHandler(() => {
+      this._replacePointToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
+    // добавление в избранное
+    this._formEditComponent.setFavoriteFormClickHandler(
+      (evt) => {
+        let newEvent = {
+          ...event,
+          favorite: evt.target.checked
+          // !event.favorite
+        };
+        this._onDataChange(this._formEditComponent, event, newEvent);
+      });
 
 
-  // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-  //    биндим на контекст
-  this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
-  this._formEditComponent._subscribeOnEvents();
+    // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
+    //    биндим на контекст
+    this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
+    this._formEditComponent._subscribeOnEvents();
 
-  render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
-}
+    render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+  }
 
-/**
- * Заменяет  event на форму редактирования
- */
-_replacePointToEdit() {
-  // обсервер кричит всем закройся(перебирает масиив и  вызывает у каждого элемента setDefaultView)
-  this._eventObserver.callClose();
-  // заменяем элемент
-  replace(this._formEditComponent, this._eventComponent);
-  // и именно у этого элемента меняем флаг
-  this._mode = Mode.EDIT;
-}
-/**
- * заменяет форму редактирования на  точку маршрута
- */
-_replaceEditToPoint() {
-  replace(this._eventComponent, this._formEditComponent);
-  this._mode = Mode.DEFAULT;
-}
+  /**
+   * Заменяет  event на форму редактирования
+   */
+  _replacePointToEdit() {
+    // обсервер кричит всем закройся(перебирает масиив и  вызывает у каждого элемента setDefaultView)
+    this._eventObserver.callClose();
+    // заменяем элемент
+    replace(this._formEditComponent, this._eventComponent);
+    // и именно у этого элемента меняем флаг
+    this._mode = Mode.EDIT;
+  }
+  /**
+   * заменяет форму редактирования на  точку маршрута
+   */
+  _replaceEditToPoint() {
+    if (document.contains(this._formEditComponent.getElement())) {
+      replace(this._eventComponent, this._formEditComponent);
+    }
+    this._mode = Mode.DEFAULT;
+  }
 
-_onEscKeyDown(evt) {
-  const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-  if (isEscKey) {
-    this._replaceEditToPoint();
+  _onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      this._replaceEditToPoint();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
+  // прописываем закрытие формы если открыта другая
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToPoint();
+    }
+  }
+
+  _onSetupFormSubmit(evt) {
+    evt.preventDefault();
+
+
+    const newFormSubmit = this._formEditComponent.getData();
+    this._replaceEditToPoint()
+    this._onDataChange(this._formEditComponent, this._formEditComponent.getItem(), newFormSubmit);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
-}
 
-// прописываем закрытие формы если открыта другая
-setDefaultView() {
-  if (this._mode !== Mode.DEFAULT) {
-    this._replaceEditToPoint();
+  destroy() {
+    remove(this._formEditComponent);
+    remove(this._eventComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
-}
-
-_onSetupFormSubmit(evt) {
-  evt.preventDefault();
-  const newFormSubmit = this._formEditComponent.getData();
-  this._replaceEditToPoint()
-  this._onDataChange(this._formEditComponent, newFormSubmit, newFormSubmit);
-  // console.log(newFormSubmit)
-  document.removeEventListener(`keydown`, this._onEscKeyDown);
-}
-
-destroy() {
-  remove(this._formEditComponent);
-  remove(this._eventComponent);
-  document.removeEventListener(`keydown`, this._onEscKeyDown);
-}
 
 }
