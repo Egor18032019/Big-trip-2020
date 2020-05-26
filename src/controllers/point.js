@@ -52,9 +52,6 @@ export default class PointController {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
-    // добавление в избранное
-    this._formEditComponent.setFavoriteFormClickHandler();
-
 
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
     this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));

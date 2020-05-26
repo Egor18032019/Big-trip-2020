@@ -225,12 +225,6 @@ export default class FormEditComponent extends SmartComponent {
     this._editFormClickHandler = handler;
   }
 
-  setFavoriteFormClickHandler(handler) {
-    this.getElement().querySelector(`.event__favorite-checkbox`)
-      .addEventListener(`click`, handler);
-    this._favoriteFormClickHandler = handler;
-  }
-
   setDeleteClickHandler(handler) {
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, handler);
@@ -291,7 +285,6 @@ export default class FormEditComponent extends SmartComponent {
 
   recoveryListeners() {
     this.setEditFormClickHandler(this._editFormClickHandler);
-    this.setFavoriteFormClickHandler(this._favoriteFormClickHandler);
     this.setDeleteClickHandler(this._deleteClickHandler);
     this.setEditFormSubmitHandler(this._editFormSubmitHandler);
     this._subscribeOnEvents();
