@@ -5,6 +5,7 @@ import {
   FirstFromTemplate,
   SortType
 } from '../components/sort.js';
+import FormFirstEditComponent from '../components/form-first';
 import CreateMainContent from '../components/content.js';
 import DayController from '../controllers/day.js';
 
@@ -92,6 +93,7 @@ export default class TripController {
      * обсервер на дни
      */
     this.dayObserver = new PointControllerObserver();
+    this._tripFirstEventsForm = new FormFirstEditComponent();
     this._mainContent = new CreateMainContent();
     this._sortComponent = new FirstFromTemplate();
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -99,10 +101,34 @@ export default class TripController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
     this._PointModel.setFilterChangeHandler(this._onFilterChange);
+
+    this._PointModel.setDataChangeHandler(this._updateTasks.bind(this));
+
+    this.firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
+
+    // добавление нового ивента
+    this.firstButtonNewEvent.addEventListener(`click`, () => {
+      let containerForFirst = document.querySelector(`.trip-events__trip-sort`);
+      this.firstButtonNewEvent.disabled = true;
+      const firstPointController = new PointController(containerForFirst, this._onDataChange, this.pointObserver);
+      this.pointObserver.callClose();
+      this.pointObserver.subscribe(
+          firstPointController
+      );
+
+      firstPointController.render(null, `adding`, RenderPosition.AFTERNODE);
+    });
   }
 
   render() {
     const tasks = this._PointModel.getTasks();
+    if (tasks.length === 0) {
+      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
+      pointController.render(null, `adding`);
+      this.firstButtonNewEvent.disabled = true;
+      return;
+    }
+    this.firstButtonNewEvent.disabled = false;
     // отрисовываем сортировку
     render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
     // Отрисовка основы для контента
@@ -145,7 +171,6 @@ export default class TripController {
       this._renderByDate(tripDays, tasks);
       return;
     }
-
     // Отрисовка основы для точек маршрута
     const dayControler = new DayController(tripDays);
     dayControler.render();
@@ -172,23 +197,16 @@ export default class TripController {
 
   _onDataChange(pointController, oldForm, newForm) {
     if (oldForm === null) {
-      // создали новый ивент = пришла oldForm = 0,
-      // флаг -- тут или в моделе ?
       this._PointModel.addTask(newForm);
-      // добавили в модель новый елемент
-      this._PointModel.updateTask(newForm);
-
-    } else if (newForm === null) {
-      // если пришла пуста новая форма  то удаляем из _PointModel этот элемент
-      this._PointModel.removeTask(oldForm.id);
-      this._updateTasks();
-
-    } else {
-      const isSuccess = this._PointModel.updateTask(oldForm.id, newForm);
-      if (isSuccess) {
-        this._updateTasks();
-      }
+      return;
     }
+
+    if (newForm === null) {
+      this._PointModel.removeTask(oldForm.id);
+      return;
+    }
+
+    this._PointModel.updateTask(oldForm.id, newForm);
   }
 
   _removePoints() {
@@ -206,13 +224,7 @@ export default class TripController {
   _updateTasks() {
     //  брекпоинт ставить debugger;
     this._removePoints();
-    let typeFilter = this._PointModel.getFilter();
-    if (typeFilter === `everything`) {
-      // подумать
-      this._renderPoints(getSortedTasks(this._PointModel.getTasksAll(), SortType.DEFAULT), SortType.DEFAULT);
-    } else {
-      this._renderPoints(this._PointModel.getTasks());
-    }
+    this.render();
   }
 
   _onFilterChange() {

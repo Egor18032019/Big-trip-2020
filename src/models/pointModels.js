@@ -80,9 +80,7 @@ export default class PointsModel {
     this._dataChangeHandlers.push(handler);
   }
 
-  // -?не могу понять как работает (())
   _callHandlers(handlers) {
-    // console.log(handlers);
     handlers.forEach((handler) => handler());
   }
 

@@ -32,7 +32,7 @@ const getRandomArraypoints = () => {
     id: new Date().getTime(),
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
-    eventOffers: POINT_TYPE[eventPoint],
+    eventOffers: randomArray(getRandomIntegerNumber(1, 3), POINT_TYPE[eventPoint]),
     eventTimeStart: timeStartEvent,
     eventTimeEnd: timeEndEvent,
     eventPrice: getRandomIntegerNumber(0, 50),
@@ -65,7 +65,13 @@ const NewFormDataId = {
   favorite: false,
   id: new Date().getTime(),
 };
-
+const randomArray = (length, array) => {
+  // создаем пустой массив - заданой длины - и заливаем его `ничего`
+  const randomValues = new Array(length).fill(`ничего`);
+  return randomValues.map((it, iterator) => {
+    return it = array[iterator];
+  });
+};
 
 const createRandomArray = (length, handlerGenerateData) => {
   // создаем пустой массив - заданой длины - и заливаем его `ничего`

@@ -13,12 +13,13 @@ import {
 } from '../controllers/point.js';
 
 
-const getEventAvailableOffer = (array, id) => {
+const getEventAvailableOffer = (array, id, cheked) => {
   let keyStyleOffers = array.eventOfferTitle;
   return (
     `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${styleOffers[keyStyleOffers]}-${id}" type="checkbox" name="event-offer-luggage" checked="">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${styleOffers[keyStyleOffers]}-${id}" type="checkbox"
+       name="event-offer-luggage" ${cheked ? `checked=""` : ``}>
       <label class="event__offer-label" for="event-offer-${styleOffers[keyStyleOffers]}-${id}">
       <span class="event__offer-title">${array.eventOfferTitle}</span>
            +€&nbsp;
@@ -27,6 +28,11 @@ const getEventAvailableOffer = (array, id) => {
      </div>
     `
   );
+};
+
+const getCheked = (array, it, id) => {
+  let cheked = array.includes(it);
+  return getEventAvailableOffer(it, id, cheked);
 };
 
 /**
@@ -39,16 +45,16 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventType = eventOneDay.eventPoint;
   const id = eventOneDay.id;
   const pointEventList = eventOneDay.eventPointTown;
-
   let offersForType = eventOneDay.eventOffers;
-
-  const eventAvailableOffers = offersForType.map((it) => getEventAvailableOffer(it, id)).join(`\n`);
+  const eventOffers = POINT_TYPE[eventType];
+  const eventAvailableOffers = eventOffers.map((it) => getCheked(offersForType, it, id)).join(`\n`);
   const isFavorite = `${eventOneDay.favorite ? `checked=""` : ``}`;
   const eventStartTime = moment().format();
   const eventEndTime = moment().format();
   return (
     `
-    <form class=" ${mode === Mode.ADDING ? `trip-events__item` : ``} event event--edit" action="#" method="post">
+    <form class="event event--edit ${mode === Mode.ADDING ? ` trip-events__item` : ` `}
+    " action="#" method="post">
     <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
@@ -177,14 +183,31 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
     </section>
   </section>
   </form>
-    `
-  );
+    `);
+};
+
+const NewFormDataId = {
+  eventPoint: `Flight`,
+  eventTitle: `sss`,
+  eventOffers: [{
+    eventOfferTitle: `add luggage`,
+    evenOfferPrice: ` 20`
+  }, {
+    eventOfferTitle: `add meal`,
+    evenOfferPrice: `  21`
+  }, {
+    eventOfferTitle: `Choose seats`,
+    evenOfferPrice: `5 $ `
+  }],
+  eventPrice: ``,
+  eventPointTown: ``,
+  favorite: false,
 };
 
 export default class FormEditComponent extends SmartComponent {
   constructor(point, mode) {
     super();
-    this._point = point;
+    this._point = point || NewFormDataId;
     this._mode = mode;
 
     this._editFormClickHandler = null;
@@ -336,7 +359,6 @@ export default class FormEditComponent extends SmartComponent {
 
   // создать функциию которая выдаст нам оббьект(в нужной нам структуре)
   //  который надо передать в модель
-  // 1.32 на 7 лекции
   getData() {
 
     const tripEvent = {
