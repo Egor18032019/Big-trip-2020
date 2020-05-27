@@ -168,9 +168,9 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
       </svg>
     </label>
 
-  <button class="event__rollup-btn" type="button">
-  <span class="visually-hidden">Open event</span>
- </button>
+    ${mode !== Mode.ADDING ? ` <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+   </button>` : ` `}
 
   </header>
 
@@ -245,9 +245,11 @@ export default class FormEditComponent extends SmartComponent {
   }
 
   setEditFormClickHandler(handler) {
-    this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, handler);
-    this._editFormClickHandler = handler;
+    if (this.getElement().querySelector(`.event__rollup-btn`)) {
+      this.getElement().querySelector(`.event__rollup-btn`)
+        .addEventListener(`click`, handler);
+      this._editFormClickHandler = handler;
+    }
   }
 
   setDeleteClickHandler(handler) {
