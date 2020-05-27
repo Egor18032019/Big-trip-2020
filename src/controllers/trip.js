@@ -122,12 +122,13 @@ export default class TripController {
 
   render() {
     const tasks = this._PointModel.getTasks();
-    if (tasks.length === 0) {
-      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
-      pointController.render(null, `adding`);
-      this.firstButtonNewEvent.disabled = true;
-      return;
-    }
+    // если фильтр вернет 0 то он отрисует форму - не помню зачем ставил эту проверку (())
+    // if (tasks.length === 0) {
+    //   const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
+    //   pointController.render(null, `adding`);
+    //   this.firstButtonNewEvent.disabled = true;
+    //   return;
+    // }
     this.firstButtonNewEvent.disabled = false;
     // отрисовываем сортировку
     render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);

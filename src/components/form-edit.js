@@ -168,9 +168,10 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
       </svg>
     </label>
 
-    <button class="event__rollup-btn" type="button">
-      <span class="visually-hidden">Open event</span>
-    </button>
+  <button class="event__rollup-btn" type="button">
+  <span class="visually-hidden">Open event</span>
+ </button>
+
   </header>
 
   <section class="event__details">
@@ -217,6 +218,8 @@ export default class FormEditComponent extends SmartComponent {
     this._editFormSubmitHandler = null;
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
+    this._endDate = this._point.eventTimeEnd;
+    this._startDate = this._point.eventTimeStart;
     this._applyFlatpickr();
     this._subscribeOnEvents();
     this._getSelectedOffers();
@@ -237,7 +240,6 @@ export default class FormEditComponent extends SmartComponent {
   getTemplate() {
     return getFormEditEventTemplate(this._point, this._mode);
   }
-  // --??? как сделать правильный резет
   reset() {
     this.rerender();
   }
@@ -269,10 +271,8 @@ export default class FormEditComponent extends SmartComponent {
         let smallCase = evt.target.value;
         this._point.eventPoint = smallCase[0].toUpperCase() + smallCase.slice(1);
         this._point.eventTitle = this._point.eventPoint;
-
         this._point.eventOffers = POINT_TYPE[this._point.eventPoint];
         this.render();
-
       });
     // изменение города назначения
     element.querySelector(`.event__input--destination`)
@@ -284,7 +284,15 @@ export default class FormEditComponent extends SmartComponent {
       .addEventListener(`change`, (evt) => {
         this._point.eventPrice = evt.target.value;
       });
-
+    // определение даты
+    element.querySelector(`[name="event-end-time"]`)
+      .addEventListener(`change`, (evt) => {
+        this._endDate = new Date(evt.target.value);
+      });
+    element.querySelector(`[name="event-start-time"]`)
+      .addEventListener(`change`, (evt) => {
+        this._startDate = new Date(evt.target.value);
+      });
   }
 
   _getSelectedOffers() {
@@ -326,6 +334,7 @@ export default class FormEditComponent extends SmartComponent {
       this._flatpickrStart = flatpickr(
           dateStartElement, {
             enableTime: true,
+            dateFormat: `d/m/y H:i`,
             altFormat: `d/m/y H:i`,
             altInput: true,
             [`time_24hr`]: true,
@@ -339,6 +348,7 @@ export default class FormEditComponent extends SmartComponent {
         altFormat: `d/m/y H:i`,
         altInput: true,
         [`time_24hr`]: true,
+        defaultDate: Date.now()
       });
     }
   }
@@ -366,9 +376,8 @@ export default class FormEditComponent extends SmartComponent {
       eventPoint: this._point.eventPoint,
       eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
       eventOffers: this._getSelectedOffers(),
-
-      eventTimeStart: new Date(),
-      eventTimeEnd: new Date(),
+      eventTimeStart: this._startDate,
+      eventTimeEnd: this._endDate,
       eventPrice: this._point.eventPrice,
       eventDuration: 11,
       eventPointTown: this._point.eventPointTown,

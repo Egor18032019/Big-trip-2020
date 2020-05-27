@@ -16,10 +16,10 @@ export default class FilterController {
     this._activeFilterType = FilterType.EVERYTHING;
     this._filterComponent = null;
 
-    this._onDataChange = this._onDataChange.bind(this);
+    // this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
 
-    this._pointModel.setDataChangeHandler(this._onDataChange);
+    // this._pointModel.setDataChangeHandler(this._onDataChange);
   }
 
   render() {
@@ -33,7 +33,6 @@ export default class FilterController {
     this._filterComponent = new SiteFiltrTemplate(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
     render(this._container, this._filterComponent, RenderPosition.BEFOREEND);
-
   }
 
   _onFilterChange(filterType) {
