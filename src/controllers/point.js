@@ -67,7 +67,15 @@ export default class PointController {
         }
     );
     this._formEditComponent.setDeleteClickHandler(() => {
-      this._onDataChange(this, event, null);
+      if (event) {
+        this._onDataChange(this, event, null);
+      } else {
+        let firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
+        firstButtonNewEvent.disabled = false;
+
+        remove(this._formEditComponent);
+
+      }
     });
 
     // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
