@@ -115,20 +115,21 @@ export default class TripController {
       this.pointObserver.subscribe(
           firstPointController
       );
-
+      // this._PointModel.setFilterType(`everything`);
+      // console.log(this._PointMode.getFilter());
       firstPointController.render(null, `adding`, RenderPosition.AFTERNODE);
     });
   }
 
   render() {
     const tasks = this._PointModel.getTasks();
-    // если фильтр вернет 0 то он отрисует форму - не помню зачем ставил эту проверку (())
-    // if (tasks.length === 0) {
-    //   const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
-    //   pointController.render(null, `adding`);
-    //   this.firstButtonNewEvent.disabled = true;
-    //   return;
-    // }
+    // если фильтр вернет 0 то он отрисует форму - то он отрисует форму приглашения
+    if (tasks.length === 0) {
+      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
+      pointController.render(null, `adding`);
+      this.firstButtonNewEvent.disabled = true;
+      return;
+    }
     this.firstButtonNewEvent.disabled = false;
     // отрисовываем сортировку
     render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);

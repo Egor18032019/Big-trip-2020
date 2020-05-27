@@ -58,6 +58,7 @@ export default class PointsModel {
   }
 
   updateTask(id, point) {
+
     const index = this._points.findIndex((it) => it.id === id);
 
     if (index === -1) {
