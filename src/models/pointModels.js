@@ -41,9 +41,6 @@ export default class PointsModel {
   setFilterType(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
-    console.log(this._callHandlers);
-    console.log(this._filterChangeHandlers);
-    console.log(this._callHandlers(this._filterChangeHandlers));
   }
 
   removePoint(id) {

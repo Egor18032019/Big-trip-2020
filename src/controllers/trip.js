@@ -42,7 +42,7 @@ const getSortedEventsByDate = (events) => {
 
   const eventWithDate = [];
 
-  for (const [key, value] of eventsByDate) {
+  for (const [, value] of eventsByDate) {
     eventWithDate.push(value);
   }
 

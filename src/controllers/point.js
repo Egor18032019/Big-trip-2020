@@ -73,7 +73,6 @@ export default class PointController {
         firstButtonNewEvent.disabled = false;
 
         remove(this._formEditComponent);
-
       }
     });
 

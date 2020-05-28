@@ -1,7 +1,6 @@
 import SmartComponent from "../components/smart-component.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-// import "flatpickr/dist/flatpickr.min.css";  - не работает так
 import moment from 'moment';
 import {
   POINT_TYPE,
@@ -43,7 +42,7 @@ const getCheked = (array, it, id) => {
  */
 const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventType = eventOneDay.eventPoint;
-  const id = eventOneDay.id;
+  const id = eventOneDay.id || new Date().getTime();
   const pointEventList = eventOneDay.eventPointTown;
   let offersForType = eventOneDay.eventOffers;
   const eventOffers = POINT_TYPE[eventType];
@@ -189,7 +188,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
 
 const NewFormDataId = {
   eventPoint: `Flight`,
-  eventTitle: `sss`,
+  eventTitle: ``,
   eventOffers: [{
     eventOfferTitle: `add luggage`,
     evenOfferPrice: ` 20`
@@ -331,7 +330,18 @@ export default class FormEditComponent extends SmartComponent {
     // искать имено так
     const dateEndElement = this.getElement().querySelector(`[name="event-end-time"]`);
     const dateStartElement = this.getElement().querySelector(`[name="event-start-time"]`);
-
+    let timeForstart;
+    if (this._point.eventTimeStart) {
+      timeForstart = new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format());
+    } else {
+      timeForstart = new Date();
+    }
+    let timeForEnd;
+    if (this._point.eventTimeStart) {
+      timeForEnd = new Date(moment(this._point.eventTimeEnd, `DD/MM/YY HH:mm`).format());
+    } else {
+      timeForEnd = new Date();
+    }
     if (dateStartElement) {
       this._flatpickrStart = flatpickr(
           dateStartElement, {
@@ -340,7 +350,7 @@ export default class FormEditComponent extends SmartComponent {
             altFormat: `d/m/y H:i`,
             altInput: true,
             [`time_24hr`]: true,
-            defaultDate: new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format()),
+            defaultDate: timeForstart,
           }
       );
     }
@@ -350,7 +360,7 @@ export default class FormEditComponent extends SmartComponent {
         altFormat: `d/m/y H:i`,
         altInput: true,
         [`time_24hr`]: true,
-        defaultDate: new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format()),
+        defaultDate: timeForEnd,
       });
     }
   }
@@ -368,11 +378,9 @@ export default class FormEditComponent extends SmartComponent {
 
     super.removeElement();
   }
-
   // создать функциию которая выдаст нам оббьект(в нужной нам структуре)
   //  который надо передать в модель
   getData() {
-
     const tripEvent = {
       id: this._point.id,
       eventPoint: this._point.eventPoint,
