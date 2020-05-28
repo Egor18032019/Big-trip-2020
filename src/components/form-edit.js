@@ -2,7 +2,9 @@ import SmartComponent from "../components/smart-component.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import moment from 'moment';
-import {encode} from "he";
+import {
+  encode
+} from "he";
 import {
   POINT_TYPE,
   styleOffers,
@@ -218,8 +220,8 @@ export default class FormEditComponent extends SmartComponent {
     this._editFormSubmitHandler = null;
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
-    this._endDate = this._point.eventTimeEnd;
-    this._startDate = this._point.eventTimeStart;
+    this._endDate = new Date();
+    this._startDate = new Date();
     this._applyFlatpickr();
     this._subscribeOnEvents();
     this._getSelectedOffers();
@@ -293,6 +295,7 @@ export default class FormEditComponent extends SmartComponent {
       });
     element.querySelector(`[name="event-start-time"]`)
       .addEventListener(`change`, (evt) => {
+        console.log(`aa`);
         this._startDate = new Date(evt.target.value);
       });
   }

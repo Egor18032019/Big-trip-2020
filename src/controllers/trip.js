@@ -21,6 +21,8 @@ const getSortedEventsByDate = (events) => {
     const {
       eventTimeStart
     } = event;
+    console.log(event);
+
     const date = new Date(
         eventTimeStart.getFullYear(),
         eventTimeStart.getMonth(),
@@ -204,13 +206,17 @@ export default class TripController {
   _onDataChange(pointController, oldForm, newForm) {
     if (oldForm === null) {
       this._PointModel.addPoint(newForm);
+      console.log(`1`);
       return;
     }
 
     if (newForm === null) {
       this._PointModel.removePoint(oldForm.id);
+      console.log(`2`);
+
       return;
     }
+    console.log(`3`);
 
     this._PointModel.updatePoints(oldForm.id, newForm);
   }
