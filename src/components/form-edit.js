@@ -153,7 +153,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${eventOneDay.eventPrice}">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${eventOneDay.eventPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -286,7 +286,7 @@ export default class FormEditComponent extends SmartComponent {
     // изменение цены
     element.querySelector(`.event__input--price`)
       .addEventListener(`change`, (evt) => {
-        this._point.eventPrice = evt.target.value;
+        this._point.eventPrice = encode(evt.target.value);
       });
     // определение даты
     element.querySelector(`[name="event-end-time"]`)
