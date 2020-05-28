@@ -33,9 +33,12 @@ const getEventAvailableOffer = (array, id, cheked) => {
 };
 
 const getCheked = (array, it, id) => {
-  let cheked = array.includes(it);
+  const even = (element) => element.eventOfferTitle === it.eventOfferTitle;
+  let cheked = array.some(even);
   return getEventAvailableOffer(it, id, cheked);
 };
+
+const cities = [`Ебург`, ` Москва`, ` Geneva`];
 
 /**
  * Новая форма
@@ -47,9 +50,10 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventType = eventOneDay.eventPoint;
   const id = eventOneDay.id || new Date().getTime();
   const pointEventList = encode(eventOneDay.eventPointTown);
-  let offersForType = eventOneDay.eventOffers;
+  const offersForType = eventOneDay.eventOffers;
   const eventOffers = POINT_TYPE[eventType];
   const eventAvailableOffers = eventOffers.map((it) => getCheked(offersForType, it, id)).join(`\n`);
+  const listCities = cities.map((city) => `<option value="${city}"></option>`).join(`\n`);
   const isFavorite = `${eventOneDay.favorite ? `checked=""` : ``}`;
   const eventStartTime = moment().format();
   const eventEndTime = moment().format();
@@ -132,7 +136,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointEventList}" list="destination-list-${id}">
       <datalist id="destination-list-${id}">
-      ${pointEventList}
+      ${listCities}
       </datalist>
     </div>
 
@@ -192,6 +196,8 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
 const NewFormDataId = {
   eventPoint: `Flight`,
   eventTitle: ``,
+  eventTimeStart: new Date(),
+  eventTimeEnd: new Date(),
   eventOffers: [{
     eventOfferTitle: `add luggage`,
     evenOfferPrice: ` 20`
@@ -221,16 +227,11 @@ export default class FormEditComponent extends SmartComponent {
     this._flatpickrStart = null;
     this._flatpickrEnd = null;
     this._endDate = new Date();
-    this._startDate = new Date();
     this._applyFlatpickr();
     this._subscribeOnEvents();
     this._getSelectedOffers();
     this._getFavoriteStatus();
     // тут получаем данные -> потом меняем в слушателях и передаем в getData() в новый обьект
-    this._point.eventPoint = this._point.eventPoint;
-    this._point.eventOffers = this._point.eventOffers;
-    this._point.eventPointTown = this._point.eventPointTown;
-    this._point.eventPrice = this._point.eventPrice;
     this._tripEventActiveOffers = this._point.eventOffers;
   }
 
@@ -288,15 +289,6 @@ export default class FormEditComponent extends SmartComponent {
       .addEventListener(`change`, (evt) => {
         this._point.eventPrice = encode(evt.target.value);
       });
-    // определение даты
-    element.querySelector(`[name="event-end-time"]`)
-      .addEventListener(`change`, (evt) => {
-        this._endDate = new Date(evt.target.value);
-      });
-    element.querySelector(`[name="event-start-time"]`)
-      .addEventListener(`change`, (evt) => {
-        this._startDate = new Date(evt.target.value);
-      });
   }
 
   _getSelectedOffers() {
@@ -333,18 +325,7 @@ export default class FormEditComponent extends SmartComponent {
     // искать имено так
     const dateEndElement = this.getElement().querySelector(`[name="event-end-time"]`);
     const dateStartElement = this.getElement().querySelector(`[name="event-start-time"]`);
-    let timeForstart;
-    if (this._point.eventTimeStart) {
-      timeForstart = new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format());
-    } else {
-      timeForstart = new Date();
-    }
-    let timeForEnd;
-    if (this._point.eventTimeStart) {
-      timeForEnd = new Date(moment(this._point.eventTimeEnd, `DD/MM/YY HH:mm`).format());
-    } else {
-      timeForEnd = new Date();
-    }
+
     if (dateStartElement) {
       this._flatpickrStart = flatpickr(
           dateStartElement, {
@@ -353,7 +334,10 @@ export default class FormEditComponent extends SmartComponent {
             altFormat: `d/m/y H:i`,
             altInput: true,
             [`time_24hr`]: true,
-            defaultDate: timeForstart,
+            defaultDate: this._point.eventTimeStart || new Date(),
+            onChange: (selectDate) => {
+              this._point.eventTimeStart = selectDate[0];
+            }
           }
       );
     }
@@ -363,7 +347,10 @@ export default class FormEditComponent extends SmartComponent {
         altFormat: `d/m/y H:i`,
         altInput: true,
         [`time_24hr`]: true,
-        defaultDate: timeForEnd,
+        defaultDate: this._point.eventTimeEnd || new Date(),
+        onChange: (selectDate) => {
+          this._point.eventTimeEnd = selectDate[0];
+        }
       });
     }
   }
@@ -389,10 +376,9 @@ export default class FormEditComponent extends SmartComponent {
       eventPoint: this._point.eventPoint,
       eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
       eventOffers: this._getSelectedOffers(),
-      eventTimeStart: this._startDate,
-      eventTimeEnd: this._endDate,
+      eventTimeStart: this._point.eventTimeStart,
+      eventTimeEnd: this._point.eventTimeEnd,
       eventPrice: this._point.eventPrice,
-      eventDuration: 11,
       eventPointTown: this._point.eventPointTown,
       eventPointDestination: {
         pathDestination: `тестовысе слова`,
