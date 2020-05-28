@@ -2,6 +2,7 @@ import SmartComponent from "../components/smart-component.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import moment from 'moment';
+import {encode} from "he";
 import {
   POINT_TYPE,
   styleOffers,
@@ -43,7 +44,7 @@ const getCheked = (array, it, id) => {
 const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventType = eventOneDay.eventPoint;
   const id = eventOneDay.id || new Date().getTime();
-  const pointEventList = eventOneDay.eventPointTown;
+  const pointEventList = encode(eventOneDay.eventPointTown);
   let offersForType = eventOneDay.eventOffers;
   const eventOffers = POINT_TYPE[eventType];
   const eventAvailableOffers = eventOffers.map((it) => getCheked(offersForType, it, id)).join(`\n`);
