@@ -33,8 +33,8 @@ import {
 import PointModel from "./models/pointModels.js";
 
 const pointsModel = new PointModel();
-pointsModel.setTasks(getEvents());
-const allEvents = pointsModel.getTasksAll();
+pointsModel.setPoints(getEvents());
+const allEvents = pointsModel.getPointsAll();
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);

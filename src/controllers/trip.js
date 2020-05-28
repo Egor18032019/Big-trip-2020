@@ -56,7 +56,7 @@ const getSortedEventsByDate = (events) => {
  * @param {*} sortType тип сортировки
  * @return{html} возращает отсротированный массив
  */
-const getSortedTasks = (array, sortType) => {
+const getSortedEvents = (array, sortType) => {
 
   const showingTasks = array.map((task) => {
     return Object.assign({}, task);
@@ -102,7 +102,7 @@ export default class TripController {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._PointModel.setFilterChangeHandler(this._onFilterChange);
 
-    this._PointModel.setDataChangeHandler(this._updateTasks.bind(this));
+    this._PointModel.setDataChangeHandler(this._updatePoints.bind(this));
 
     this.firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
 
@@ -123,7 +123,7 @@ export default class TripController {
   }
 
   render() {
-    const tasks = this._PointModel.getTasks();
+    const tasks = this._PointModel.getPoints();
     const filter = this._PointModel.getFilter();
     if (tasks.length === 0 && filter === `everything`) {
       const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
@@ -141,7 +141,7 @@ export default class TripController {
     if (tasks.length > 0 && this._container) {
       render(this._container, this._mainContent, RenderPosition.BEFOREEND);
     }
-    this._renderPoints(getSortedTasks(tasks, SortType.DEFAULT), SortType.DEFAULT);
+    this._renderPoints(getSortedEvents(tasks, SortType.DEFAULT), SortType.DEFAULT);
   }
 
   _renderByDate(container, sortedEventByDate) {
@@ -197,22 +197,22 @@ export default class TripController {
     // чистим
     this._removePoints();
     // сортитруем приходящий массив
-    const sortedTasks = getSortedTasks(this._PointModel.getTasks(), sortType);
+    const sortedTasks = getSortedEvents(this._PointModel.getPoints(), sortType);
     this._renderPoints(sortedTasks, sortType);
   }
 
   _onDataChange(pointController, oldForm, newForm) {
     if (oldForm === null) {
-      this._PointModel.addTask(newForm);
+      this._PointModel.addPoint(newForm);
       return;
     }
 
     if (newForm === null) {
-      this._PointModel.removeTask(oldForm.id);
+      this._PointModel.removePoint(oldForm.id);
       return;
     }
 
-    this._PointModel.updateTask(oldForm.id, newForm);
+    this._PointModel.updatePoints(oldForm.id, newForm);
   }
 
   _removePoints() {
@@ -227,13 +227,15 @@ export default class TripController {
 
   }
 
-  _updateTasks() {
+  _updatePoints() {
     //  брекпоинт ставить debugger;
     this._removePoints();
     this.render();
   }
 
   _onFilterChange() {
-    this._updateTasks();
+    this._sortComponent.setSortType(SortType.DEFAULT);
+
+    this._updatePoints();
   }
 }

@@ -21,11 +21,11 @@ export default class PointsModel {
 
   }
 
-  getTasks() {
+  getPoints() {
     return getEventByFilter(this._points, this._activeFilterType);
   }
 
-  getTasksAll() {
+  getPointsAll() {
     return this._points;
   }
 
@@ -33,7 +33,7 @@ export default class PointsModel {
     return this._activeFilterType;
   }
 
-  setTasks(points) {
+  setPoints(points) {
     this._points = Array.from(points);
     this._callHandlers(this._dataChangeHandlers);
   }
@@ -41,9 +41,12 @@ export default class PointsModel {
   setFilterType(filterType) {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
+    console.log(this._callHandlers);
+    console.log(this._filterChangeHandlers);
+    console.log(this._callHandlers(this._filterChangeHandlers));
   }
 
-  removeTask(id) {
+  removePoint(id) {
     const index = this._points.findIndex((it) => it.id === id);
 
     if (index === -1) {
@@ -57,7 +60,7 @@ export default class PointsModel {
     return true;
   }
 
-  updateTask(id, point) {
+  updatePoints(id, point) {
 
     const index = this._points.findIndex((it) => it.id === id);
 
@@ -72,8 +75,8 @@ export default class PointsModel {
     return true;
   }
 
-  addTask(task) {
-    this._points = [].concat(task, this._points);
+  addPoint(point) {
+    this._points = [].concat(point, this._points);
     this._callHandlers(this._dataChangeHandlers);
   }
 

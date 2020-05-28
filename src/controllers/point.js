@@ -14,7 +14,6 @@ export const Mode = {
   EDIT: `edit`,
   ADDING: `adding`,
 };
-export const EmptyTask = {};
 
 export default class PointController {
   constructor(container, onDataChange, eventObserver, iterator) {

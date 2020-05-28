@@ -1,15 +1,12 @@
 
 // захардкоженные данные в виде массива ключ значение
 export const creatSorting = [{
-  name: `event`,
-  check: `true`
+  name: `sort-event`,
 },
 {
-  name: `time`,
-  check: 0
+  name: `sort-time`,
 },
 {
-  name: `price`,
-  check: 0
+  name: `sort-price`,
 }
 ];

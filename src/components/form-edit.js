@@ -340,7 +340,7 @@ export default class FormEditComponent extends SmartComponent {
             altFormat: `d/m/y H:i`,
             altInput: true,
             [`time_24hr`]: true,
-            defaultDate: Date.now()
+            defaultDate: new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format()),
           }
       );
     }
@@ -350,7 +350,7 @@ export default class FormEditComponent extends SmartComponent {
         altFormat: `d/m/y H:i`,
         altInput: true,
         [`time_24hr`]: true,
-        defaultDate: Date.now()
+        defaultDate: new Date(moment(this._point.eventTimeStart, `DD/MM/YY HH:mm`).format()),
       });
     }
   }

@@ -18,24 +18,32 @@ const SortType = {
  * @return{html} возращает разметку одного фильтра
  */
 const creatSort = (name, isChecked) => {
-  return (
-    `<div class="trip-sort__item  trip-sort__item--${name}">
-  <input id="sort-${name}" class="trip-sort__input  visually-hidden" type="radio"
-  name="trip-sort"
-  ${isChecked ? `checked` : ``}
-  value="sort-${name}">
-  <label class="trip-sort__btn" for="sort-${name}">
-    ${name}
-  </label>
-</div>`);
+
+  return (`
+  <div class="trip-sort__item  trip-sort__item--${name.slice(5)}">
+  <input id="${name}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${name}"
+  ${isChecked ? `checked=""` : ``}>
+  <label class="trip-sort__btn" for="${name}">${name.slice(5)}</label>
+</div>
+`);
 };
 
+const getCheked = (it, array) => {
+  let cheked = false;
+  if (array === it.name) {
+    cheked = true;
+  }
+  return creatSort(it.name, cheked);
+};
 /**
  *   Сортировка
+ * @param {*} typeFilter тип фильтра по умалчанию sort-event
  * @return{html} возращает разметку всех фильтров
  */
-const createSiteSortTemplate = () => {
-  const creatSortMarkup = creatSorting.map((it) => creatSort(it.name, it.check)).join(``);
+const createSiteSortTemplate = (typeFilter = SortType.DEFAULT) => {
+  const creatSortMarkup = creatSorting.map((it) => getCheked(it, typeFilter)).join(``);
+  // const creatSortMarkup = creatSorting.map((it) => creatSort(it.name, it.check)).join(``);
+
   return (
     `
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -48,17 +56,22 @@ ${creatSortMarkup}
 };
 
 class FirstFromTemplate extends AbstractComponent {
-  constructor(point) {
+  constructor() {
     super();
-    this._point = point;
     this._currenSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
-    return createSiteSortTemplate();
+    return createSiteSortTemplate(this._currenSortType);
   }
 
-  getSortType() {}
+  getSortType() {
+    return this._currenSortType;
+  }
+
+  setSortType(sortingType) {
+    this._currenSortType = sortingType;
+  }
 
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
