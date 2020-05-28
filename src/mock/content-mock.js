@@ -65,12 +65,14 @@ const NewFormDataId = {
   favorite: false,
   id: new Date().getTime(),
 };
-const randomArray = (length, array) => {
+const randomArray = function (length, array) {
   // создаем пустой массив - заданой длины - и заливаем его `ничего`
   const randomValues = new Array(length).fill(`ничего`);
-  return randomValues.map((it, iterator) => {
-    return it = array[iterator];
-  });
+  return randomValues.map(
+      function (it, iterator) {
+        return it = array[iterator];
+      }
+  );
 };
 
 const createRandomArray = (length, handlerGenerateData) => {

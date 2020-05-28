@@ -12,6 +12,7 @@ import DayController from '../controllers/day.js';
 import {
   render,
   RenderPosition,
+  remove,
 } from '../utils/render.js';
 
 const getSortedEventsByDate = (events) => {
@@ -228,7 +229,7 @@ export default class TripController {
   }
 
   _updatePoints() {
-    //  брекпоинт ставить debugger;
+    remove(this._sortComponent);
     this._removePoints();
     this.render();
   }
