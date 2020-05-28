@@ -295,7 +295,6 @@ export default class FormEditComponent extends SmartComponent {
       });
     element.querySelector(`[name="event-start-time"]`)
       .addEventListener(`change`, (evt) => {
-        console.log(`aa`);
         this._startDate = new Date(evt.target.value);
       });
   }

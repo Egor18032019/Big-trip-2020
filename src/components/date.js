@@ -3,7 +3,8 @@ import AbstractComponent from "../components/abstract-component.js";
 import moment from "moment";
 
 const getPathPointDate = (itemArray) => {
-  return itemArray.eventDate;
+
+  return itemArray.eventTimeStart;
 };
 
 /**
@@ -19,11 +20,12 @@ const getPathPointSortingDates = (allEvent) => {
 
     // ищем самую ранюю дату
     const tripEventsStartDates = allDates.sort((a, b) => a - b);
-    const tripEventsStartDatesGood = moment(tripEventsStartDates[0]).format(`MMM Do YY`).substring(0, 5);
+
+    const tripEventsStartDatesGood = moment(tripEventsStartDates[0]).format(`LLL`).substring(0, 6);
 
     // ищем самую позднию дату
     const tripEventsEndtDates = allDates.sort((a, b) => a - b);
-    const tripEventsEndDatesGood = moment(tripEventsEndtDates[tripEventsEndtDates.length - 1]).format(`MMM Do YY`).substring(0, 5);
+    const tripEventsEndDatesGood = moment(tripEventsEndtDates[tripEventsEndtDates.length - 1]).format(`LLL`).substring(0, 6);
 
     // отдаем раннюю дату и позднею дату(без месяца)
     return [tripEventsStartDatesGood, tripEventsEndDatesGood];
