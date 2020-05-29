@@ -34,6 +34,7 @@ export default class PointController {
   render(event, mode = Mode.DEFAULT, renderposition = RenderPosition.AFTERBEGIN) {
     this._mode = mode;
     this.renderposition = renderposition;
+
     this._initForm(event);
 
     if (!event) {
@@ -47,18 +48,15 @@ export default class PointController {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
-    // замена ивента на форму редактрирования
-    this._eventComponent.setEditPointClickHandler(() => {
-      this._replacePointToEdit();
-      document.addEventListener(`keydown`, this._onEscKeyDown);
-    });
+
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
   }
 
   _initForm(event) {
+
     this._formEditComponent = new FormEditComponent(event, this._mode);
-    // Замена форма на ивент
+    // Замена формы на ивент
     this._formEditComponent.setEditFormClickHandler(
         () => {
           this._replaceEditToPoint();
@@ -134,7 +132,6 @@ export default class PointController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     if (!this._eventComponent) {
       remove(this._formEditComponent);
-
       return;
     }
     this._replaceEditToPoint();
