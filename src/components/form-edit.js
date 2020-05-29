@@ -278,6 +278,8 @@ export default class FormEditComponent extends SmartComponent {
         this._point.eventTitle = this._point.eventPoint;
         this._point.eventOffers = POINT_TYPE[this._point.eventPoint];
         this.render();
+        this._applyFlatpickr();
+
       });
     // изменение города назначения
     element.querySelector(`.event__input--destination`)
