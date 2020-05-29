@@ -69,7 +69,6 @@ export default class PointController {
       } else {
         let firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
         firstButtonNewEvent.disabled = false;
-
         remove(this._formEditComponent);
       }
     });
