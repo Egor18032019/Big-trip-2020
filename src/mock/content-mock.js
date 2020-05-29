@@ -70,7 +70,8 @@ const randomArray = function (length, array) {
   const randomValues = new Array(length).fill(`ничего`);
   return randomValues.map(
       function (it, iterator) {
-        return it = array[iterator];
+        it = array[iterator];
+        return it;
       }
   );
 };
