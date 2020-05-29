@@ -158,6 +158,27 @@ const FilterType = {
   PAST: `past`,
 };
 
+const EventPointMap = {
+  'Taxi': `🚕 TAXI`,
+  'Bus': `🚌 BUS`,
+  'Train': `🚂 TRAIN`,
+  'Ship': `🛳 SHIP`,
+  'Transport': `🚊 TRANSPORT`,
+  'Drive': `🚗 DRIVE`,
+  'Flight': `✈️ FLIGHT`,
+  'Check-in': `🏨 CHECK-IN`,
+  'Sightseeing': `🏛 SIGHTSEEING`,
+  'Restaurant': `🍴 RESTAURANT`,
+};
+
+const HelpersForTimeinMs = {
+  DAY: 86400000,
+  HOUR: 3600000,
+  MINUTE: 60000,
+};
+
+const TRANSPORT_TYPE = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`];
+
 export {
   ALLDAY,
   POINT_TOWN,
@@ -166,4 +187,7 @@ export {
   DESCRIPTION_IMG,
   styleOffers,
   FilterType,
+  EventPointMap,
+  HelpersForTimeinMs,
+  TRANSPORT_TYPE,
 };

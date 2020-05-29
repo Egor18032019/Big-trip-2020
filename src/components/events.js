@@ -1,6 +1,9 @@
 // отрисовка эвентов в каждом дне
 import AbstractComponent from "../components/abstract-component.js";
 import moment from 'moment';
+import {
+  HelpersForTimeinMs
+} from '../mock/const.js';
 
 /**
  * контейнер для Offers
@@ -31,17 +34,17 @@ const getPointTemplate = (points) => {
   } = points;
   // Более суток: дни часы минуты (например «01D 02H 30M»);
   const eventDurationSec = eventTimeEnd - eventTimeStart;
-  const day = eventDurationSec / 86400000;
-  const hours = (eventDurationSec - Math.floor(day) * 86400000) / 3600000;
-  const minutes = (eventDurationSec - Math.floor(day) * 86400000 - Math.floor(hours) * 3600000) / 60000;
-  let eventDuration = Math.round(eventDurationSec / 60000) + `M`;
+  const day = eventDurationSec / HelpersForTimeinMs.DAY;
+  const hours = (eventDurationSec - Math.floor(day) * HelpersForTimeinMs.DAY) / HelpersForTimeinMs.HOUR;
+  const minutes = (eventDurationSec - Math.floor(day) * HelpersForTimeinMs.DAY - Math.floor(hours) * HelpersForTimeinMs.HOUR) / HelpersForTimeinMs.MINUTE;
+  let eventDuration = Math.round(eventDurationSec / HelpersForTimeinMs.MINUTE) + `M`;
 
-  if (eventDurationSec > 86400000) {
+  if (eventDurationSec > HelpersForTimeinMs.DAY) {
     eventDuration = Math.floor(day) + `` + `D` + `  ` + Math.floor(hours) + `H` + `  ` + Math.round(minutes) + `M`;
 
   }
-  if (eventDurationSec > 3600000 && eventDurationSec < 86400000) {
-    eventDuration = Math.floor(eventDurationSec / 3600000) + `H` + `  ` + Math.round((eventDurationSec - Math.floor(eventDurationSec / 3600000) * 3600000) / 60000) + `M`;
+  if (eventDurationSec > HelpersForTimeinMs.HOUR && eventDurationSec < HelpersForTimeinMs.DAY) {
+    eventDuration = Math.floor(eventDurationSec / HelpersForTimeinMs.HOUR) + `H` + `  ` + Math.round((eventDurationSec - Math.floor(eventDurationSec / HelpersForTimeinMs.HOUR) * HelpersForTimeinMs.HOUR) / HelpersForTimeinMs.MINUTE) + `M`;
   }
 
   const startEvent = moment(eventTimeStart).format(`HH:mm`);
