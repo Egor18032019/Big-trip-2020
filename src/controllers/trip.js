@@ -5,18 +5,51 @@ import {
   FirstFromTemplate,
   SortType
 } from '../components/sort.js';
+import FormFirstEditComponent from '../components/form-first';
 import CreateMainContent from '../components/content.js';
-import PointComponent from '../components/points.js';
+import DayController from '../controllers/day.js';
 
 import {
   render,
   RenderPosition,
+  remove,
 } from '../utils/render.js';
 
-const renderPoint = (listElement, task, iterator) => {
-  const pointComponent = new PointComponent(task, iterator);
-  render(listElement, pointComponent, RenderPosition.BEFOREEND);
+const getSortedEventsByDate = (events) => {
+  const eventsByDate = new Map();
+
+  events.forEach((event) => {
+    const {
+      eventTimeStart
+    } = event;
+    const date = new Date(
+        eventTimeStart.getFullYear(),
+        eventTimeStart.getMonth(),
+        eventTimeStart.getDate()
+    );
+    const ids = date.getTime();
+
+    if (eventsByDate.has(ids)) {
+      const data = eventsByDate.get(ids);
+      data.points.push(event);
+      eventsByDate.set(ids, data);
+    } else {
+      eventsByDate.set(ids, {
+        eventDate: date,
+        points: [event]
+      });
+    }
+  });
+
+  const eventWithDate = [];
+
+  for (const [, value] of eventsByDate) {
+    eventWithDate.push(value);
+  }
+
+  return eventWithDate.sort((a, b) => a.eventDate - b.eventDate);
 };
+
 
 /**
  * Сортировка ивентов
@@ -24,82 +57,106 @@ const renderPoint = (listElement, task, iterator) => {
  * @param {*} sortType тип сортировки
  * @return{html} возращает отсротированный массив
  */
-const getSortedTasks = (array, sortType) => {
+const getSortedEvents = (array, sortType) => {
 
   const showingTasks = array.map((task) => {
-    // создаем новый массив с рузультатом вызова этой функции для каждого элемента старого массива
-    return Object.assign({},
-        task, {
-          points: task.points.map((point) => Object.assign(
-          // так как внутри массива есть еще обьекты то снова воспользовался Object.assign
-              {},
-              point
-          ))
-        });
+    return Object.assign({}, task);
   });
   let sortedTasks = [];
   switch (sortType) {
     case SortType.DATE:
-      sortedTasks = showingTasks.map((it) => {
-        // в it заменяем  массиве it.poins уже отсортированным массивом
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => {
-          // считаем продолжительность в каждой точке
-          const durationA = a.eventTimeEnd.getTime() - a.eventTimeStart.getTime();
-          const durationB = b.eventTimeEnd.getTime() - b.eventTimeStart.getTime();
-          return durationB - durationA;
-        }));
-        return sortedTasks;
-
+      sortedTasks = showingTasks.sort((a, b) => {
+        // считаем продолжительность в каждой точке
+        const durationA = a.eventTimeEnd.getTime() - a.eventTimeStart.getTime();
+        const durationB = b.eventTimeEnd.getTime() - b.eventTimeStart.getTime();
+        return durationB - durationA;
       });
       break;
     case SortType.PRICE:
-      sortedTasks = showingTasks.map((it) => {
-        sortedTasks = Object.assign(it, it.points.sort((a, b) => b.eventPrice - a.eventPrice));
-        return sortedTasks;
-      });
+      sortedTasks = showingTasks.sort((a, b) => b.eventPrice - a.eventPrice);
       break;
     case SortType.DEFAULT:
-      sortedTasks = array;
+      sortedTasks = getSortedEventsByDate(showingTasks);
       break;
   }
   return sortedTasks.slice();
 };
 
 export default class TripController {
-  constructor(container) {
+  constructor(container, tasksModel) {
     this._container = container;
-    this._tasks = [];
-    // обсервер
+    this._PointModel = tasksModel;
+    /**
+     * обсревер на точки маршурта
+     */
     this.pointObserver = new PointControllerObserver();
+    /**
+     * обсервер на дни
+     */
+    this.dayObserver = new PointControllerObserver();
+    this._tripFirstEventsForm = new FormFirstEditComponent();
     this._mainContent = new CreateMainContent();
     this._sortComponent = new FirstFromTemplate();
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
     this._onDataChange = this._onDataChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
+    this._PointModel.setFilterChangeHandler(this._onFilterChange);
+
+    this._PointModel.setDataChangeHandler(this._updatePoints.bind(this));
+
+    this.firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
+
+    // добавление нового ивента
+    this.firstButtonNewEvent.addEventListener(`click`, () => {
+      this._PointModel.setFilterType(`everything`);
+      // надо поставить setSortTypeChangeHandler чтобы поменял тип фильтра
+      let containerForFirst = document.querySelector(`.trip-events__trip-sort`);
+      this.firstButtonNewEvent.disabled = true;
+      const firstPointController = new PointController(containerForFirst, this._onDataChange, this.pointObserver);
+      this.pointObserver.callClose();
+      this.pointObserver.subscribe(
+          firstPointController
+      );
+
+      firstPointController.render(null, `adding`, RenderPosition.AFTERNODE);
+    });
   }
 
-  render(tasks) {
-    this._tasks = tasks;
+  render() {
+    const tasks = this._PointModel.getPoints();
+    const filter = this._PointModel.getFilter();
+    if (tasks.length === 0 && filter === `everything`) {
+      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
+      pointController.render(null, `adding`);
+
+      this.firstButtonNewEvent.disabled = true;
+      return;
+    }
+
+
+    this.firstButtonNewEvent.disabled = false;
     // отрисовываем сортировку
     render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
     // Отрисовка основы для контента
-    if (this._tasks.length > 0 && this._container) {
+    if (tasks.length > 0 && this._container) {
       render(this._container, this._mainContent, RenderPosition.BEFOREEND);
     }
+    this._renderPoints(getSortedEvents(tasks, SortType.DEFAULT), SortType.DEFAULT);
+  }
 
-    const tripEventsList = document.querySelector(`.trip-days`);
-
-    // --?? сделать два контролера на точки и на ивенты (плюс назвать соответствено)
-    this._tasks.forEach((it, iterator) => {
-      renderPoint(tripEventsList, it, iterator);
+  _renderByDate(container, sortedEventByDate) {
+    sortedEventByDate.forEach((it, iterator) => {
+      const dayControler = new DayController(container, iterator);
+      dayControler.render(it);
+      // закидываем инстансы в обсервер
+      this.dayObserver.subscribe(dayControler);
     });
 
     const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
     const tripDaysItemArray = Array.from(tripDaysItem);
 
-
-    this._tasks.forEach((day, iterator) => {
-
+    sortedEventByDate.forEach((day, iterator) => {
       day.points.forEach((it) => {
 
         const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver, iterator);
@@ -111,35 +168,75 @@ export default class TripController {
         );
       });
     });
+  }
 
+  _renderPoints(tasks, sortType = SortType.DEFAULT) {
+
+    const tripDays = document.querySelector(`.trip-days`);
+
+    if (sortType === SortType.DEFAULT) {
+      this._renderByDate(tripDays, tasks);
+      return;
+    }
+    // Отрисовка основы для точек маршрута
+    const dayControler = new DayController(tripDays);
+    dayControler.render();
+    this.dayObserver.subscribe(dayControler);
+
+    const tripDaysItem = document.querySelector(`.trip-events__list`);
+    tasks.forEach((task) => {
+      const pointController = new PointController(tripDaysItem, this._onDataChange, this.pointObserver);
+
+      pointController.render(task);
+      this.pointObserver.subscribe(
+          pointController
+      );
+    });
   }
 
   _onSortTypeChange(sortType) {
-    const tripEventsList = document.querySelector(`.trip-days`);
     // чистим
-    tripEventsList.innerHTML = ``;
+    this._removePoints();
     // сортитруем приходящий массив
-    const sortedTasks = getSortedTasks(this._tasks, sortType);
-    // и отрисовывваем его
-    sortedTasks.forEach((it, iterator) => {
-      renderPoint(tripEventsList, it, iterator);
-    });
-    sortedTasks.forEach((day, iterator) => {
-      const tripDaysItem = document.querySelectorAll(`.trip-events__list`);
-      const tripDaysItemArray = Array.from(tripDaysItem);
-
-      day.points.forEach((it) => {
-
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver);
-
-        pointController.render(it);
-        // убираем в обсервере старые инстансы
-        this.pointObserver.unsubscribe(pointController);
-      });
-    });
+    const sortedTasks = getSortedEvents(this._PointModel.getPoints(), sortType);
+    this._renderPoints(sortedTasks, sortType);
   }
 
-  _onDataChange() {
-    // console.log(`добавил в избранное`);
+  _onDataChange(pointController, oldForm, newForm) {
+    if (oldForm === null) {
+      this._PointModel.addPoint(newForm);
+      return;
+    }
+
+    if (newForm === null) {
+      this._PointModel.removePoint(oldForm.id);
+      return;
+    }
+
+    this._PointModel.updatePoints(oldForm.id, newForm);
+  }
+
+  _removePoints() {
+    this.pointObserver.observers.forEach(
+        (point) => point.destroy()
+    );
+    this.pointObserver.observers = [];
+    this.dayObserver.observers.forEach(
+        (dayControler) => dayControler.destroy()
+    );
+    this.dayObserver.observers = [];
+
+  }
+
+  _updatePoints() {
+    remove(this._sortComponent);
+    this._removePoints();
+    this.render();
+  }
+
+  _onFilterChange() {
+    this._sortComponent.setSortType(SortType.DEFAULT);
+
+    this._updatePoints();
   }
 }

@@ -24,17 +24,15 @@ const getRandomArraypoints = () => {
   const startEvent = moment(timeStartEvent).format(`HH:mm`);
 
   const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
-  // const endEvent = moment(timeEndEvent).format(`HH:mm`);
-  // console.log(timeEndEvent);
-  // console.log(timeStartEvent);
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
   // --,,,??? почему не правильно считает ??
-  const favorite = true;
+  const favorite = false;
   return {
+    id: new Date().getTime(),
     eventPoint,
     eventTitle: `${eventPoint} to  ${eventTown}`,
-    eventOffers: POINT_TYPE[eventPoint],
+    eventOffers: randomArray(getRandomIntegerNumber(1, 3), POINT_TYPE[eventPoint]),
     eventTimeStart: timeStartEvent,
     eventTimeEnd: timeEndEvent,
     eventPrice: getRandomIntegerNumber(0, 50),
@@ -48,6 +46,36 @@ const getRandomArraypoints = () => {
   };
 };
 
+
+const NewFormDataId = {
+  eventPoint: `Flight`,
+  eventTitle: `sss`,
+  eventOffers: [{
+    eventOfferTitle: `add luggage`,
+    evenOfferPrice: ` 20`
+  }, {
+    eventOfferTitle: `add meal`,
+    evenOfferPrice: `  21`
+  }, {
+    eventOfferTitle: `Choose seats`,
+    evenOfferPrice: `5 $ `
+  }],
+  eventPrice: ``,
+  eventPointTown: ``,
+  favorite: false,
+  id: new Date().getTime(),
+};
+const randomArray = function (length, array) {
+  // создаем пустой массив - заданой длины - и заливаем его `ничего`
+  const randomValues = new Array(length).fill(`ничего`);
+  return randomValues.map(
+      function (it, iterator) {
+        it = array[iterator];
+        return it;
+      }
+  );
+};
+
 const createRandomArray = (length, handlerGenerateData) => {
   // создаем пустой массив - заданой длины - и заливаем его `ничего`
   const randomValues = new Array(length).fill(`ничего`);
@@ -58,13 +86,20 @@ const getEventContent = function () {
   const length = getRandomIntegerNumber(1, 5);
   // передаем в функцию createRandomArray -> длину и функцию с перемеными которая при каждом вызвае будет даватьновое значение
   return createRandomArray(length, () => ({
-    eventDate: moment(getRandomDate()).format(`MMM do DD`).substring(0, 5),
+    eventDate: getRandomDate(),
     points: createRandomArray(getRandomIntegerNumber(1, 4), getRandomArraypoints),
   }));
 };
 
+const getEvents = function () {
+  // const length = getRandomIntegerNumber(1, 5);
+  return createRandomArray(getRandomIntegerNumber(1, 10), getRandomArraypoints);
+};
+
 
 export {
+  getEvents,
   getEventContent,
   getRandomArrayItem,
+  NewFormDataId,
 };

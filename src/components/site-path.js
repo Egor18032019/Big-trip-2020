@@ -1,13 +1,6 @@
 // отрисовыает точки и даты маршрута
 import AbstractComponent from "./abstract-component.js";
 
-const getPathPointTown = (itemArray) => {
-  let totalPath = ``;
-  for (let eventDay = 0; eventDay < itemArray.points.length; eventDay++) {
-    totalPath = totalPath + ` ` + itemArray.points[eventDay].eventPointTown;
-  }
-  return totalPath;
-};
 /**
  *  Маршрут и  дата
  * @param {*} listEvent список ивентов
@@ -16,7 +9,7 @@ const getPathPointTown = (itemArray) => {
 const getSitePathTemplate = (listEvent) => {
   let pathPoints = ``;
   if (listEvent) {
-    pathPoints = listEvent.map((it) => getPathPointTown(it)).join(` &mdash; `);
+    pathPoints = listEvent.map((it) => it.eventPointTown).join(` &mdash; `);
   }
   return (
     `

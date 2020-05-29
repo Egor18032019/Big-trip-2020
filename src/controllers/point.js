@@ -6,11 +6,13 @@ import {
   render,
   RenderPosition,
   replace,
+  remove,
 } from '../utils/render.js';
 
-const Mode = {
+export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
+  ADDING: `adding`,
 };
 
 export default class PointController {
@@ -23,51 +25,61 @@ export default class PointController {
 
     this._eventComponent = null;
     this._formEditComponent = null;
-    // флаг
-    this._mode = Mode.DEFAULT;
-
+    this._creatingTask = null;
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
   }
 
-  render(event) {
+  render(event, mode = Mode.DEFAULT, renderposition = RenderPosition.AFTERBEGIN) {
+    this._mode = mode;
+    this.renderposition = renderposition;
+    this._initForm(event);
+
+    if (!event) {
+      render(this._container, this._formEditComponent, this.renderposition);
+      return;
+    }
 
     this._eventComponent = new EventComponent(event);
-    this._formEditComponent = new FormEditComponent(event, this._iterator);
-    // Замена форма на ивент
-    this._formEditComponent.setEditFormClickHandler(
-        () => {
-          this._replaceEditToPoint();
-          this._formEditComponent.getElement().reset();
-        }
-    );
-    this._formEditComponent.setDeleteClickHandler(() => {
-      this._container.removeChild(this._formEditComponent.getElement());
-      const node = this._eventComponent.getElement();
-      node.remove();
+    // замена ивента на форму редактрирования
+    this._eventComponent.setEditPointClickHandler(() => {
+      this._replacePointToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyDown);
     });
     // замена ивента на форму редактрирования
     this._eventComponent.setEditPointClickHandler(() => {
       this._replacePointToEdit();
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
-    // добавление в избранное
-    this._formEditComponent.setFavoriteFormClickHandler(() => {
-      this._onDataChange(event);
-      event.favorite = !event.favorite;
-      this._formEditComponent.rerender();
-      // и что бы запомнилась -> приравниваем
-      this._formEditComponent = this._formEditComponent;
-    });
-
-
-    // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
-    //    биндим на контекст
-    this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
-    this._formEditComponent._subscribeOnEvents();
 
     render(this._container, this._eventComponent, RenderPosition.BEFOREEND);
+  }
+
+  _initForm(event) {
+    this._formEditComponent = new FormEditComponent(event, this._mode);
+    // Замена форма на ивент
+    this._formEditComponent.setEditFormClickHandler(
+        () => {
+          this._replaceEditToPoint();
+          this._formEditComponent.reset();
+        }
+    );
+    this._formEditComponent.setDeleteClickHandler(() => {
+      if (event) {
+        this._onDataChange(this, event, null);
+      } else {
+        let firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
+        firstButtonNewEvent.disabled = false;
+
+        remove(this._formEditComponent);
+      }
+    });
+
+    // вешаем обработчик иммено на отправку(пока так, до настройки XHR)
+    // биндим на контекст
+    this._formEditComponent.setEditFormSubmitHandler(this._onSetupFormSubmit.bind(this));
+    this._formEditComponent._subscribeOnEvents();
   }
 
   /**
@@ -85,7 +97,9 @@ export default class PointController {
    * заменяет форму редактирования на  точку маршрута
    */
   _replaceEditToPoint() {
-    replace(this._eventComponent, this._formEditComponent);
+    if (document.contains(this._formEditComponent.getElement())) {
+      replace(this._eventComponent, this._formEditComponent);
+    }
     this._mode = Mode.DEFAULT;
   }
 
@@ -99,16 +113,36 @@ export default class PointController {
 
   // прописываем закрытие формы если открыта другая
   setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
+    // если режим редактирования -именно у этой формы то закрываем
+    if (this._mode === Mode.EDIT) {
       this._replaceEditToPoint();
+    }
+    if (this._mode === Mode.ADDING) {
+      // если у именно у этой формы режим добавления = то закрываем
+      this.firstButtonNewEvent = document.querySelector(`.trip-main__event-add-btn`);
+      this.firstButtonNewEvent.disabled = false;
+      remove(this._formEditComponent);
+
     }
   }
 
   _onSetupFormSubmit(evt) {
     evt.preventDefault();
-    replace(this._eventComponent, this._formEditComponent);
-
+    const oldFormData = this._formEditComponent.getItem().id ? this._formEditComponent.getItem() : null;
+    const newFormSubmit = this._formEditComponent.getData();
+    this._onDataChange(this._formEditComponent, oldFormData, newFormSubmit);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    if (!this._eventComponent) {
+      remove(this._formEditComponent);
+
+      return;
+    }
+    this._replaceEditToPoint();
   }
 
+  destroy() {
+    remove(this._formEditComponent);
+    remove(this._eventComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
 }

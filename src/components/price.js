@@ -16,10 +16,9 @@ export default class SiteCostTemplate extends AbstractComponent {
     let totalCost = 0;
     if (this._point) {
       for (let eventDay = 0; eventDay < this._point.length; eventDay++) {
-        for (let point = 0; point < this._point[eventDay].points.length; point++) {
-          let priceOneEvent = this._point[eventDay].points[point].eventPrice;
-          totalCost = totalCost + priceOneEvent;
-        }
+        let priceOneEvent = this._point[eventDay].eventPrice;
+        totalCost = totalCost + priceOneEvent;
+
       }
     }
     return (

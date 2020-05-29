@@ -1,6 +1,3 @@
-import {
-  getEventContent
-} from './content-mock.js';
 /**
  * кол-во дней
  */
@@ -155,17 +152,18 @@ const DESCRIPTION_IMG = [
   `  <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">`
 ];
 
-/**
- * весь список ивентов
- */
-const allEvent = getEventContent();
+const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
 
 export {
   ALLDAY,
   POINT_TOWN,
   POINT_TYPE,
-  allEvent,
   DESCRIPTION,
   DESCRIPTION_IMG,
-  styleOffers
+  styleOffers,
+  FilterType,
 };

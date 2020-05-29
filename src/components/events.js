@@ -28,8 +28,21 @@ const getPointTemplate = (points) => {
     eventTimeStart,
     eventTimeEnd,
     eventPrice,
-    eventDuration,
   } = points;
+  // Более суток: дни часы минуты (например «01D 02H 30M»);
+  const eventDurationSec = eventTimeEnd - eventTimeStart;
+  const day = eventDurationSec / 86400000;
+  const hours = (eventDurationSec - Math.floor(day) * 86400000) / 3600000;
+  const minutes = (eventDurationSec - Math.floor(day) * 86400000 - Math.floor(hours) * 3600000) / 60000;
+  let eventDuration = Math.round(eventDurationSec / 60000) + `M`;
+
+  if (eventDurationSec > 86400000) {
+    eventDuration = Math.floor(day) + `` + `D` + `  ` + Math.floor(hours) + `H` + `  ` + Math.round(minutes) + `M`;
+
+  }
+  if (eventDurationSec > 3600000 && eventDurationSec < 86400000) {
+    eventDuration = Math.floor(eventDurationSec / 3600000) + `H` + `  ` + Math.round((eventDurationSec - Math.floor(eventDurationSec / 3600000) * 3600000) / 60000) + `M`;
+  }
 
   const startEvent = moment(eventTimeStart).format(`HH:mm`);
   const endEvent = moment(eventTimeEnd).format(`HH:mm`);
@@ -48,9 +61,9 @@ const getPointTemplate = (points) => {
 
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">${startEvent}</time>
+        <time class="event__start-time" datetime="${startEvent}">${startEvent}</time>
         —
-        <time class="event__end-time" datetime="2019-03-18T11:00">${endEvent}</time>
+        <time class="event__end-time" datetime="${endEvent}</">${endEvent}</time>
       </p>
       <p class="event__duration">${eventDuration}</p>
     </div>

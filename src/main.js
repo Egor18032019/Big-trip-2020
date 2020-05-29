@@ -1,14 +1,13 @@
 //  генерация разметки
 
 import {
-  allEvent
-} from './mock/const.js';
-// const allEvent = 0;
+  getEvents
+} from './mock/content-mock';
+
 /**
  * .trip-main
  */
 const runMainElement = document.querySelector(`.trip-main`);
-const firstButtonNewEvent = runMainElement.querySelector(`.btn--yellow`);
 /**
  * `.trip-main__trip-controls в infoMainElement
  */
@@ -20,72 +19,44 @@ import SiteDateTemplate from './components/date.js';
 
 import SiteHeaderContainerTemplate from './components/path.js';
 import SiteMenuTemplate from './components/menu.js';
-import SiteFiltrTemplate from './components/filter.js';
+import FilterController from "./controllers/filter.js";
+
 import SiteCostTemplate from './components/price.js';
-import FormFirstEditComponent from './components/form-first.js';
 
 import TripController from './controllers/trip.js';
-
 
 import {
   render,
   RenderPosition
 } from './utils/render.js';
 
+import PointModel from "./models/pointModels.js";
+
+const pointsModel = new PointModel();
+pointsModel.setPoints(getEvents());
+const allEvents = pointsModel.getPointsAll();
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 
-// отрисовали контайнер и  и теперь отрисовывем цену с маршрутом
-const renderPath = (array) => {
-  const tripInfoComponent = new SitePathTemplate(array);
-  render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-  const dateComponent = new SiteDateTemplate(array);
-  render(pathElement, dateComponent, RenderPosition.BEFOREEND);
-};
 const pathElement = document.querySelector(`.trip-info__main`);
-if (pathElement) {
-  renderPath(allEvent);
-}
-
-const renderCost = (array) => {
-  const costComponent = new SiteCostTemplate(array);
-  render(costElement, costComponent, RenderPosition.BEFOREEND);
-};
 const costElement = document.querySelector(`.trip-info`);
-if (costElement) {
-  renderCost(allEvent);
-}
-const renderMenu = () => {
-  const siteComponent = new SiteMenuTemplate();
-  render(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
-};
-if (tripControlsElement) {
-  renderMenu();
-}
 
-const renderFilter = () => {
-  const siteFilter = new SiteFiltrTemplate();
-  render(tripControlsElement, siteFilter, RenderPosition.BEFOREEND);
-};
-if (tripControlsElement) {
-  renderFilter();
-}
+const tripInfoComponent = new SitePathTemplate(allEvents);
+const dateComponent = new SiteDateTemplate(allEvents);
+const costComponent = new SiteCostTemplate(allEvents);
+const siteComponent = new SiteMenuTemplate();
+
+render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+render(pathElement, dateComponent, RenderPosition.BEFOREEND);
+render(costElement, costComponent, RenderPosition.BEFOREEND);
+render(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
+
+const filterController = new FilterController(tripControlsElement, pointsModel);
+filterController.render();
 
 
 const sortMainElement = document.querySelector(`.trip-events`);
-// если нет точек то рисуем форму приглашение
-const renderFirstForm = (listElement) => {
-  const tripFirstEventsForm = new FormFirstEditComponent();
-  render(listElement, tripFirstEventsForm, RenderPosition.BEFOREEND);
-};
-if (!allEvent.length) {
-  renderFirstForm(sortMainElement);
-  // дисаблем кнопку для создание новых ивентов
-  firstButtonNewEvent.disabled = true;
-}
 
-const renderTripEvent = new TripController(sortMainElement);
-renderTripEvent.render(allEvent);
-
-
+const renderTripEvent = new TripController(sortMainElement, pointsModel);
+renderTripEvent.render();

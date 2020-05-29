@@ -13,7 +13,8 @@ const createElement = (template) => {
 
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
+  BEFOREEND: `beforeend`,
+  AFTERNODE: `after`,
 };
 /**
  * отрисовка
@@ -28,6 +29,9 @@ const render = (container, component, place) => {
       break;
     case RenderPosition.BEFOREEND:
       container.append(component.getElement());
+      break;
+    case RenderPosition.AFTERNODE:
+      container.after(component.getElement());
       break;
   }
 };
@@ -52,8 +56,10 @@ const replace = (newComponent, oldComponent) => {
 };
 
 const remove = (component) => {
-  component.getElement().remove();
-  component.removeElement();
+  if (component) {
+    component.getElement().remove();
+    component.removeElement();
+  }
 };
 
 
