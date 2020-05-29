@@ -119,12 +119,12 @@ export const getSiteAddNewEventTemplate = (vremennoOpisanie, vremennoTown, point
                     </div>
 
                     <div class="event__type-item">
-                      <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+                      <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" checked="">
                       <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
                     </div>
 
                     <div class="event__type-item">
-                      <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
+                      <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
                       <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                     </div>
                   </fieldset>

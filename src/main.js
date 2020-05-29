@@ -63,9 +63,9 @@ const renderTripEvent = new TripController(sortMainElement, pointsModel);
 renderTripEvent.render();
 
 // отрисовка стастистки
-const pageBodyContainer = document.querySelector(`.page-body__container`);
+const pageBodyContainer = document.querySelector(`main .page-body__container`);
 const tripStatistics = new TripStatistics(pointsModel);
-render(pageBodyContainer, tripStatistics);
+render(pageBodyContainer, tripStatistics, RenderPosition.AFTERBEGIN);
 tripStatistics.hide();
 
 // получаем куда тыкнули и взависимости от этого отрисовываем
