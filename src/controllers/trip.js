@@ -225,6 +225,7 @@ export default class TripController {
         (dayControler) => dayControler.destroy()
     );
     this.dayObserver.observers = [];
+
   }
 
   _updatePoints() {
@@ -235,15 +236,7 @@ export default class TripController {
 
   _onFilterChange() {
     this._sortComponent.setSortType(SortType.DEFAULT);
-    this._updatePoints();
-  }
 
-  hide() {
-    this._sortComponent.setSortType(SortType.DEFAULT);
-    remove(this._sortComponent);
-    this._removePoints();
-  }
-  show() {
-    this.render();
+    this._updatePoints();
   }
 }

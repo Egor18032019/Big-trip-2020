@@ -18,8 +18,6 @@
     "node": "10"
   },
   "dependencies": {
-    "chart.js": "^2.9.3",
-    "chartjs-plugin-datalabels": "^0.7.0",
     "css-loader": "^3.5.3",
     "flatpickr": "^4.6.3",
     "he": "^1.2.0",
