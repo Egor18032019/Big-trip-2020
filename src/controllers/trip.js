@@ -235,7 +235,14 @@ export default class TripController {
 
   _onFilterChange() {
     this._sortComponent.setSortType(SortType.DEFAULT);
-
     this._updatePoints();
+  }
+  show() {
+    this.render();
+  }
+  hide() {
+    this._sortComponent.setSortType(SortType.DEFAULT);
+    remove(this._sortComponent);
+    this._removePoints();
   }
 }
