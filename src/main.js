@@ -22,7 +22,6 @@ import SiteMenuTemplate from './components/menu.js';
 import FilterController from "./controllers/filter.js";
 
 import SiteCostTemplate from './components/price.js';
-import TripStatistics from './components/statistick.js';
 
 import TripController from './controllers/trip.js';
 
@@ -61,6 +60,7 @@ const sortMainElement = document.querySelector(`.trip-events`);
 
 const renderTripEvent = new TripController(sortMainElement, pointsModel);
 renderTripEvent.render();
+<<<<<<< HEAD
 
 // отрисовка стастистки
 const pageBodyContainer = document.querySelector(`main .page-body__container`);
@@ -86,3 +86,5 @@ siteComponent.setOnChange(
       }
     }
 );
+=======
+>>>>>>> 37459cddfbb50864e03eaf3f1f5a2b5de4335adb
