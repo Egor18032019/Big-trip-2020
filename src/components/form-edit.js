@@ -104,7 +104,7 @@ const getFormEditEventTemplate = (eventOneDay, mode) => {
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
+            <input id="event-type-flight-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
             <label class="event__type-label  event__type-label--flight" for="event-type-flight-${id}">Flight</label>
           </div>
         </fieldset>

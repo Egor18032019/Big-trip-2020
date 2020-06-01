@@ -110,8 +110,7 @@ export default class TripController {
     // добавление нового ивента
     this.firstButtonNewEvent.addEventListener(`click`, () => {
       this._PointModel.setFilterType(`everything`);
-      // надо поставить setSortTypeChangeHandler чтобы поменял тип фильтра
-      let containerForFirst = document.querySelector(`.trip-events__trip-sort`);
+      const containerForFirst = document.querySelector(`.trip-events__trip-sort`);
       this.firstButtonNewEvent.disabled = true;
       const firstPointController = new PointController(containerForFirst, this._onDataChange, this.pointObserver);
       this.pointObserver.callClose();
@@ -236,7 +235,14 @@ export default class TripController {
 
   _onFilterChange() {
     this._sortComponent.setSortType(SortType.DEFAULT);
-
     this._updatePoints();
+  }
+  show() {
+    this.render();
+  }
+  hide() {
+    this._sortComponent.setSortType(SortType.DEFAULT);
+    remove(this._sortComponent);
+    this._removePoints();
   }
 }
