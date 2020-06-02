@@ -56,8 +56,6 @@ const renderTripEvent = new TripController(sortMainElement, pointsModel, api);
 api.getData()
   .then((data) => {
     pointsModel.setPoints(data.tripEvents);
-    // console.log(data.tripEvents[0]);
-    // console.log(data);
     pointsModel.setOffers(data.offers);
     pointsModel.setDestinations(data.destinations);
   })
@@ -70,9 +68,7 @@ api.getData()
     const costComponent = new SiteCostTemplate(pointsModel.getPointsAll());
     render(costElement, costComponent, RenderPosition.BEFOREEND);
     renderTripEvent.render();
-
     // remove(loadingComponent);
-
   });
 
 

@@ -138,7 +138,7 @@ export default class PointController {
     this._replaceEditToPoint();
   }
   _prepareData(formData) {
-    console.log(formData);
+    // console.log(formData);
     const tripEventAdapter = new TripEventAdapter(formData);
     const data = tripEventAdapter.toRAW(formData);
 
