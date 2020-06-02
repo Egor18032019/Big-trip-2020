@@ -1,6 +1,7 @@
 // отрисовка одного ивента
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
+import TripEventAdapter from '../models/EventAdapter.js';
 
 import {
   render,
@@ -127,7 +128,8 @@ export default class PointController {
     evt.preventDefault();
     const oldFormData = this._formEditComponent.getItem().id ? this._formEditComponent.getItem() : null;
     const newFormSubmit = this._formEditComponent.getData();
-    this._onDataChange(this._formEditComponent, oldFormData, newFormSubmit);
+    const data = this._prepareData(newFormSubmit);
+    this._onDataChange(this._formEditComponent, oldFormData, data);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     if (!this._eventComponent) {
       remove(this._formEditComponent);
@@ -135,7 +137,13 @@ export default class PointController {
     }
     this._replaceEditToPoint();
   }
+  _prepareData(formData) {
+    console.log(formData);
+    const tripEventAdapter = new TripEventAdapter(formData);
+    const data = tripEventAdapter.toRAW(formData);
 
+    return data;
+  }
   destroy() {
     remove(this._formEditComponent);
     remove(this._eventComponent);

@@ -42,7 +42,12 @@ export default class PointsModel {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }
-
+  setOffers(offers) {
+    this._offers = offers;
+  }
+  setDestinations(destinations) {
+    this._destinations = destinations;
+  }
   removePoint(id) {
     const index = this._points.findIndex((it) => it.id === id);
 

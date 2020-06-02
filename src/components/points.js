@@ -26,7 +26,7 @@ export default class PointComponent extends AbstractComponent {
       iterator = ``;
     }
     return (`
-    <li class="trip-days__item  day">
+    <li class="trip-days__item day ">
       <div class="day__info">
       <span class="day__counter">${iterator}</span>
       <time class="day__date" datetime="${dayEventDate}">${dayEventDate}</time>

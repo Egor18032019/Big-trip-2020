@@ -83,9 +83,10 @@ const getSortedEvents = (array, sortType) => {
 };
 
 export default class TripController {
-  constructor(container, tasksModel) {
+  constructor(container, tasksModel, api) {
     this._container = container;
     this._PointModel = tasksModel;
+    this._api = api;
     /**
      * обсревер на точки маршурта
      */
@@ -173,6 +174,7 @@ export default class TripController {
 
     const tripDays = document.querySelector(`.trip-days`);
 
+
     if (sortType === SortType.DEFAULT) {
       this._renderByDate(tripDays, tasks);
       return;
@@ -196,6 +198,7 @@ export default class TripController {
   _onSortTypeChange(sortType) {
     // чистим
     this._removePoints();
+
     // сортитруем приходящий массив
     const sortedTasks = getSortedEvents(this._PointModel.getPoints(), sortType);
     this._renderPoints(sortedTasks, sortType);
@@ -212,7 +215,16 @@ export default class TripController {
       return;
     }
 
-    this._PointModel.updatePoints(oldForm.id, newForm);
+    // this._PointModel.updatePoints(oldForm.id, newForm);
+
+    this._api.updateTripEvent(oldForm.id, newForm)
+    .then((tripEventModel) => {
+      const isSuccess = this._PointModel.updatePoints(oldForm.id, tripEventModel);
+
+      if (isSuccess) {
+        pointController.render(tripEventModel);
+      }
+    });
   }
 
   _removePoints() {
