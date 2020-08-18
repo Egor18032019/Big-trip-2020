@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import {
   HelpersForTimeinMs
 } from '../mock/const.js';
@@ -45,6 +46,8 @@ const getTimeDifference = (start, end) => {
 
 export default class TripEventAdapter {
   constructor(data) {
+    // console.log(data);
+
     this.id = data[`id`];
     this.eventPoint = getCapitalizedString(data[`type`]);
     this.eventPointTown = data[`destination`].name;
@@ -89,4 +92,5 @@ export default class TripEventAdapter {
   static parseTripEvents(data) {
     return data.map(TripEventAdapter.parseTripEvent);
   }
+
 }

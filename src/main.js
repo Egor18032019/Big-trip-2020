@@ -33,9 +33,6 @@ import PointModel from "./models/pointModels.js";
 const AUTHORIZATION = `Basic kakEtoRabotaet`;
 const api = new API(AUTHORIZATION);
 
-const pointsModel = new PointModel();
-// console.log(getEvents()[0]);
-
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
@@ -47,12 +44,12 @@ const siteComponent = new SiteMenuTemplate();
 
 render(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
 
+const pointsModel = new PointModel();
 const filterController = new FilterController(tripControlsElement, pointsModel);
 filterController.render();
 
-
+let renderTripEvent;
 const sortMainElement = document.querySelector(`.trip-events`);
-const renderTripEvent = new TripController(sortMainElement, pointsModel, api);
 api.getData()
   .then((data) => {
     pointsModel.setPoints(data.tripEvents);
@@ -61,11 +58,11 @@ api.getData()
   })
   .then(() => {
     const tripInfoComponent = new SitePathTemplate(pointsModel.getPointsAll());
-    render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
     const dateComponent = new SiteDateTemplate(pointsModel.getPointsAll());
-    render(pathElement, dateComponent, RenderPosition.BEFOREEND);
-
     const costComponent = new SiteCostTemplate(pointsModel.getPointsAll());
+    renderTripEvent = new TripController(sortMainElement, pointsModel, api);
+    render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+    render(pathElement, dateComponent, RenderPosition.BEFOREEND);
     render(costElement, costComponent, RenderPosition.BEFOREEND);
     renderTripEvent.render();
     // remove(loadingComponent);

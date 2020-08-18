@@ -387,19 +387,19 @@ export default class FormEditComponent extends SmartComponent {
   //  который надо передать в модель
   getData() {
     const tripEvent = {
-      id: this._point.id,
-      eventPoint: this._point.eventPoint,
-      eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
-      eventOffers: this._getSelectedOffers(),
-      eventTimeStart: this._point.eventTimeStart,
-      eventTimeEnd: this._point.eventTimeEnd,
-      eventPrice: this._point.eventPrice,
-      eventPointTown: this._point.eventPointTown,
-      eventPointDestination: {
-        pathDestination: `тестовысе слова`,
-        destinationImg: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
+      'id': this._point.id,
+      'type': this._point.eventPoint.toLowerCase(),
+      // "eventTitle": this._point.eventPoint + ` ` + this._point.eventPointTown,
+      'offers': this._getSelectedOffers(),
+      'date_from': moment.parseZone(this._point.eventTimeStart).utc().format(),
+      'date_to': moment.parseZone(this._point.eventTimeEnd).utc().format(),
+      'base_price': this._point.eventPrice,
+      'destination': {
+        description: `тестовысе слова`,
+        pictures: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
+        name: this._point.eventPointTown,
       },
-      favorite: this._getFavoriteStatus(),
+      'is_favorite': this._getFavoriteStatus(),
     };
 
     return tripEvent;

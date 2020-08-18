@@ -22,36 +22,36 @@ export default class API {
       this.getOffers(),
       this.getDestinations(),
     ])
-       .then((response) => {
-         const [tripEvents, offers, destinations] = response;
-         return {
-           tripEvents,
-           offers,
-           destinations,
-         };
-       });
+      .then((response) => {
+        const [tripEvents, offers, destinations] = response;
+        return {
+          tripEvents,
+          offers,
+          destinations,
+        };
+      });
   }
 
   getTripEvents() {
     return this._loadData({
       url: ServerUrl.POINTS
     })
-       .then((response) => response.json())
-       .then(TripEventAdapter.parseTripEvents);
+      .then((response) => response.json())
+      .then(TripEventAdapter.parseTripEvents);
   }
 
   getOffers() {
     return this._loadData({
       url: ServerUrl.OFFERS
     })
-       .then((response) => response.json());
+      .then((response) => response.json());
   }
 
   getDestinations() {
     return this._loadData({
       url: ServerUrl.DESTINATIONS
     })
-       .then((response) => response.json());
+      .then((response) => response.json());
   }
 
   updateTripEvent(id, data) {
@@ -60,9 +60,9 @@ export default class API {
       method: Method.PUT,
       body: JSON.stringify(data),
     })
-       .then(this._checkStatus)
-       .then((response) => response.json())
-       .then(TripEventAdapter.parseTripEvent);
+      .then(this._checkStatus)
+      .then((response) => response.json())
+      .then(TripEventAdapter.parseTripEvent);
   }
 
   _loadData({
@@ -79,10 +79,10 @@ export default class API {
       body,
       headers
     })
-       .then(this._checkStatus)
-       .catch((error) => {
-         throw error;
-       });
+      .then(this._checkStatus)
+      .catch((error) => {
+        throw error;
+      });
   }
 
 
