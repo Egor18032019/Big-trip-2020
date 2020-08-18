@@ -14,10 +14,10 @@ const getOffersTemplates = (arrayOffers) => {
   return (
     `
       <li class="event__offer">
-      <span class="event__offer-title">${arrayOffers.eventOfferTitle}</span>
+      <span class="event__offer-title">${arrayOffers.title}</span>
       +
       €&nbsp;
-      <span class="event__offer-price">${arrayOffers.evenOfferPrice}</span>
+      <span class="event__offer-price">${arrayOffers.price}</span>
      </li>
      `);
 };

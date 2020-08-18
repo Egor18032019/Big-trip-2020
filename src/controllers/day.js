@@ -28,6 +28,8 @@ export default class DayController {
 
   destroy() {
     remove(this._dayComponent);
+    this._dayComponent = null;
+
   }
 
 }

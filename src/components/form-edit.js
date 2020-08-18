@@ -7,7 +7,6 @@ import {
 } from "he";
 import {
   POINT_TYPE,
-  styleOffers,
 } from '../mock/const.js';
 
 import {
@@ -16,16 +15,20 @@ import {
 
 
 const getEventAvailableOffer = (array, id, cheked) => {
-  let keyStyleOffers = array.eventOfferTitle;
+  /**
+   * убраные пробелы в array.title
+   */
+  let title = array.title.replace(/\s/g, ``).toLowerCase();
+
   return (
     `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${styleOffers[keyStyleOffers]}-${id}" type="checkbox"
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox"
        name="event-offer-luggage" ${cheked ? `checked=""` : ``}>
-      <label class="event__offer-label" for="event-offer-${styleOffers[keyStyleOffers]}-${id}">
-      <span class="event__offer-title">${array.eventOfferTitle}</span>
+      <label class="event__offer-label" for="event-offer-${title}-${id}">
+      <span class="event__offer-title">${array.title}</span>
            +€&nbsp;
-       <span class="event__offer-price">${array.evenOfferPrice}</span>
+       <span class="event__offer-price">${array.price}</span>
        </label>
      </div>
     `
@@ -33,7 +36,7 @@ const getEventAvailableOffer = (array, id, cheked) => {
 };
 
 const getCheked = (array, it, id) => {
-  const even = (element) => element.eventOfferTitle === it.eventOfferTitle;
+  const even = (element) => element.title === it.title;
   let cheked = array.some(even);
   return getEventAvailableOffer(it, id, cheked);
 };
@@ -49,7 +52,8 @@ const cities = [`Ебург`, ` Москва`, ` Geneva`];
 const getFormEditEventTemplate = (eventOneDay, mode) => {
   const eventType = eventOneDay.eventPoint;
   const id = eventOneDay.id || new Date().getTime();
-  const pointEventList = encode(eventOneDay.eventPointTown);
+  const pointEventList = eventOneDay.eventPointTown;
+  // const pointEventList = encode(eventOneDay.eventPointTown);
   const offersForType = eventOneDay.eventOffers;
   const eventOffers = POINT_TYPE[eventType];
   const eventAvailableOffers = eventOffers.map((it) => getCheked(offersForType, it, id)).join(`\n`);
@@ -199,15 +203,24 @@ const NewFormDataId = {
   eventTimeStart: new Date(),
   eventTimeEnd: new Date(),
   eventOffers: [{
-    eventOfferTitle: `add luggage`,
-    evenOfferPrice: ` 20`
+    title: `Choose meal`,
+    price: ` 120`
   }, {
-    eventOfferTitle: `add meal`,
-    evenOfferPrice: `  21`
+    title: `Business lounge`,
+    price: `  160`
   }, {
-    eventOfferTitle: `Choose seats`,
-    evenOfferPrice: `5 $ `
-  }],
+    title: `Choose seats`,
+    price: `90 $ `
+  },
+  {
+    title: `Upgrade to business class`,
+    price: `120`
+  },
+  {
+    title: `Add luggage`,
+    price: `170`
+  }
+  ],
   eventPrice: ``,
   eventPointTown: ``,
   favorite: false,
@@ -289,7 +302,7 @@ export default class FormEditComponent extends SmartComponent {
     // изменение цены
     element.querySelector(`.event__input--price`)
       .addEventListener(`change`, (evt) => {
-        this._point.eventPrice = encode(evt.target.value);
+        this._point.eventPrice = evt.target.value;
       });
   }
 
@@ -374,19 +387,19 @@ export default class FormEditComponent extends SmartComponent {
   //  который надо передать в модель
   getData() {
     const tripEvent = {
-      id: this._point.id,
-      eventPoint: this._point.eventPoint,
-      eventTitle: this._point.eventPoint + ` ` + this._point.eventPointTown,
-      eventOffers: this._getSelectedOffers(),
-      eventTimeStart: this._point.eventTimeStart,
-      eventTimeEnd: this._point.eventTimeEnd,
-      eventPrice: this._point.eventPrice,
-      eventPointTown: this._point.eventPointTown,
-      eventPointDestination: {
-        pathDestination: `тестовысе слова`,
-        destinationImg: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
+      'id': this._point.id,
+      'type': this._point.eventPoint.toLowerCase(),
+      // "eventTitle": this._point.eventPoint + ` ` + this._point.eventPointTown,
+      'offers': this._getSelectedOffers(),
+      'date_from': moment.parseZone(this._point.eventTimeStart).utc().format(),
+      'date_to': moment.parseZone(this._point.eventTimeEnd).utc().format(),
+      'base_price': this._point.eventPrice,
+      'destination': {
+        description: `тестовысе слова`,
+        pictures: `  <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">`,
+        name: this._point.eventPointTown,
       },
-      favorite: this._getFavoriteStatus(),
+      'is_favorite': this._getFavoriteStatus(),
     };
 
     return tripEvent;

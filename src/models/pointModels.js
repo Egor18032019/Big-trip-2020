@@ -13,6 +13,7 @@ export default class PointsModel {
   constructor() {
     this._activeFilterType = FilterType.EVERYTHING;
     this._points = [];
+    this._offers = [];
     /**
      * обсервер
      */
@@ -32,7 +33,9 @@ export default class PointsModel {
   getFilter() {
     return this._activeFilterType;
   }
-
+  getOffers() {
+    return this._offers;
+  }
   setPoints(points) {
     this._points = Array.from(points);
     this._callHandlers(this._dataChangeHandlers);
@@ -42,7 +45,12 @@ export default class PointsModel {
     this._activeFilterType = filterType;
     this._callHandlers(this._filterChangeHandlers);
   }
-
+  setOffers(offers) {
+    this._offers = Array.from(offers);
+  }
+  setDestinations(destinations) {
+    this._destinations = destinations;
+  }
   removePoint(id) {
     const index = this._points.findIndex((it) => it.id === id);
 

@@ -5,124 +5,129 @@ const ALLDAY = 5;
 
 const POINT_TOWN = [`Amsterdam`, `Geneva`, `Ekaterinburg`, `Moskow`];
 
-const styleOffers = {
-  "Rent a car": `luggage`,
-  "Order Uber": `comfort`,
-  "Поймать попопутку": `meal`,
-  "Rent a vagon": `luggage`,
-  "Order traindriver": `comfort`,
-  "Выйти покурить": `meal`,
-  "Rent a Ship": `luggage`,
-  "Order Ship": `comfort`,
-  "Пропиратить шхуну": `meal`,
-  "add luggage": `luggage`,
-  "add meal": `comfort`,
-  "Choose seats": `meal`,
-  "Швеский стол": `luggage`,
-  "Больше мясо": `comfort`,
-  "Choose table": `meal`,
-};
-
 const POINT_TYPE = {
   "Taxi": [{
-    eventOfferTitle: `Rent a car`,
-    evenOfferPrice: ` 200`
+    title: `Drive slowly`,
+    price: ` 130`
   }, {
-    eventOfferTitle: `Order Uber`,
-    evenOfferPrice: ` 20`
+    title: `Choose temperature`,
+    price: ` 170`
   }, {
-    eventOfferTitle: `Поймать попопутку`,
-    evenOfferPrice: `Поболтать`
-  }],
+    title: `Choose the radio station`,
+    price: `30`
+  },
+  {
+    title: `Drive quickly, I'm in a hurry`,
+    price: ` 100`
+  },
+  ],
   "Bus": [{
-    eventOfferTitle: `Rent a car`,
-    evenOfferPrice: ` 200`
+    title: `Infotainment system `,
+    price: ` 50`
   }, {
-    eventOfferTitle: `Order Uber`,
-    evenOfferPrice: ` 20`
+    title: `Order meal `,
+    price: ` 100`
   }, {
-    eventOfferTitle: `Поймать попопутку`,
-    evenOfferPrice: `Поболтать`
+    title: `Choose seats`,
+    price: `190`
   }],
   "Train": [{
-    eventOfferTitle: `Rent a vagon`,
-    evenOfferPrice: ` 200`
+    title: `Rent a vagon`,
+    price: ` 200`
   }, {
-    eventOfferTitle: `Order traindriver`,
-    evenOfferPrice: ` 20`
+    title: `Order traindriver`,
+    price: ` 20`
   }, {
-    eventOfferTitle: `Выйти покурить`,
-    evenOfferPrice: `Поболтать`
+    title: `Выйти покурить`,
+    price: `Поболтать`
   }],
   "Ship": [{
-    eventOfferTitle: `Rent a Ship`,
-    evenOfferPrice: ` 200`
+    title: `Upgrade to business class`,
+    price: ` 150`
   }, {
-    eventOfferTitle: `Order Ship`,
-    evenOfferPrice: ` 20`
+    title: `Choose seats`,
+    price: ` 40`
   }, {
-    eventOfferTitle: `Пропиратить шхуну`,
-    evenOfferPrice: `Виселица`
+    title: `Business lounge`,
+    price: `40`
   }],
   "Transport": [{
-    eventOfferTitle: `Rent a car`,
-    evenOfferPrice: ` 200`
+    title: `Rent a car`,
+    price: ` 200`
   }, {
-    eventOfferTitle: `Order Uber`,
-    evenOfferPrice: ` 20`
+    title: `Order Uber`,
+    price: ` 20`
   }, {
-    eventOfferTitle: `Поймать попопутку`,
-    evenOfferPrice: `Поболтать`
+    title: `Поймать попопутку`,
+    price: `Поболтать`
   }],
   "Drive": [{
-    eventOfferTitle: `Rent a car`,
-    evenOfferPrice: ` 200`
+    title: `Choose temperature`,
+    price: ` 170`
   }, {
-    eventOfferTitle: `Order Uber`,
-    evenOfferPrice: ` 20`
+    title: `Choose business class`,
+    price: ` 180`
   }, {
-    eventOfferTitle: `Поймать попопутку`,
-    evenOfferPrice: `Поболтать`
+    title: `Choose comfort class`,
+    price: `110`
   }],
   "Flight": [{
-    eventOfferTitle: `add luggage`,
-    evenOfferPrice: ` 20`
+    title: `Choose meal`,
+    price: ` 120`
   }, {
-    eventOfferTitle: `add meal`,
-    evenOfferPrice: `  21`
+    title: `Business lounge`,
+    price: `  160`
   }, {
-    eventOfferTitle: `Choose seats`,
-    evenOfferPrice: `5 $ `
-  }],
+    title: `Choose seats`,
+    price: `90 $ `
+  },
+  {
+    title: `Upgrade to business class`,
+    price: `120`
+  },
+  {
+    title: `Add luggage`,
+    price: `170`
+  }
+  ],
   "Check-in": [{
-    eventOfferTitle: `add luggage`,
-    evenOfferPrice: ` 20`
+    title: `Choose the time of check-in`,
+    price: ` 70`
   }, {
-    eventOfferTitle: `add meal`,
-    evenOfferPrice: `  21`
+    title: `Choose the time of check-out`,
+    price: ` 190`
+  },
+  {
+    title: `Add breakfast`,
+    price: `  110`
   }, {
-    eventOfferTitle: `Choose seats`,
-    evenOfferPrice: `5 $ `
-  }],
+    title: `Laundry`,
+    price: `140 $ `
+  },
+  {
+    title: `Order a meal from the restaurant`,
+    price: `  30`
+  }
+  ],
   "Sightseeing": [{
-    eventOfferTitle: `add luggage`,
-    evenOfferPrice: ` 20`
+    title: `add luggage`,
+    price: ` 20`
   }, {
-    eventOfferTitle: `add meal`,
-    evenOfferPrice: `  21`
+    title: `add meal`,
+    price: `  21`
   }, {
-    eventOfferTitle: `Choose seats`,
-    evenOfferPrice: `5 $ `
+    title: `Choose seats`,
+    price: `5 $ `
   }],
   "Restaurant": [{
-    eventOfferTitle: `Швеский стол`,
-    evenOfferPrice: `20`
+    title: `Choose live music`,
+    price: `150`
   }, {
-    eventOfferTitle: `Больше мясо`,
-    evenOfferPrice: `21`
+    title: `Choose VIP area`,
+    price: `70`
   }, {
-    eventOfferTitle: `Choose table`,
-    evenOfferPrice: `5`
+    title: `Choose table`,
+    price: `5`
   }],
 };
 
@@ -186,7 +191,6 @@ export {
   POINT_TYPE,
   DESCRIPTION,
   DESCRIPTION_IMG,
-  styleOffers,
   FilterType,
   EventPointMap,
   HelpersForTimeinMs,

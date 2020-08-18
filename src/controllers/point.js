@@ -1,6 +1,7 @@
 // отрисовка одного ивента
 import EventComponent from '../components/events.js';
 import FormEditComponent from '../components/form-edit.js';
+import TripEventAdapter from '../models/EventAdapter.js';
 
 import {
   render,
@@ -16,13 +17,12 @@ export const Mode = {
 };
 
 export default class PointController {
-  constructor(container, onDataChange, eventObserver, iterator) {
+  constructor(container, onDataChange, eventObserver, iterator, allOffers) {
     this._container = container;
     this._iterator = iterator;
+    this._allOffers = allOffers;
     this._eventObserver = eventObserver;
-
     this._onDataChange = onDataChange;
-
     this._eventComponent = null;
     this._formEditComponent = null;
     this._creatingTask = null;
@@ -55,7 +55,7 @@ export default class PointController {
 
   _initForm(event) {
 
-    this._formEditComponent = new FormEditComponent(event, this._mode);
+    this._formEditComponent = new FormEditComponent(event, this._mode, this._allOffers);
     // Замена формы на ивент
     this._formEditComponent.setEditFormClickHandler(
         () => {
@@ -64,6 +64,8 @@ export default class PointController {
         }
     );
     this._formEditComponent.setDeleteClickHandler(() => {
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+
       if (event) {
         this._onDataChange(this, event, null);
       } else {
@@ -127,6 +129,7 @@ export default class PointController {
     evt.preventDefault();
     const oldFormData = this._formEditComponent.getItem().id ? this._formEditComponent.getItem() : null;
     const newFormSubmit = this._formEditComponent.getData();
+
     this._onDataChange(this._formEditComponent, oldFormData, newFormSubmit);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     if (!this._eventComponent) {

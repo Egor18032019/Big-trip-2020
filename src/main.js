@@ -1,9 +1,5 @@
 //  генерация разметки
 
-import {
-  getEvents
-} from './mock/content-mock';
-
 /**
  * .trip-main
  */
@@ -13,7 +9,8 @@ const runMainElement = document.querySelector(`.trip-main`);
  */
 const tripControlsElement = runMainElement.querySelector(`.trip-controls`);
 
-
+import API from './api.js';
+// import LoadingComponent from './components/loading.js';
 import SitePathTemplate from './components/site-path.js';
 import SiteDateTemplate from './components/date.js';
 
@@ -33,9 +30,9 @@ import {
 
 import PointModel from "./models/pointModels.js";
 
-const pointsModel = new PointModel();
-pointsModel.setPoints(getEvents());
-const allEvents = pointsModel.getPointsAll();
+const AUTHORIZATION = `Basic kakEtoRabotaet`;
+const api = new API(AUTHORIZATION);
+
 
 const HeaderContainer = new SiteHeaderContainerTemplate();
 render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
@@ -43,24 +40,34 @@ render(runMainElement, HeaderContainer, RenderPosition.AFTERBEGIN);
 const pathElement = document.querySelector(`.trip-info__main`);
 const costElement = document.querySelector(`.trip-info`);
 
-const tripInfoComponent = new SitePathTemplate(allEvents);
-const dateComponent = new SiteDateTemplate(allEvents);
-const costComponent = new SiteCostTemplate(allEvents);
 const siteComponent = new SiteMenuTemplate();
 
-render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-render(pathElement, dateComponent, RenderPosition.BEFOREEND);
-render(costElement, costComponent, RenderPosition.BEFOREEND);
 render(tripControlsElement, siteComponent, RenderPosition.BEFOREEND);
 
+const pointsModel = new PointModel();
 const filterController = new FilterController(tripControlsElement, pointsModel);
 filterController.render();
 
-
+let renderTripEvent;
 const sortMainElement = document.querySelector(`.trip-events`);
+api.getData()
+  .then((data) => {
+    pointsModel.setPoints(data.tripEvents);
+    pointsModel.setOffers(data.offers);
+    pointsModel.setDestinations(data.destinations);
+  })
+  .then(() => {
+    const tripInfoComponent = new SitePathTemplate(pointsModel.getPointsAll());
+    const dateComponent = new SiteDateTemplate(pointsModel.getPointsAll());
+    const costComponent = new SiteCostTemplate(pointsModel.getPointsAll());
+    renderTripEvent = new TripController(sortMainElement, pointsModel, api);
+    render(pathElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
+    render(pathElement, dateComponent, RenderPosition.BEFOREEND);
+    render(costElement, costComponent, RenderPosition.BEFOREEND);
+    renderTripEvent.render();
+    // remove(loadingComponent);
+  });
 
-const renderTripEvent = new TripController(sortMainElement, pointsModel);
-renderTripEvent.render();
 
 // отрисовка стастистки
 const pageBodyContainer = document.querySelector(`main .page-body__container`);
@@ -78,7 +85,7 @@ siteComponent.setOnChange(
           renderTripEvent.hide();
           tripStatistics.show();
           break;
-        case `table` :
+        case `table`:
           siteComponent.setActiveItem(menuItem);
           tripStatistics.hide();
           renderTripEvent.show();

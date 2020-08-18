@@ -1,5 +1,6 @@
 //  отрисовк точек
 import PointController from '../controllers/point.js';
+import TripEventAdapter from '../models/EventAdapter.js';
 import PointControllerObserver from '../observers/pointControler-observer.js';
 import {
   FirstFromTemplate,
@@ -83,9 +84,10 @@ const getSortedEvents = (array, sortType) => {
 };
 
 export default class TripController {
-  constructor(container, tasksModel) {
+  constructor(container, tasksModel, api) {
     this._container = container;
     this._PointModel = tasksModel;
+    this._api = api;
     /**
      * обсревер на точки маршурта
      */
@@ -112,7 +114,7 @@ export default class TripController {
       this._PointModel.setFilterType(`everything`);
       const containerForFirst = document.querySelector(`.trip-events__trip-sort`);
       this.firstButtonNewEvent.disabled = true;
-      const firstPointController = new PointController(containerForFirst, this._onDataChange, this.pointObserver);
+      const firstPointController = new PointController(containerForFirst, this._onDataChange, this.pointObserver, this._PointModel.getOffers());
       this.pointObserver.callClose();
       this.pointObserver.subscribe(
           firstPointController
@@ -126,7 +128,7 @@ export default class TripController {
     const tasks = this._PointModel.getPoints();
     const filter = this._PointModel.getFilter();
     if (tasks.length === 0 && filter === `everything`) {
-      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver);
+      const pointController = new PointController(this._container, this._onDataChange, this.pointObserver, this._PointModel.getOffers());
       pointController.render(null, `adding`);
 
       this.firstButtonNewEvent.disabled = true;
@@ -158,7 +160,7 @@ export default class TripController {
     sortedEventByDate.forEach((day, iterator) => {
       day.points.forEach((it) => {
 
-        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver, iterator);
+        const pointController = new PointController(tripDaysItemArray[iterator], this._onDataChange, this.pointObserver, iterator, this._PointModel.getOffers());
 
         pointController.render(it);
         // инстансы евентов закидвываем в обсервер
@@ -173,6 +175,7 @@ export default class TripController {
 
     const tripDays = document.querySelector(`.trip-days`);
 
+
     if (sortType === SortType.DEFAULT) {
       this._renderByDate(tripDays, tasks);
       return;
@@ -184,7 +187,7 @@ export default class TripController {
 
     const tripDaysItem = document.querySelector(`.trip-events__list`);
     tasks.forEach((task) => {
-      const pointController = new PointController(tripDaysItem, this._onDataChange, this.pointObserver);
+      const pointController = new PointController(tripDaysItem, this._onDataChange, this.pointObserver, this._PointModel.getOffers());
 
       pointController.render(task);
       this.pointObserver.subscribe(
@@ -196,6 +199,7 @@ export default class TripController {
   _onSortTypeChange(sortType) {
     // чистим
     this._removePoints();
+
     // сортитруем приходящий массив
     const sortedTasks = getSortedEvents(this._PointModel.getPoints(), sortType);
     this._renderPoints(sortedTasks, sortType);
@@ -212,7 +216,17 @@ export default class TripController {
       return;
     }
 
-    this._PointModel.updatePoints(oldForm.id, newForm);
+    // let ass = new TripEventAdapter(newForm)
+    // let newForms = ass.toRAW
+    this._api.updateTripEvent(oldForm.id, newForm)
+      .then((tripEventModel) => {
+
+        const isSuccess = this._PointModel.updatePoints(oldForm.id, tripEventModel);
+
+        if (isSuccess) {
+          pointController.render(tripEventModel);
+        }
+      });
   }
 
   _removePoints() {

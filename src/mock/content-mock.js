@@ -26,7 +26,6 @@ const getRandomArraypoints = () => {
   const timeEndEvent = getEndRandomDate(timeStartEvent, startEvent);
   const getDurationEvent = timeEndEvent.getTime() - timeStartEvent.getTime();
   const durationEvent = moment(getDurationEvent).format(`HH:mm`);
-  // --,,,??? почему не правильно считает ??
   const favorite = false;
   return {
     id: new Date().getTime(),
@@ -51,14 +50,14 @@ const NewFormDataId = {
   eventPoint: `Flight`,
   eventTitle: `sss`,
   eventOffers: [{
-    eventOfferTitle: `add luggage`,
-    evenOfferPrice: ` 20`
+    title: `add luggage`,
+    price: ` 20`
   }, {
-    eventOfferTitle: `add meal`,
-    evenOfferPrice: `  21`
+    title: `add meal`,
+    price: `  21`
   }, {
-    eventOfferTitle: `Choose seats`,
-    evenOfferPrice: `5 $ `
+    title: `Choose seats`,
+    price: `5 $ `
   }],
   eventPrice: ``,
   eventPointTown: ``,
