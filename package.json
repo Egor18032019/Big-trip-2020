@@ -23,7 +23,7 @@
     "css-loader": "^3.5.3",
     "flatpickr": "^4.6.3",
     "he": "^1.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-locales-webpack-plugin": "^1.2.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.42.1",
