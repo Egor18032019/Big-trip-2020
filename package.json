@@ -12,7 +12,7 @@
   "devDependencies": {
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
-    "webpack-cli": "3.3.11"
+    "webpack-cli": "5.0.1"
   },
   "engines": {
     "node": "10"
@@ -20,13 +20,13 @@
   "dependencies": {
     "chart.js": "^2.9.3",
     "chartjs-plugin-datalabels": "^0.7.0",
-    "css-loader": "^3.5.3",
+    "css-loader": "^6.7.3",
     "flatpickr": "^4.6.3",
     "he": "^1.2.0",
     "moment": "^2.24.0",
     "moment-locales-webpack-plugin": "^1.2.0",
     "style-loader": "^1.2.1",
-    "webpack": "^4.42.1",
+    "webpack": "^5.75.0",
     "webpack-dev-server": "^3.11.0"
   }
 }
